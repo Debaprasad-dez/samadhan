@@ -33,6 +33,9 @@ next-env.d.ts
 .vscode/*
 !.vscode/extensions.json
 
+# local tooling
+.claude/
+
 # debug logs
 npm-debug.log*
 yarn-debug.log*
