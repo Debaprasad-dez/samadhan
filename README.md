@@ -121,4 +121,31 @@ pnpm build           # production build (gate)
 
 E2E specs (`tests/e2e/`) cover the file-complaint and officer-close happy paths;
 run them against a dev server (`pnpm dev`).
-```
+
+## Deploy (Vercel + PostgreSQL)
+
+GitHub Pages cannot host this app — it is a Next.js **server** app (API routes,
+SSR with sessions, Prisma, server-side AI). Deploy to **Vercel**. Serverless
+filesystems are read-only/ephemeral, so SQLite is swapped for **PostgreSQL**
+(`provider = "postgresql"`).
+
+1. **Create a Postgres DB** (Neon free tier or Vercel Postgres) and copy the
+   connection string (`postgresql://…?sslmode=require`).
+2. **Sync schema + seed** (run once from your machine):
+   ```bash
+   # put the Postgres URL in .env and .env.local
+   pnpm prisma db push        # create tables
+   pnpm prisma db seed        # seed wards/depts/cases/demo users
+   ```
+3. **Vercel env vars** (Project → Settings → Environment Variables):
+   `DATABASE_URL`, `SESSION_PASSWORD` (32+ chars), `OPENROUTER_CHAT_URL`,
+   `OPENROUTER_MODEL`, `NEXT_PUBLIC_APP_NAME`, `NEXT_PUBLIC_DEMO_MODE=true`.
+4. **Deploy:** `vercel --prod` (or connect the GitHub repo in the Vercel
+   dashboard). Build runs `vercel-build` = `prisma generate && prisma db push &&
+   next build`.
+
+**Known limitation:** evidence uploads (`/api/upload`) write to the local
+filesystem, which is read-only on serverless — image upload won't persist in
+production until swapped for object storage (Vercel Blob / S3). Filing a
+complaint without evidence works fully.
+
