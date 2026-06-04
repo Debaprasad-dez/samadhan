@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Samadhan">
+  <rect width="512" height="512" rx="96" fill="#C25527"/>
+  <circle cx="256" cy="150" r="34" fill="#FBFAF6"/>
+  <path d="M150 372c0-58 47-106 106-106s106 48 106 106" fill="none" stroke="#FBFAF6" stroke-width="34" stroke-linecap="round"/>
+</svg>

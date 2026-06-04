@@ -1,0 +1,19 @@
+{
+  "name": "Samadhan — Civic Resolution Network",
+  "short_name": "Samadhan",
+  "description": "Track every government complaint like a service journey, with public accountability.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FBFAF6",
+  "theme_color": "#C25527",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

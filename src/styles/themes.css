@@ -1,0 +1,620 @@
+/* =============================================================================
+   Samadhan — Cultural theme palettes (design addendum §3).
+   6 cultural themes × 2 modes = 12 fully-realised identities.
+   Selectors: [data-theme="…"][data-mode="light|dark"]. Default: bharat-dawn.
+   All values are HSL triplets, consumed as hsl(var(--token) / <alpha>).
+
+   --------------------------------------------------------------------------
+   TOKEN NAMING — READ THIS (resolves the design↔shadcn `accent` clash):
+   --------------------------------------------------------------------------
+   • --accent / --accent-soft  → the DESIGN's SATURATED cultural accent
+       (sindoor rose, peacock teal, emerald, …). Exposed as the Tailwind
+       `accent` / `accent-soft` utilities for ART and decorative work.
+   • --accent-muted / --accent-muted-foreground → shadcn's MUTED hover surface
+       (menus, dropdowns, command items). Exposed as Tailwind `accent-muted`.
+       The shadcn ui primitives were remapped from `accent` → `accent-muted`
+       so the two meanings never collide on one token.
+
+   The design tokens (--bg, --text, --brand, …) are the SOURCE OF TRUTH.
+   The shadcn/legacy names (--background, --foreground, --card, --primary, …)
+   are ALIASED to them at the bottom of each block so every existing component
+   keeps working untouched; D1 re-skins on top.
+
+   Soft status variants (--success-soft/--warning-soft/--danger-soft/--info-soft)
+   are SYNTHESIZED here (the design only ships --accent-soft): same hue as the
+   base status colour, low-saturation/high-lightness in light, low-lightness in
+   dark — so badges stay coherent across all 12 combos.
+   ============================================================================= */
+
+/* Shared alias recipe is repeated per block (CSS has no mixins). Light blocks use
+   white on-brand text; dark blocks use the deep --bg as on-brand text for contrast. */
+
+/* ---------------------------------------------------------------- bharat-dawn */
+:root,
+[data-theme="bharat-dawn"][data-mode="light"] {
+  --bg: 36 45% 97%;
+  --surface: 40 50% 99%;
+  --surface-muted: 36 38% 94%;
+  --border: 34 25% 87%;
+  --border-strong: 32 22% 76%;
+  --text: 25 30% 14%;
+  --text-muted: 28 15% 38%;
+  --text-subtle: 30 12% 54%;
+  --brand: 18 85% 48%;
+  --brand-hover: 16 88% 41%;
+  --brand-soft: 24 90% 93%;
+  --accent: 352 60% 45%;
+  --accent-soft: 352 70% 94%;
+  --success: 145 50% 36%;
+  --warning: 38 92% 48%;
+  --danger: 4 72% 48%;
+  --info: 204 70% 42%;
+  --success-soft: 145 55% 90%;
+  --warning-soft: 38 70% 90%;
+  --danger-soft: 4 65% 93%;
+  --info-soft: 204 60% 92%;
+  --motif-1: 18 85% 52%;
+  --motif-2: 352 55% 48%;
+  --motif-3: 150 45% 38%;
+  --motif-gold: 42 78% 52%;
+
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--brand);
+  --primary-foreground: 0 0% 100%;
+  --secondary: var(--surface-muted);
+  --secondary-foreground: var(--text);
+  --muted: var(--surface-muted);
+  --muted-foreground: var(--text-muted);
+  --accent-muted: var(--surface-muted);
+  --accent-muted-foreground: var(--text);
+  --destructive: var(--danger);
+  --destructive-foreground: 0 0% 100%;
+  --input: var(--border-strong);
+  --ring: var(--brand);
+  --accent-blue: var(--accent);
+}
+
+[data-theme="bharat-dawn"][data-mode="dark"] {
+  --bg: 24 28% 8%;
+  --surface: 22 22% 12%;
+  --surface-muted: 22 18% 16%;
+  --border: 24 16% 24%;
+  --border-strong: 26 14% 36%;
+  --text: 36 35% 92%;
+  --text-muted: 32 18% 68%;
+  --text-subtle: 30 14% 52%;
+  --brand: 24 90% 60%;
+  --brand-hover: 26 95% 67%;
+  --brand-soft: 20 50% 18%;
+  --accent: 352 65% 62%;
+  --accent-soft: 352 40% 20%;
+  --success: 145 50% 52%;
+  --warning: 38 90% 60%;
+  --danger: 4 75% 62%;
+  --info: 204 70% 60%;
+  --success-soft: 145 40% 16%;
+  --warning-soft: 38 45% 18%;
+  --danger-soft: 4 45% 18%;
+  --info-soft: 204 45% 18%;
+  --motif-1: 24 90% 62%;
+  --motif-2: 352 60% 60%;
+  --motif-3: 150 45% 50%;
+  --motif-gold: 42 85% 60%;
+
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--brand);
+  --primary-foreground: var(--bg);
+  --secondary: var(--surface-muted);
+  --secondary-foreground: var(--text);
+  --muted: var(--surface-muted);
+  --muted-foreground: var(--text-muted);
+  --accent-muted: var(--surface-muted);
+  --accent-muted-foreground: var(--text);
+  --destructive: var(--danger);
+  --destructive-foreground: var(--bg);
+  --input: var(--border-strong);
+  --ring: var(--brand);
+  --accent-blue: var(--accent);
+}
+
+/* -------------------------------------------------------------- mithila-bloom */
+[data-theme="mithila-bloom"][data-mode="light"] {
+  --bg: 48 40% 96%;
+  --surface: 0 0% 100%;
+  --surface-muted: 46 30% 93%;
+  --border: 40 22% 85%;
+  --border-strong: 38 20% 74%;
+  --text: 340 25% 16%;
+  --text-muted: 340 12% 40%;
+  --text-subtle: 340 10% 56%;
+  --brand: 340 75% 44%;
+  --brand-hover: 340 80% 38%;
+  --brand-soft: 340 70% 93%;
+  --accent: 168 65% 32%;
+  --accent-soft: 168 50% 90%;
+  --success: 142 55% 34%;
+  --warning: 36 90% 46%;
+  --danger: 2 74% 46%;
+  --info: 200 72% 40%;
+  --success-soft: 142 55% 90%;
+  --warning-soft: 36 70% 90%;
+  --danger-soft: 2 65% 93%;
+  --info-soft: 200 60% 92%;
+  --motif-1: 340 75% 48%;
+  --motif-2: 168 60% 36%;
+  --motif-3: 30 88% 50%;
+  --motif-gold: 44 80% 50%;
+
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--brand);
+  --primary-foreground: 0 0% 100%;
+  --secondary: var(--surface-muted);
+  --secondary-foreground: var(--text);
+  --muted: var(--surface-muted);
+  --muted-foreground: var(--text-muted);
+  --accent-muted: var(--surface-muted);
+  --accent-muted-foreground: var(--text);
+  --destructive: var(--danger);
+  --destructive-foreground: 0 0% 100%;
+  --input: var(--border-strong);
+  --ring: var(--brand);
+  --accent-blue: var(--accent);
+}
+
+[data-theme="mithila-bloom"][data-mode="dark"] {
+  --bg: 335 24% 8%;
+  --surface: 335 20% 11%;
+  --surface-muted: 335 16% 15%;
+  --border: 336 14% 23%;
+  --border-strong: 338 12% 34%;
+  --text: 44 30% 92%;
+  --text-muted: 40 16% 66%;
+  --text-subtle: 38 12% 50%;
+  --brand: 342 80% 62%;
+  --brand-hover: 342 85% 68%;
+  --brand-soft: 340 40% 18%;
+  --accent: 168 60% 48%;
+  --accent-soft: 168 35% 18%;
+  --success: 142 52% 50%;
+  --warning: 36 88% 58%;
+  --danger: 2 76% 62%;
+  --info: 200 70% 58%;
+  --success-soft: 142 40% 16%;
+  --warning-soft: 36 45% 18%;
+  --danger-soft: 2 45% 18%;
+  --info-soft: 200 45% 18%;
+  --motif-1: 342 80% 64%;
+  --motif-2: 168 60% 52%;
+  --motif-3: 30 88% 60%;
+  --motif-gold: 44 85% 60%;
+
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--brand);
+  --primary-foreground: var(--bg);
+  --secondary: var(--surface-muted);
+  --secondary-foreground: var(--text);
+  --muted: var(--surface-muted);
+  --muted-foreground: var(--text-muted);
+  --accent-muted: var(--surface-muted);
+  --accent-muted-foreground: var(--text);
+  --destructive: var(--danger);
+  --destructive-foreground: var(--bg);
+  --input: var(--border-strong);
+  --ring: var(--brand);
+  --accent-blue: var(--accent);
+}
+
+/* ---------------------------------------------------------------- warli-earth */
+[data-theme="warli-earth"][data-mode="light"] {
+  --bg: 22 30% 88%;
+  --surface: 24 36% 92%;
+  --surface-muted: 22 26% 84%;
+  --border: 20 22% 74%;
+  --border-strong: 18 20% 62%;
+  --text: 18 25% 18%;
+  --text-muted: 18 14% 36%;
+  --text-subtle: 18 10% 50%;
+  --brand: 14 55% 40%;
+  --brand-hover: 14 60% 34%;
+  --brand-soft: 16 40% 82%;
+  --accent: 30 18% 30%;
+  --accent-soft: 28 16% 80%;
+  --success: 120 30% 32%;
+  --warning: 34 70% 44%;
+  --danger: 6 65% 44%;
+  --info: 200 35% 38%;
+  --success-soft: 120 32% 86%;
+  --warning-soft: 34 55% 86%;
+  --danger-soft: 6 50% 88%;
+  --info-soft: 200 35% 88%;
+  --motif-1: 0 0% 98%;
+  --motif-2: 14 50% 42%;
+  --motif-3: 20 20% 28%;
+  --motif-gold: 36 50% 46%;
+
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--brand);
+  --primary-foreground: 0 0% 100%;
+  --secondary: var(--surface-muted);
+  --secondary-foreground: var(--text);
+  --muted: var(--surface-muted);
+  --muted-foreground: var(--text-muted);
+  --accent-muted: var(--surface-muted);
+  --accent-muted-foreground: var(--text);
+  --destructive: var(--danger);
+  --destructive-foreground: 0 0% 100%;
+  --input: var(--border-strong);
+  --ring: var(--brand);
+  --accent-blue: var(--accent);
+}
+
+[data-theme="warli-earth"][data-mode="dark"] {
+  --bg: 16 22% 9%;
+  --surface: 16 18% 12%;
+  --surface-muted: 16 16% 16%;
+  --border: 16 14% 24%;
+  --border-strong: 16 12% 35%;
+  --text: 24 24% 90%;
+  --text-muted: 22 14% 64%;
+  --text-subtle: 20 10% 48%;
+  --brand: 16 65% 56%;
+  --brand-hover: 16 70% 62%;
+  --brand-soft: 14 36% 18%;
+  --accent: 28 20% 70%;
+  --accent-soft: 28 16% 20%;
+  --success: 120 32% 48%;
+  --warning: 34 72% 56%;
+  --danger: 6 68% 60%;
+  --info: 200 40% 56%;
+  --success-soft: 120 30% 16%;
+  --warning-soft: 34 40% 18%;
+  --danger-soft: 6 40% 18%;
+  --info-soft: 200 35% 18%;
+  --motif-1: 0 0% 96%;
+  --motif-2: 16 55% 56%;
+  --motif-3: 24 18% 72%;
+  --motif-gold: 36 56% 58%;
+
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--brand);
+  --primary-foreground: var(--bg);
+  --secondary: var(--surface-muted);
+  --secondary-foreground: var(--text);
+  --muted: var(--surface-muted);
+  --muted-foreground: var(--text-muted);
+  --accent-muted: var(--surface-muted);
+  --accent-muted-foreground: var(--text);
+  --destructive: var(--danger);
+  --destructive-foreground: var(--bg);
+  --input: var(--border-strong);
+  --ring: var(--brand);
+  --accent-blue: var(--accent);
+}
+
+/* -------------------------------------------------------------- mughal-indigo */
+[data-theme="mughal-indigo"][data-mode="light"] {
+  --bg: 210 25% 96%;
+  --surface: 0 0% 100%;
+  --surface-muted: 214 22% 93%;
+  --border: 216 18% 85%;
+  --border-strong: 218 16% 73%;
+  --text: 222 35% 15%;
+  --text-muted: 222 16% 38%;
+  --text-subtle: 220 12% 54%;
+  --brand: 224 64% 38%;
+  --brand-hover: 224 70% 31%;
+  --brand-soft: 224 60% 93%;
+  --accent: 168 58% 32%;
+  --accent-soft: 168 45% 90%;
+  --success: 158 52% 33%;
+  --warning: 40 88% 46%;
+  --danger: 352 68% 46%;
+  --info: 224 64% 46%;
+  --success-soft: 158 50% 90%;
+  --warning-soft: 40 70% 90%;
+  --danger-soft: 352 60% 93%;
+  --info-soft: 224 60% 93%;
+  --motif-1: 224 64% 44%;
+  --motif-2: 168 55% 36%;
+  --motif-3: 352 60% 48%;
+  --motif-gold: 43 74% 50%;
+
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--brand);
+  --primary-foreground: 0 0% 100%;
+  --secondary: var(--surface-muted);
+  --secondary-foreground: var(--text);
+  --muted: var(--surface-muted);
+  --muted-foreground: var(--text-muted);
+  --accent-muted: var(--surface-muted);
+  --accent-muted-foreground: var(--text);
+  --destructive: var(--danger);
+  --destructive-foreground: 0 0% 100%;
+  --input: var(--border-strong);
+  --ring: var(--brand);
+  --accent-blue: var(--accent);
+}
+
+[data-theme="mughal-indigo"][data-mode="dark"] {
+  --bg: 226 38% 7%;
+  --surface: 225 32% 11%;
+  --surface-muted: 224 26% 15%;
+  --border: 222 22% 24%;
+  --border-strong: 222 18% 36%;
+  --text: 210 30% 93%;
+  --text-muted: 214 16% 68%;
+  --text-subtle: 216 12% 52%;
+  --brand: 226 78% 68%;
+  --brand-hover: 226 82% 74%;
+  --brand-soft: 224 44% 18%;
+  --accent: 165 60% 48%;
+  --accent-soft: 168 35% 16%;
+  --success: 158 52% 50%;
+  --warning: 40 86% 58%;
+  --danger: 352 70% 62%;
+  --info: 226 70% 66%;
+  --success-soft: 158 40% 16%;
+  --warning-soft: 40 45% 18%;
+  --danger-soft: 352 45% 18%;
+  --info-soft: 226 45% 18%;
+  --motif-1: 226 78% 66%;
+  --motif-2: 165 58% 50%;
+  --motif-3: 352 64% 62%;
+  --motif-gold: 43 82% 60%;
+
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--brand);
+  --primary-foreground: var(--bg);
+  --secondary: var(--surface-muted);
+  --secondary-foreground: var(--text);
+  --muted: var(--surface-muted);
+  --muted-foreground: var(--text-muted);
+  --accent-muted: var(--surface-muted);
+  --accent-muted-foreground: var(--text);
+  --destructive: var(--danger);
+  --destructive-foreground: var(--bg);
+  --input: var(--border-strong);
+  --ring: var(--brand);
+  --accent-blue: var(--accent);
+}
+
+/* ------------------------------------------------- coromandel-pattachitra */
+[data-theme="coromandel-pattachitra"][data-mode="light"] {
+  --bg: 44 48% 95%;
+  --surface: 46 54% 98%;
+  --surface-muted: 42 36% 92%;
+  --border: 38 26% 84%;
+  --border-strong: 36 22% 72%;
+  --text: 20 35% 14%;
+  --text-muted: 22 16% 38%;
+  --text-subtle: 24 12% 54%;
+  --brand: 8 78% 46%;
+  --brand-hover: 8 82% 40%;
+  --brand-soft: 10 75% 93%;
+  --accent: 150 55% 30%;
+  --accent-soft: 150 45% 89%;
+  --success: 150 52% 33%;
+  --warning: 40 90% 47%;
+  --danger: 4 76% 46%;
+  --info: 198 68% 40%;
+  --success-soft: 150 50% 90%;
+  --warning-soft: 40 70% 90%;
+  --danger-soft: 4 65% 93%;
+  --info-soft: 198 60% 92%;
+  --motif-1: 8 78% 50%;
+  --motif-2: 150 50% 34%;
+  --motif-3: 42 88% 50%;
+  --motif-gold: 40 80% 50%;
+
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--brand);
+  --primary-foreground: 0 0% 100%;
+  --secondary: var(--surface-muted);
+  --secondary-foreground: var(--text);
+  --muted: var(--surface-muted);
+  --muted-foreground: var(--text-muted);
+  --accent-muted: var(--surface-muted);
+  --accent-muted-foreground: var(--text);
+  --destructive: var(--danger);
+  --destructive-foreground: 0 0% 100%;
+  --input: var(--border-strong);
+  --ring: var(--brand);
+  --accent-blue: var(--accent);
+}
+
+[data-theme="coromandel-pattachitra"][data-mode="dark"] {
+  --bg: 18 28% 8%;
+  --surface: 18 22% 11%;
+  --surface-muted: 18 18% 15%;
+  --border: 18 16% 24%;
+  --border-strong: 18 13% 35%;
+  --text: 44 32% 92%;
+  --text-muted: 40 16% 66%;
+  --text-subtle: 38 12% 50%;
+  --brand: 10 82% 62%;
+  --brand-hover: 10 86% 68%;
+  --brand-soft: 8 44% 18%;
+  --accent: 150 52% 48%;
+  --accent-soft: 150 32% 16%;
+  --success: 150 52% 50%;
+  --warning: 40 88% 58%;
+  --danger: 4 78% 62%;
+  --info: 198 68% 58%;
+  --success-soft: 150 40% 16%;
+  --warning-soft: 40 45% 18%;
+  --danger-soft: 4 45% 18%;
+  --info-soft: 198 45% 18%;
+  --motif-1: 10 82% 64%;
+  --motif-2: 150 52% 52%;
+  --motif-3: 42 90% 60%;
+  --motif-gold: 40 84% 60%;
+
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--brand);
+  --primary-foreground: var(--bg);
+  --secondary: var(--surface-muted);
+  --secondary-foreground: var(--text);
+  --muted: var(--surface-muted);
+  --muted-foreground: var(--text-muted);
+  --accent-muted: var(--surface-muted);
+  --accent-muted-foreground: var(--text);
+  --destructive: var(--danger);
+  --destructive-foreground: var(--bg);
+  --input: var(--border-strong);
+  --ring: var(--brand);
+  --accent-blue: var(--accent);
+}
+
+/* --------------------------------------------------------------- nilgiri-mist */
+[data-theme="nilgiri-mist"][data-mode="light"] {
+  --bg: 155 28% 96%;
+  --surface: 150 30% 99%;
+  --surface-muted: 152 22% 92%;
+  --border: 150 18% 84%;
+  --border-strong: 152 16% 71%;
+  --text: 175 30% 13%;
+  --text-muted: 172 14% 36%;
+  --text-subtle: 168 11% 52%;
+  --brand: 162 58% 30%;
+  --brand-hover: 162 64% 24%;
+  --brand-soft: 160 45% 90%;
+  --accent: 14 70% 48%;
+  --accent-soft: 14 65% 92%;
+  --success: 150 55% 32%;
+  --warning: 38 88% 46%;
+  --danger: 4 72% 46%;
+  --info: 192 66% 38%;
+  --success-soft: 150 55% 90%;
+  --warning-soft: 38 70% 90%;
+  --danger-soft: 4 65% 93%;
+  --info-soft: 192 60% 92%;
+  --motif-1: 162 55% 34%;
+  --motif-2: 14 68% 50%;
+  --motif-3: 42 76% 48%;
+  --motif-gold: 40 70% 48%;
+
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--brand);
+  --primary-foreground: 0 0% 100%;
+  --secondary: var(--surface-muted);
+  --secondary-foreground: var(--text);
+  --muted: var(--surface-muted);
+  --muted-foreground: var(--text-muted);
+  --accent-muted: var(--surface-muted);
+  --accent-muted-foreground: var(--text);
+  --destructive: var(--danger);
+  --destructive-foreground: 0 0% 100%;
+  --input: var(--border-strong);
+  --ring: var(--brand);
+  --accent-blue: var(--accent);
+}
+
+[data-theme="nilgiri-mist"][data-mode="dark"] {
+  --bg: 178 30% 7%;
+  --surface: 176 24% 10%;
+  --surface-muted: 174 20% 14%;
+  --border: 170 16% 23%;
+  --border-strong: 168 13% 34%;
+  --text: 152 26% 92%;
+  --text-muted: 156 14% 66%;
+  --text-subtle: 158 11% 50%;
+  --brand: 160 56% 50%;
+  --brand-hover: 160 62% 56%;
+  --brand-soft: 162 38% 16%;
+  --accent: 14 76% 60%;
+  --accent-soft: 14 44% 18%;
+  --success: 150 52% 50%;
+  --warning: 38 86% 58%;
+  --danger: 4 74% 62%;
+  --info: 192 66% 56%;
+  --success-soft: 150 40% 16%;
+  --warning-soft: 38 45% 18%;
+  --danger-soft: 4 45% 18%;
+  --info-soft: 192 45% 18%;
+  --motif-1: 160 54% 52%;
+  --motif-2: 14 74% 62%;
+  --motif-3: 42 80% 58%;
+  --motif-gold: 40 78% 58%;
+
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--brand);
+  --primary-foreground: var(--bg);
+  --secondary: var(--surface-muted);
+  --secondary-foreground: var(--text);
+  --muted: var(--surface-muted);
+  --muted-foreground: var(--text-muted);
+  --accent-muted: var(--surface-muted);
+  --accent-muted-foreground: var(--text);
+  --destructive: var(--danger);
+  --destructive-foreground: var(--bg);
+  --input: var(--border-strong);
+  --ring: var(--brand);
+  --accent-blue: var(--accent);
+}
+
+/* Per-theme display font overrides (design §4.3). Default is Tiro (tokens.css);
+   warm/narrative themes use Yatra One. */
+[data-theme="mithila-bloom"],
+[data-theme="coromandel-pattachitra"] {
+  --font-display: var(--font-yatra);
+}

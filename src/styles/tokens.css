@@ -1,0 +1,43 @@
+/* Samadhan — shared STRUCTURAL tokens (the "calm canvas", design §2.2).
+   Colour tokens live in themes.css (per data-theme × data-mode). These are
+   theme-agnostic: spacing, radius, motion, z-index, and the display-font hook. */
+
+:root {
+  /* Spacing scale (PRD §7.2.3) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Radius (PRD §7.2.4) */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius: 10px; /* shadcn calc() base */
+
+  /* Motion (design §2.2 / §6) */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 150ms;
+  --dur-mid: 280ms;
+  --dur-slow: 480ms;
+
+  /* Z-index scale (PRD §7.2.6) */
+  --z-sticky: 10;
+  --z-bottomnav: 20;
+  --z-dropdown: 30;
+  --z-tooltip: 40;
+  --z-modal: 50;
+  --z-toast: 60;
+  --z-command: 70;
+
+  /* Display font hook — themes may override (design §4.3). Default Tiro. */
+  --font-display: var(--font-tiro);
+}

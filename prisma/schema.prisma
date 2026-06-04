@@ -1,0 +1,206 @@
+// Samadhan — Prisma schema
+// NOTE: SQLite (Prisma) does not support native `enum` types. The PRD §8.1 schema
+// uses enums; on SQLite these are represented as String columns. The allowed values
+// are mirrored as TS union types + Zod enums in src/types and src/schemas.
+//
+//   Role:       CITIZEN | OFFICER | ADMIN
+//   CaseStatus: OPEN | ACKNOWLEDGED | IN_PROGRESS | AWAITING_INFO | RESOLVED | ESCALATED | CLOSED
+//   Severity:   LOW | MEDIUM | HIGH
+//   EventType:  CREATED | ACKNOWLEDGED | STATUS_CHANGED | COMMENT_ADDED | EVIDENCE_ADDED
+//               | INFO_REQUESTED | INFO_PROVIDED | RESOLVED | REOPENED | ESCALATED | CLOSED | REASSIGNED
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String      @id @default(cuid())
+  role              String // Role
+  name              String
+  phone             String?     @unique
+  email             String?     @unique
+  passwordHash      String?
+  wardCode          String?
+  departmentCode    String?
+  isDeptLead        Boolean     @default(false)
+  reputation        Int         @default(100)
+  streakDays        Int         @default(0)
+  lastVisitAt       DateTime?
+  showOnLeaderboard Boolean     @default(false)
+  aiAssistLevel     String      @default("full") // 'full' | 'reduced' | 'off'
+  language          String      @default("en")
+  createdAt         DateTime    @default(now())
+  cases             Case[]      @relation("FiledBy")
+  assignedCases     Case[]      @relation("AssignedTo")
+  events            CaseEvent[]
+  upvotes           Upvote[]
+  cosigns           Cosign[]
+  badges            UserBadge[]
+  notifications     Notification[]
+}
+
+model Ward {
+  code      String @id
+  name      String
+  zone      String
+  centerLat Float
+  centerLng Float
+}
+
+model Department {
+  code       String     @id
+  name       String
+  categories Category[]
+}
+
+model Category {
+  id             String     @id @default(cuid())
+  name           String
+  slaDays        Int
+  departmentCode String
+  department     Department @relation(fields: [departmentCode], references: [code])
+
+  @@unique([departmentCode, name])
+}
+
+model Case {
+  id             String      @id @default(cuid())
+  number         String      @unique // e.g., "SMD-2026-000128"
+  title          String
+  body           String
+  status         String      @default("OPEN") // CaseStatus
+  severity       String      @default("MEDIUM") // Severity
+  wardCode       String
+  departmentCode String
+  categoryId     String
+  filedById      String
+  assignedToId   String?
+  slaDueAt       DateTime
+  escalated      Boolean     @default(false)
+  isPublic       Boolean     @default(true)
+  qualityScore   Int? // 0-10 (post-closure)
+  isBoilerplate  Boolean? // flagged by AI on close
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  resolvedAt     DateTime?
+  closedAt       DateTime?
+  reopenedAt     DateTime?
+
+  filedBy    User        @relation("FiledBy", fields: [filedById], references: [id])
+  assignedTo User?       @relation("AssignedTo", fields: [assignedToId], references: [id])
+  events     CaseEvent[]
+  evidence   Evidence[]
+  upvotes    Upvote[]
+  cosigns    Cosign[]
+
+  @@index([status])
+  @@index([wardCode])
+  @@index([departmentCode])
+  @@index([filedById])
+  @@index([assignedToId])
+}
+
+model CaseEvent {
+  id        String   @id @default(cuid())
+  caseId    String
+  actorId   String?
+  type      String // EventType
+  message   String?
+  metadata  String? // JSON string for flexible payload
+  createdAt DateTime @default(now())
+
+  case  Case  @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  actor User? @relation(fields: [actorId], references: [id])
+
+  @@index([caseId, createdAt])
+}
+
+model Evidence {
+  id            String    @id @default(cuid())
+  caseId        String
+  url           String // local /uploads/ path
+  kind          String // 'photo' | 'video'
+  filename      String
+  sizeBytes     Int
+  lat           Float?
+  lng           Float?
+  takenAt       DateTime?
+  isBeforeAfter String? // 'before' | 'after' (set by officer at close)
+  createdAt     DateTime  @default(now())
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId])
+}
+
+model Upvote {
+  id        String   @id @default(cuid())
+  caseId    String
+  userId    String
+  createdAt DateTime @default(now())
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([caseId, userId])
+}
+
+model Cosign {
+  id        String   @id @default(cuid())
+  caseId    String
+  userId    String
+  reason    String // 10-200 chars
+  createdAt DateTime @default(now())
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([caseId, userId])
+}
+
+model Badge {
+  id          String      @id
+  name        String
+  description String
+  iconKey     String
+  awards      UserBadge[]
+}
+
+model UserBadge {
+  id         String   @id @default(cuid())
+  userId     String
+  badgeId    String
+  unlockedAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id])
+  badge Badge @relation(fields: [badgeId], references: [id])
+
+  @@unique([userId, badgeId])
+}
+
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  title     String
+  body      String
+  link      String?
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, readAt])
+}
+
+model MockMessage {
+  id        String   @id @default(cuid())
+  to        String
+  channel   String // 'sms' | 'whatsapp'
+  body      String
+  createdAt DateTime @default(now())
+}

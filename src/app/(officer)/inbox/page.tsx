@@ -1,0 +1,275 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Keyboard, Loader2, AlertTriangle } from "lucide-react";
+import { useInbox, useCaseEvent, type InboxItem } from "@/hooks/use-officer";
+import { StatusBadge, SeverityChip } from "@/components/case/status-badge";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { cn, formatRelative } from "@/lib/utils";
+import type { CaseStatus } from "@/types";
+
+const STATUS_FILTERS = [
+  { k: "open", l: "Open" },
+  { k: "all", l: "All" },
+  { k: "ACKNOWLEDGED", l: "Acknowledged" },
+  { k: "IN_PROGRESS", l: "In progress" },
+  { k: "ESCALATED", l: "Escalated" },
+];
+
+const SHORTCUTS = [
+  ["J / ↓", "Next"],
+  ["K / ↑", "Previous"],
+  ["Enter / C", "Open case"],
+  ["A", "Acknowledge"],
+  ["I", "Move to in progress"],
+  ["/", "Focus filter"],
+  ["?", "This help"],
+];
+
+export default function OfficerInbox() {
+  const router = useRouter();
+  const [status, setStatus] = useState("open");
+  const [severity, setSeverity] = useState("");
+  const { data, isLoading, isError, refetch } = useInbox({ status, severity });
+  const event = useCaseEvent();
+
+  const cases: InboxItem[] = data?.cases ?? [];
+  const [cursor, setCursor] = useState(0);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [helpOpen, setHelpOpen] = useState(false);
+  const filterRef = useRef<HTMLInputElement>(null);
+
+  // Keep the cursor in range when the filtered list shrinks.
+  useEffect(() => {
+    setCursor((c) => Math.min(c, Math.max(0, cases.length - 1)));
+  }, [cases.length]);
+
+  function act(c: InboxItem | undefined, next: CaseStatus, label: string) {
+    if (!c) return;
+    event.mutate(
+      { id: c.id, status: next },
+      {
+        onSuccess: () => toast.success(`${c.number}: ${label}`),
+        onError: (e) => toast.error(e.message),
+      },
+    );
+  }
+
+  // Keyboard shortcuts (§5.5.1).
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      const tag = (e.target as HTMLElement).tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") {
+        if (e.key === "Escape") (e.target as HTMLElement).blur();
+        return;
+      }
+      if (e.key === "?") {
+        setHelpOpen(true);
+        return;
+      }
+      if (e.key === "/") {
+        e.preventDefault();
+        filterRef.current?.focus();
+        return;
+      }
+      if (!cases.length) return;
+      const k = e.key.toLowerCase();
+      if (e.key === "ArrowDown" || k === "j") {
+        e.preventDefault();
+        setCursor((c) => Math.min(cases.length - 1, c + 1));
+      } else if (e.key === "ArrowUp" || k === "k") {
+        e.preventDefault();
+        setCursor((c) => Math.max(0, c - 1));
+      } else if (e.key === "Enter" || k === "c") {
+        router.push(`/case/${cases[cursor]?.id}`);
+      } else if (k === "a") {
+        act(cases[cursor], "ACKNOWLEDGED", "Acknowledged");
+      } else if (k === "i") {
+        act(cases[cursor], "IN_PROGRESS", "In progress");
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cases, cursor]);
+
+  function toggleSelect(id: string) {
+    setSelected((s) => {
+      const next = new Set(s);
+      if (next.has(id)) next.delete(id);
+      else if (next.size < 20) next.add(id);
+      else toast.info("You can select up to 20.");
+      return next;
+    });
+  }
+
+  async function bulkAck() {
+    const ids = [...selected];
+    for (const id of ids) {
+      await event.mutateAsync({ id, status: "ACKNOWLEDGED" }).catch(() => null);
+    }
+    toast.success(`Acknowledged ${ids.length} case(s).`);
+    setSelected(new Set());
+  }
+
+  return (
+    <div className="space-y-5">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="font-display text-3xl font-semibold">Inbox</h1>
+          <p className="text-muted-foreground text-sm">
+            Prioritised queue · {data?.total ?? 0} cases
+          </p>
+        </div>
+        <Button variant="ghost" size="icon" aria-label="Keyboard shortcuts" onClick={() => setHelpOpen(true)}>
+          <Keyboard />
+        </Button>
+      </div>
+
+      {/* filters */}
+      <div className="flex flex-wrap items-center gap-2">
+        <input
+          ref={filterRef}
+          value={severity}
+          onChange={(e) => setSeverity(e.target.value.toUpperCase())}
+          placeholder="Filter severity (LOW/MEDIUM/HIGH) — press /"
+          className="border-input bg-background h-8 w-72 rounded-md border px-3 text-sm"
+        />
+        {STATUS_FILTERS.map((f) => (
+          <button
+            key={f.k}
+            onClick={() => setStatus(f.k)}
+            className={cn(
+              "rounded-full border px-3 py-1 text-sm transition-colors",
+              status === f.k
+                ? "border-brand bg-brand-soft text-brand"
+                : "text-muted-foreground hover:bg-surface-muted",
+            )}
+          >
+            {f.l}
+          </button>
+        ))}
+      </div>
+
+      {selected.size > 0 && (
+        <div className="bg-brand-soft flex items-center justify-between rounded-md p-2 text-sm">
+          <span>{selected.size} selected</span>
+          <Button size="sm" onClick={bulkAck} disabled={event.isPending}>
+            Acknowledge selected
+          </Button>
+        </div>
+      )}
+
+      {isLoading ? (
+        <div className="space-y-2">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <Skeleton key={i} className="h-16 w-full" />
+          ))}
+        </div>
+      ) : isError ? (
+        <Card>
+          <CardContent className="flex flex-col items-center gap-3 p-8 text-center">
+            <p className="text-muted-foreground">Couldn&rsquo;t load the inbox.</p>
+            <Button variant="outline" onClick={() => refetch()}>
+              Retry
+            </Button>
+          </CardContent>
+        </Card>
+      ) : cases.length === 0 ? (
+        <Card>
+          <CardContent className="p-10 text-center">
+            <p className="font-display text-xl">Inbox zero 🎉</p>
+            <p className="text-muted-foreground text-sm">No open cases.</p>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="overflow-hidden rounded-lg border">
+          {cases.map((c, i) => {
+            const overdue = new Date(c.slaDueAt).getTime() < Date.now();
+            return (
+              <div
+                key={c.id}
+                onClick={() => router.push(`/case/${c.id}`)}
+                className={cn(
+                  "flex cursor-pointer items-center gap-3 border-b px-3 py-2.5 text-sm last:border-0",
+                  i === cursor ? "bg-brand-soft" : "hover:bg-surface-muted",
+                )}
+              >
+                <input
+                  type="checkbox"
+                  checked={selected.has(c.id)}
+                  onClick={(e) => e.stopPropagation()}
+                  onChange={() => toggleSelect(c.id)}
+                  className="h-4 w-4 shrink-0"
+                  aria-label={`Select ${c.number}`}
+                />
+                <span
+                  className="bg-surface-muted w-10 shrink-0 rounded text-center font-mono text-xs"
+                  title="Priority rank"
+                >
+                  {c.rank}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-medium">{c.title}</p>
+                  <p className="text-muted-foreground font-mono text-xs">
+                    {c.number} · Ward {c.wardCode} · {c._count.cosigns} co-signs
+                  </p>
+                </div>
+                <SeverityChip severity={c.severity} />
+                <StatusBadge status={c.status} />
+                <span
+                  className={cn(
+                    "w-20 shrink-0 text-right text-xs",
+                    overdue ? "text-danger font-medium" : "text-muted-foreground",
+                  )}
+                >
+                  {overdue ? (
+                    <span className="inline-flex items-center gap-1">
+                      <AlertTriangle className="h-3 w-3" /> overdue
+                    </span>
+                  ) : (
+                    `due ${formatRelative(c.slaDueAt)}`
+                  )}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {event.isPending && (
+        <p className="text-muted-foreground inline-flex items-center gap-1 text-xs">
+          <Loader2 className="h-3 w-3 animate-spin" /> updating…
+        </p>
+      )}
+
+      <Dialog open={helpOpen} onOpenChange={setHelpOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Keyboard shortcuts</DialogTitle>
+          </DialogHeader>
+          <ul className="space-y-1.5 text-sm">
+            {SHORTCUTS.map(([k, d]) => (
+              <li key={k} className="flex items-center justify-between">
+                <span className="text-muted-foreground">{d}</span>
+                <kbd className="bg-surface-muted rounded px-1.5 py-0.5 font-mono text-xs">
+                  {k}
+                </kbd>
+              </li>
+            ))}
+          </ul>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}

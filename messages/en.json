@@ -1,0 +1,27 @@
+{
+  "nav": {
+    "home": "Home",
+    "feed": "Feed",
+    "file": "File",
+    "cases": "Cases",
+    "profile": "Profile",
+    "inbox": "Inbox",
+    "clusters": "Clusters",
+    "metrics": "My metrics",
+    "overview": "Overview",
+    "officers": "Officers",
+    "trends": "Trends",
+    "policy": "Policy"
+  },
+  "common": {
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "fileComplaint": "File a complaint",
+    "loading": "Loading…",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "feed": { "title": "Public feed", "hot": "Top issues this week" },
+  "cases": { "title": "My cases", "empty": "No complaints yet" }
+}

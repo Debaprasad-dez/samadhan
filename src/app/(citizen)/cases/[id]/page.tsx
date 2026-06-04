@@ -1,0 +1,226 @@
+import { notFound } from "next/navigation";
+import { ThumbsUp, Users, Share2 } from "lucide-react";
+import { getCurrentUser } from "@/lib/auth";
+import { db } from "@/lib/db";
+import { CATEGORIES, WARDS } from "@/lib/seed-data";
+import { humanizeCode, formatIST } from "@/lib/utils";
+import { StatusBadge, SeverityChip } from "@/components/case/status-badge";
+import { SlaRing } from "@/components/case/sla-ring";
+import { CaseTimeline } from "@/components/case/case-timeline";
+import { EvidenceGallery } from "@/components/case/evidence-gallery";
+import { CaseEngagement } from "@/components/case/case-engagement";
+import { SlaPredictChip } from "@/components/case/sla-predict-chip";
+import { RtiDraftButton } from "@/components/case/rti-draft-button";
+import { Confetti } from "@/components/citizen/confetti";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import type { CaseStatus, Severity } from "@/types";
+
+export default async function CaseDetail({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ new?: string }>;
+}) {
+  const { id } = await params;
+  const { new: isNew } = await searchParams;
+  const user = await getCurrentUser();
+
+  const c = await db.case.findUnique({
+    where: { id },
+    include: {
+      events: {
+        orderBy: { createdAt: "asc" },
+        include: { actor: { select: { name: true, role: true } } },
+      },
+      evidence: true,
+      filedBy: { select: { id: true, name: true, reputation: true } },
+      _count: { select: { upvotes: true, cosigns: true } },
+    },
+  });
+
+  if (!c) notFound();
+
+  const isOwner = user?.id === c.filedById;
+  const isStaff = user?.role === "OFFICER" || user?.role === "ADMIN";
+  if (!isOwner && !isStaff && !c.isPublic) notFound();
+
+  const category = CATEGORIES.find((x) => x.id === c.categoryId)?.name ?? "—";
+  const ward = WARDS.find((x) => x.code === c.wardCode)?.name ?? c.wardCode;
+
+  // Viewer engagement state (for upvote/cosign toggles).
+  let viewerUpvoted = false;
+  let viewerCosigned = false;
+  if (user && !isOwner) {
+    const [uv, cs] = await Promise.all([
+      db.upvote.findUnique({
+        where: { caseId_userId: { caseId: c.id, userId: user.id } },
+        select: { id: true },
+      }),
+      db.cosign.findUnique({
+        where: { caseId_userId: { caseId: c.id, userId: user.id } },
+        select: { id: true },
+      }),
+    ]);
+    viewerUpvoted = !!uv;
+    viewerCosigned = !!cs;
+  }
+
+  const isOpen = c.status !== "RESOLVED" && c.status !== "CLOSED";
+  const daysSince = Math.floor(
+    (Date.now() - c.createdAt.getTime()) / 86_400_000,
+  );
+  const stalled = isOpen && daysSince >= 30 && isOwner;
+
+  return (
+    <div className="space-y-6">
+      {isNew === "1" && <Confetti />}
+
+      {/* header */}
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="min-w-0">
+          <p className="text-muted-foreground font-mono text-xs">{c.number}</p>
+          <h1 className="font-display mt-1 text-2xl font-semibold">{c.title}</h1>
+          <div className="mt-2 flex flex-wrap items-center gap-2">
+            <StatusBadge status={c.status as CaseStatus} />
+            <SeverityChip severity={c.severity as Severity} />
+            <Badge variant="outline">{humanizeCode(c.departmentCode)}</Badge>
+            <Badge variant="outline">
+              {ward} ({c.wardCode})
+            </Badge>
+          </div>
+        </div>
+        <SlaRing
+          createdAt={c.createdAt.toISOString()}
+          dueAt={c.slaDueAt.toISOString()}
+        />
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
+        {/* left: body + timeline + evidence */}
+        <div className="space-y-6">
+          <Card>
+            <CardContent className="p-5">
+              <p className="text-muted-foreground mb-1 text-xs font-semibold uppercase">
+                Complaint
+              </p>
+              <p className="whitespace-pre-wrap text-sm leading-relaxed">
+                {c.body}
+              </p>
+              <div className="mt-4 border-t pt-3">
+                <CaseEngagement
+                  caseId={c.id}
+                  isOwner={isOwner}
+                  initialUpvotes={c._count.upvotes}
+                  viewerUpvoted={viewerUpvoted}
+                  initialCosigns={c._count.cosigns}
+                  viewerCosigned={viewerCosigned}
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {c.evidence.length > 0 && (
+            <section className="space-y-3">
+              <h2 className="font-display text-lg font-semibold">Evidence</h2>
+              <EvidenceGallery
+                items={c.evidence.map((e) => ({
+                  url: e.url,
+                  kind: e.kind,
+                  filename: e.filename,
+                }))}
+              />
+            </section>
+          )}
+
+          <section className="space-y-3">
+            <h2 className="font-display text-lg font-semibold">Timeline</h2>
+            <CaseTimeline
+              events={c.events.map((e) => ({
+                id: e.id,
+                type: e.type,
+                message: e.message,
+                createdAt: e.createdAt.toISOString(),
+                actor: e.actor,
+              }))}
+            />
+          </section>
+        </div>
+
+        {/* right: meta */}
+        <aside className="space-y-4 lg:sticky lg:top-20 lg:self-start">
+          <Card>
+            <CardContent className="space-y-3 p-4 text-sm">
+              <Meta label="Category" value={category} />
+              <Meta
+                label="Filed"
+                value={formatIST(c.createdAt)}
+              />
+              <Meta label="SLA due" value={formatIST(c.slaDueAt)} />
+              <div className="flex items-center gap-4 pt-1">
+                <span className="text-muted-foreground inline-flex items-center gap-1.5">
+                  <ThumbsUp className="h-4 w-4" />
+                  {c._count.upvotes}
+                </span>
+                <span className="text-muted-foreground inline-flex items-center gap-1.5">
+                  <Users className="h-4 w-4" />
+                  {c._count.cosigns} co-signers
+                </span>
+              </div>
+              {c.qualityScore !== null && (
+                <div className="border-t pt-3">
+                  <Meta
+                    label="Resolution quality"
+                    value={`${c.qualityScore}/10`}
+                  />
+                  {c.isBoilerplate && (
+                    <p className="text-warning mt-2 text-xs">
+                      AI suspects this closure may be inadequate.
+                    </p>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {isOpen && (
+            <SlaPredictChip
+              departmentCode={c.departmentCode}
+              categoryId={c.categoryId}
+              wardCode={c.wardCode}
+              severity={c.severity as Severity}
+            />
+          )}
+
+          {stalled && (
+            <Card className="border-warning/30 bg-warning-soft">
+              <CardContent className="space-y-2 p-4">
+                <p className="text-sm font-medium">Stalled past 30 days</p>
+                <p className="text-muted-foreground text-xs">
+                  No resolution in {daysSince} days. You can file an RTI to demand
+                  a status update.
+                </p>
+                <RtiDraftButton caseId={c.id} number={c.number} />
+              </CardContent>
+            </Card>
+          )}
+
+          <p className="text-muted-foreground inline-flex items-center gap-1.5 text-xs">
+            <Share2 className="h-3.5 w-3.5" />
+            {c.isPublic ? "Visible on public feed (anonymised)" : "Private"}
+          </p>
+        </aside>
+      </div>
+    </div>
+  );
+}
+
+function Meta({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <span className="text-muted-foreground">{label}</span>
+      <span className="text-right font-medium">{value}</span>
+    </div>
+  );
+}
