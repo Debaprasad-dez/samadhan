@@ -10,7 +10,9 @@
 //               | INFO_REQUESTED | INFO_PROVIDED | RESOLVED | REOPENED | ESCALATED | CLOSED | REASSIGNED
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  // "native" for local dev; rhel-openssl-3.0.x for the Vercel/AWS Lambda runtime.
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
