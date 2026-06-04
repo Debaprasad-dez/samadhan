@@ -1,0 +1,9 @@
+# Never upload local env files to the build — Vercel env vars are the source of truth.
+.env
+.env.local
+.env*.local
+
+# Local-only
+prisma/dev.db
+public/uploads
+.claude
