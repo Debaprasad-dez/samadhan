@@ -41,7 +41,10 @@ export default async function ProfilePage() {
             <TierChip reputation={user.reputation} />
             <span className="text-warning inline-flex items-center gap-1 text-sm">
               <Flame className="h-4 w-4" />
-              {user.streakDays}-day streak
+              <span className="font-baloo font-semibold">
+                {user.streakDays}
+              </span>
+              -day streak
             </span>
           </div>
         </div>
@@ -56,7 +59,7 @@ export default async function ProfilePage() {
                 <Card key={s.label}>
                   <CardContent className="p-4">
                     <Icon className="text-muted-foreground h-4 w-4" />
-                    <p className="font-display mt-1 text-2xl font-semibold">
+                    <p className="font-baloo mt-1 text-2xl font-semibold">
                       {s.value}
                     </p>
                     <p className="text-muted-foreground text-xs">{s.label}</p>

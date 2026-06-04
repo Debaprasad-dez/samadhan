@@ -31,14 +31,18 @@ export function humanizeCode(code: string): string {
     .join(" ");
 }
 
-/** Deterministic avatar background colour from a name (§7.4.5). */
+/**
+ * Deterministic avatar background from a name (§7.4.5 / §7.6) — picks one of the
+ * active theme's motif colours so avatars recolour per theme. Returns a CSS
+ * `hsl(var(--motif-N))` string for use as an inline background.
+ */
 export function avatarColor(name: string): string {
+  const motifs = ["--motif-1", "--motif-2", "--motif-3", "--motif-gold"];
   let hash = 0;
   for (let i = 0; i < name.length; i++) {
     hash = name.charCodeAt(i) + ((hash << 5) - hash);
   }
-  const hue = Math.abs(hash) % 360;
-  return `hsl(${hue} 55% 45%)`;
+  return `hsl(var(${motifs[Math.abs(hash) % motifs.length]}))`;
 }
 
 /** Initials from a display name. */

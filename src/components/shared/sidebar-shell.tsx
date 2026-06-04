@@ -15,6 +15,7 @@ import {
 import { cn, initials } from "@/lib/utils";
 import { Brand } from "@/components/shared/brand";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
+import { AmbientLamp } from "@/components/shared/ambient-lamp";
 import { LogoutButton } from "@/components/shared/logout-button";
 import type { SessionUser } from "@/types";
 
@@ -95,12 +96,15 @@ export function SidebarShell({
                     key={it.href}
                     href={it.href}
                     className={cn(
-                      "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                      "relative flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                       active
                         ? "bg-brand-soft text-brand"
                         : "text-muted-foreground hover:bg-surface-muted hover:text-foreground",
                     )}
                   >
+                    {active && (
+                      <span className="bg-brand absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-r-full" />
+                    )}
                     <Icon className="h-[18px] w-[18px]" />
                     {it.label}
                   </Link>
@@ -115,12 +119,13 @@ export function SidebarShell({
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="bg-background/95 sticky top-0 z-10 flex h-16 items-center justify-between border-b px-4 backdrop-blur md:px-6">
+        <header className="bg-background/80 border-border sticky top-0 z-10 flex h-16 items-center justify-between border-b px-4 backdrop-blur-md md:px-6">
           <div className="lg:hidden">
             <Brand href={homeHref} />
           </div>
           <div className="hidden lg:block" />
           <div className="flex items-center gap-2">
+            <AmbientLamp className="hidden sm:inline-flex" />
             <ThemeToggle />
             <span
               className="bg-brand-soft text-brand ring-brand/40 flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold ring-1"

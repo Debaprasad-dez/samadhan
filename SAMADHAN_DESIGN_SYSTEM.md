@@ -877,6 +877,7 @@ These are the *only* sanctioned literal colours; everything else must be a token
 - `src/app/global-error.tsx` — the root global error boundary renders its own `<html>`/`<body>` when the root layout (and thus `globals.css`/`themes.css`) has failed; it uses a minimal inline fallback palette.
 - `src/app/layout.tsx` `viewport.themeColor` and `public/manifest.webmanifest` — PWA/browser chrome metadata cannot read CSS variables; literal values approximate the `bharat-dawn` default.
 - `public/icons/icon.svg` — the static app icon/favicon asset (brand mark), not in-app UI chrome.
+- `ward-grid.tsx` heatmap tile labels use `text-white` — a data-viz label on a computed, fixed-saturation tile colour (mode-independent), where white is the correct legibility choice (as with chart labels).
 
 ---
 

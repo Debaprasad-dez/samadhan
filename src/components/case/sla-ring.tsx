@@ -72,7 +72,7 @@ export function SlaRing({
           className="transition-all duration-500"
         />
       </svg>
-      <span className="absolute text-center text-[11px] font-semibold leading-tight">
+      <span className="font-baloo absolute text-center text-sm font-semibold leading-tight">
         {breached ? "Overdue" : `${Math.max(0, days)}d`}
       </span>
     </div>

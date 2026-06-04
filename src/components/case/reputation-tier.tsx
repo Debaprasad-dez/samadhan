@@ -23,7 +23,12 @@ export function TierChip({
       )}
     >
       {tier}
-      {showScore && ` · ${reputation}`}
+      {showScore && (
+        <>
+          {" · "}
+          <span className="font-baloo font-semibold">{reputation}</span>
+        </>
+      )}
     </span>
   );
 }
