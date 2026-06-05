@@ -2,7 +2,9 @@ import { Flame, FileText, ThumbsUp, Users } from "lucide-react";
 import { requireRole } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { initials } from "@/lib/utils";
+import { tierForScore } from "@/lib/reputation";
 import { TierChip } from "@/components/case/reputation-tier";
+import { TierEmblem } from "@/components/art/tier-emblem";
 import { BadgeGrid } from "@/components/citizen/badge-grid";
 import { SettingsForm } from "@/components/citizen/settings-form";
 import { Card, CardContent } from "@/components/ui/card";
@@ -19,6 +21,7 @@ export default async function ProfilePage() {
   if (!user) return null;
 
   const earned = user.badges.map((b) => b.badgeId);
+  const tier = tierForScore(user.reputation);
   const stats = [
     { label: "Complaints", value: user._count.cases, icon: FileText },
     { label: "Upvotes given", value: user._count.upvotes, icon: ThumbsUp },
@@ -30,12 +33,12 @@ export default async function ProfilePage() {
       {/* identity */}
       <div className="flex items-center gap-4">
         <span
-          className="bg-brand-soft text-brand flex h-16 w-16 items-center justify-center rounded-full text-xl font-semibold"
+          className="bg-brand-soft text-brand ring-brand/30 flex h-16 w-16 items-center justify-center rounded-full text-xl font-semibold ring-1"
           aria-hidden
         >
           {initials(user.name)}
         </span>
-        <div>
+        <div className="flex-1">
           <h1 className="font-display text-2xl font-semibold">{user.name}</h1>
           <div className="mt-1 flex items-center gap-2">
             <TierChip reputation={user.reputation} />
@@ -48,6 +51,7 @@ export default async function ProfilePage() {
             </span>
           </div>
         </div>
+        <TierEmblem tier={tier} className="w-16" />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">

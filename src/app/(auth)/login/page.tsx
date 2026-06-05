@@ -4,14 +4,18 @@ import { redirect } from "next/navigation";
 import { getCurrentUser, homePathForRole } from "@/lib/auth";
 import { Brand } from "@/components/shared/brand";
 import { LoginForm } from "@/components/auth/login-form";
+import { ThemedHero } from "@/components/art/themed-hero";
 
 export default async function LoginPage() {
   const user = await getCurrentUser();
   if (user) redirect(homePathForRole(user.role));
 
   return (
-    <div className="flex min-h-dvh flex-col items-center justify-center gap-8 px-4 py-10">
+    <div className="flex min-h-dvh flex-col items-center justify-center gap-6 px-4 py-10">
       <Brand href="/login" />
+      <div className="border-border shadow-elev-1 w-full max-w-md overflow-hidden rounded-lg border">
+        <ThemedHero />
+      </div>
       <Suspense fallback={null}>
         <LoginForm />
       </Suspense>

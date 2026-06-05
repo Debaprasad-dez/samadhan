@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
 import { EmptyState } from "@/components/shared/empty-state";
-import { IntakeIllustration } from "@/components/shared/illustrations";
+import { EmptyCases } from "@/components/art/empty";
 import { cn } from "@/lib/utils";
 
 const FILTERS = [
@@ -80,7 +80,7 @@ export default function CasesPage() {
         </Card>
       ) : cases.length === 0 ? (
         <EmptyState
-          illustration={<IntakeIllustration className="h-full w-full" />}
+          illustration={<EmptyCases />}
           title="No complaints yet"
           description="Your civic journey starts here. File your first complaint to track it like a service journey."
           action={

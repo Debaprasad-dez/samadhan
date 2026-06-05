@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Boxes, RefreshCw, Loader2 } from "lucide-react";
+import { RefreshCw, Loader2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/shared/empty-state";
+import { EmptyClusters } from "@/components/art/empty";
 import { formatRelative } from "@/lib/utils";
 
 interface Cluster {
@@ -71,16 +73,11 @@ export default function ClustersPage() {
           ))}
         </div>
       ) : clusters.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center gap-3 p-10 text-center">
-            <span className="bg-surface-muted text-muted-foreground flex h-12 w-12 items-center justify-center rounded-full">
-              <Boxes className="h-6 w-6" />
-            </span>
-            <p className="font-medium">
-              No systemic clusters detected this week.
-            </p>
-          </CardContent>
-        </Card>
+        <EmptyState
+          illustration={<EmptyClusters />}
+          title="No systemic clusters detected this week"
+          description="When related complaints group up across wards, they'll surface here."
+        />
       ) : (
         <div className="grid gap-3 sm:grid-cols-2">
           {clusters.map((c) => (

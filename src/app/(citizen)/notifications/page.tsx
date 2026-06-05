@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Bell } from "lucide-react";
 import { formatRelative, cn } from "@/lib/utils";
-import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { EmptyState } from "@/components/shared/empty-state";
+import { EmptyNotifications } from "@/components/art/empty";
 
 interface Notif {
   id: string;
@@ -51,12 +51,11 @@ export default function NotificationsPage() {
           ))}
         </div>
       ) : items.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center gap-2 p-10 text-center">
-            <Bell className="text-muted-foreground h-6 w-6" />
-            <p className="text-muted-foreground text-sm">No notifications yet.</p>
-          </CardContent>
-        </Card>
+        <EmptyState
+          illustration={<EmptyNotifications />}
+          title="All caught up"
+          description="No notifications yet. We'll ping you when your cases move."
+        />
       ) : (
         <div className="overflow-hidden rounded-lg border">
           {items.map((n) => (

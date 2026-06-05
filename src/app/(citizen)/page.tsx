@@ -12,6 +12,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { ThemedHero } from "@/components/art/themed-hero";
+import { BorderBand } from "@/components/art/border-band";
 
 export default async function CitizenHome() {
   const user = await requireRole(["CITIZEN"]);
@@ -30,6 +32,9 @@ export default async function CitizenHome() {
 
   return (
     <div className="space-y-8">
+      <div className="shadow-elev-1 overflow-hidden rounded-lg border">
+        <ThemedHero />
+      </div>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="font-display text-3xl font-semibold">
@@ -69,6 +74,8 @@ export default async function CitizenHome() {
           </Button>
         </CardContent>
       </Card>
+
+      <BorderBand className="opacity-70" />
 
       <section className="space-y-3">
         <div className="flex items-center justify-between">

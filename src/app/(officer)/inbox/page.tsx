@@ -9,6 +9,8 @@ import { StatusBadge, SeverityChip } from "@/components/case/status-badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
+import { EmptyState } from "@/components/shared/empty-state";
+import { EmptyInbox } from "@/components/art/empty";
 import {
   Dialog,
   DialogContent,
@@ -186,12 +188,11 @@ export default function OfficerInbox() {
           </CardContent>
         </Card>
       ) : cases.length === 0 ? (
-        <Card>
-          <CardContent className="p-10 text-center">
-            <p className="font-display text-xl">Inbox zero 🎉</p>
-            <p className="text-muted-foreground text-sm">No open cases.</p>
-          </CardContent>
-        </Card>
+        <EmptyState
+          illustration={<EmptyInbox />}
+          title="Inbox zero"
+          description="No open cases in your queue. Beautifully clear."
+        />
       ) : (
         <div className="overflow-hidden rounded-lg border">
           {cases.map((c, i) => {

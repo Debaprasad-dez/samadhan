@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Flame, Loader2 } from "lucide-react";
 import { FeedCard, type FeedItem } from "@/components/public/feed-card";
+import { EmptyState } from "@/components/shared/empty-state";
+import { EmptySearch } from "@/components/art/empty";
 import { Skeleton } from "@/components/ui/skeleton";
 import { WARDS, DEPARTMENTS } from "@/lib/seed-data";
 import { CASE_STATUSES } from "@/types";
@@ -134,9 +136,11 @@ export default function FeedPage() {
           ))}
         </div>
       ) : items.length === 0 ? (
-        <p className="text-muted-foreground py-10 text-center">
-          No complaints match. Reset filters.
-        </p>
+        <EmptyState
+          illustration={<EmptySearch />}
+          title="No complaints match"
+          description="Try a different ward, department, or status — or reset the filters."
+        />
       ) : (
         <>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

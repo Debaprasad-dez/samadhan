@@ -16,7 +16,7 @@ export function EmptyState({
     <Card>
       <CardContent className="flex flex-col items-center gap-3 p-10 text-center">
         {illustration && (
-          <span className="text-muted-foreground h-24 w-24">{illustration}</span>
+          <span className="mb-1 flex w-44 justify-center">{illustration}</span>
         )}
         <p className="font-display text-lg font-semibold">{title}</p>
         {description && (

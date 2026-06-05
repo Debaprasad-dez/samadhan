@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ThumbsUp, Users } from "lucide-react";
 import { StatusBadge, SeverityChip } from "@/components/case/status-badge";
+import { CategoryIcon } from "@/components/art/category-icon";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatRelative, humanizeCode } from "@/lib/utils";
 import type { CaseListItem } from "@/hooks/use-cases";
@@ -33,7 +34,10 @@ export function CaseCard({ c }: { c: CaseListItem }) {
             <p className="mt-0.5 truncate font-medium">{c.title}</p>
             <div className="text-muted-foreground mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
               <SeverityChip severity={c.severity} />
-              <span>{humanizeCode(c.departmentCode)}</span>
+              <span className="inline-flex items-center gap-1">
+                <CategoryIcon department={c.departmentCode} className="h-3.5 w-3.5" />
+                {humanizeCode(c.departmentCode)}
+              </span>
               <span>Ward {c.wardCode}</span>
               <span className="inline-flex items-center gap-1">
                 <ThumbsUp className="h-3 w-3" />

@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { Error500 } from "@/components/art/empty";
 
 // Root error boundary (§10.3).
 export default function Error({
@@ -18,6 +19,7 @@ export default function Error({
 
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center gap-4 px-6 text-center">
+      <Error500 className="w-56" />
       <h1 className="font-display text-3xl font-semibold">
         Something went wrong.
       </h1>
