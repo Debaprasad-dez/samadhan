@@ -9,7 +9,7 @@ const SceneHero = dynamic(
   () => import("./scene-hero").then((m) => m.SceneHero),
   {
     ssr: false,
-    loading: () => <Skeleton className="h-[478px] w-full" />,
+    loading: () => <Skeleton className="h-[420px] w-full" />,
   },
 );
 

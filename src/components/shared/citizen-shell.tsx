@@ -95,9 +95,15 @@ export function CitizenShell({
                 key={n.href}
                 href={n.href}
                 aria-label={t(n.label)}
-                className="bg-brand text-brand-foreground edge-highlight shadow-elev-3 -mt-7 flex h-14 w-14 flex-col items-center justify-center rounded-full ring-4 ring-surface transition-transform active:scale-95"
+                className="text-brand-foreground ring-surface -mt-7 flex h-14 w-14 flex-col items-center justify-center rounded-full ring-4 transition-all duration-150 active:translate-y-0.5"
+                style={{
+                  background:
+                    "radial-gradient(120% 120% at 50% 14%, hsl(var(--brand)) 0%, hsl(var(--brand-hover)) 100%)",
+                  boxShadow:
+                    "0 10px 22px -6px hsl(var(--brand) / 0.55), 0 4px 8px -2px rgba(0,0,0,0.28), inset 0 2px 1px rgba(255,255,255,0.5), inset 0 -3px 5px rgba(0,0,0,0.22)",
+                }}
               >
-                <Icon className="h-6 w-6" />
+                <Icon className="h-6 w-6 drop-shadow-[0_1px_1px_rgba(0,0,0,0.35)]" />
               </Link>
             );
           }

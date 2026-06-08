@@ -84,7 +84,7 @@ export function SceneHero({ className }: { className?: string }) {
     <div
       ref={ref}
       className={cn("relative overflow-hidden", className)}
-      style={{ height: 478, WebkitMaskImage: fade, maskImage: fade }}
+      style={{ height: 420, WebkitMaskImage: fade, maskImage: fade }}
     >
       {/* parallax layer — bleeds past the hero on all sides so it never gaps */}
       <motion.div

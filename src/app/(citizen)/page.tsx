@@ -116,7 +116,7 @@ export default async function CitizenHome() {
       <div className="relative -mx-4 md:-mx-6">
         <ThemedHero />
 
-        <div className="absolute inset-x-6 top-14 z-[8]">
+        <div className="absolute inset-x-6 top-6 z-[8]">
           {/* brand row */}
           <div className="flex items-center gap-2.5">
             <div className="flex h-[30px] w-[30px] flex-none items-center justify-center rounded-[9px]"
@@ -142,7 +142,7 @@ export default async function CitizenHome() {
           </div>
 
           {/* greeting with frosted veil */}
-          <div className="relative mt-8">
+          <div className="relative mt-5">
             <div className="pointer-events-none absolute -inset-3 z-[-1]"
               style={{
                 background: "radial-gradient(120% 120% at 22% 44%,color-mix(in srgb,var(--g-bg) 90%,transparent) 0%,color-mix(in srgb,var(--g-bg) 66%,transparent) 56%,transparent 84%)",
@@ -167,7 +167,7 @@ export default async function CitizenHome() {
 
       {/* ── Body: overlaps hero by ~46px. All colours from --g-* → reskins per theme.
           RevealList staggers the cascade on load (§6.3). ── */}
-      <RevealList className="relative z-[9] -mx-4 -mt-12 flex flex-col gap-6 px-4 pb-28 md:-mx-6 md:px-6">
+      <RevealList className="relative z-[9] -mx-4 -mt-20 flex flex-col gap-6 px-4 pb-4 md:-mx-6 md:px-6">
 
         {/* CTA card (+ floating marigold sprig sibling, so it isn't clipped) */}
         <div className="relative">
