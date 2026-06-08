@@ -612,12 +612,9 @@
   --accent-blue: var(--accent);
 }
 
-/* Per-theme display font overrides (design §4.3). Default is Tiro (tokens.css);
-   warm/narrative themes use Yatra One. */
-[data-theme="mithila-bloom"],
-[data-theme="coromandel-pattachitra"] {
-  --font-display: var(--font-yatra);
-}
+/* Font family is kept CONSTANT across all themes (per design handoff): the
+   display face is Tiro Devanagari Sanskrit and body is Mukta everywhere. No
+   per-theme display-font override. */
 
 /* =============================================================================
    GALLERY TOKENS (design_handoff/lib/app.css) — the "art tradition × token swap"

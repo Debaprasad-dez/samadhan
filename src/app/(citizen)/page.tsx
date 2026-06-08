@@ -112,10 +112,9 @@ export default async function CitizenHome() {
   return (
     <div className="flex flex-col">
 
-      {/* ── Hero: full-bleed, break out of shell padding ──
-          NOTE: the hero art is the bharat dawn scene for every theme until the
-          other scenes are ported, so this overlay keeps a fixed dawn-readable
-          ink rather than --g-ink (which goes light on the dark themes). */}
+      {/* ── Hero: full-bleed, break out of shell padding. Each theme renders its
+          own procedural scene (SceneHero follows data-theme), so the overlay uses
+          --g-ink etc. and reads correctly on both light and dark traditions. ── */}
       <div className="relative -mx-4 md:-mx-6">
         <ThemedHero />
 
@@ -131,11 +130,11 @@ export default async function CitizenHome() {
               </svg>
             </div>
             <div>
-              <p className="font-display text-lg leading-none" style={{ color: "#2c1b10" }}>समाधान</p>
-              <p className="mt-0.5 text-[9.5px] font-semibold uppercase tracking-[2.5px]" style={{ color: "#6e5746" }}>Samadhan</p>
+              <p className="font-display text-lg leading-none" style={{ color: "var(--g-ink)" }}>समाधान</p>
+              <p className="mt-0.5 text-[9.5px] font-semibold uppercase tracking-[2.5px]" style={{ color: "var(--g-ink-soft)" }}>Samadhan</p>
             </div>
             <div className="ml-auto flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-semibold"
-              style={{ background: "rgba(255,255,255,.62)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,.45)", color: "#6e5746", boxShadow: "0 4px 14px -8px rgba(40,26,12,.5)" }}>
+              style={{ background: "color-mix(in srgb,var(--g-card) 72%,transparent)", backdropFilter: "blur(8px)", border: "1px solid color-mix(in srgb,var(--g-ink) 14%,transparent)", color: "var(--g-ink-soft)", boxShadow: "0 4px 14px -8px rgba(20,12,6,.45)" }}>
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
                 <path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z" stroke="currentColor" strokeWidth="1.8"/>
                 <circle cx="12" cy="10" r="2.4" fill="currentColor"/>
@@ -148,21 +147,21 @@ export default async function CitizenHome() {
           <div className="relative mt-8">
             <div className="pointer-events-none absolute -inset-3 z-[-1]"
               style={{
-                background: "radial-gradient(120% 120% at 22% 44%,rgba(251,247,238,.9) 0%,rgba(251,247,238,.7) 56%,transparent 84%)",
+                background: "radial-gradient(120% 120% at 22% 44%,color-mix(in srgb,var(--g-bg) 90%,transparent) 0%,color-mix(in srgb,var(--g-bg) 66%,transparent) 56%,transparent 84%)",
                 backdropFilter: "blur(2.5px)",
                 WebkitMaskImage: "radial-gradient(120% 120% at 26% 44%,#000 40%,transparent 82%)",
                 maskImage: "radial-gradient(120% 120% at 26% 44%,#000 40%,transparent 82%)",
               }} />
-            <p className="font-display text-[13px] italic" style={{ color: "#a83c14" }}>
+            <p className="font-display text-[13px] italic" style={{ color: "var(--g-primary-deep)" }}>
               सुप्रभात — the city wakes
             </p>
-            <h1 className="font-display text-[33px] leading-[1.06] tracking-[-0.2px]" style={{ color: "#2c1b10" }}>
+            <h1 className="font-display text-[33px] leading-[1.06] tracking-[-0.2px]" style={{ color: "var(--g-ink)" }}>
               Good morning,<br />
-              <span style={{ color: "#a83c14" }}>{firstName}</span>
+              <span style={{ color: "var(--g-primary-deep)" }}>{firstName}</span>
             </h1>
-            <p className="mt-2 max-w-[225px] text-[12.5px] font-medium" style={{ color: "#6e5746" }}>
+            <p className="mt-2 max-w-[225px] text-[12.5px] font-medium" style={{ color: "var(--g-ink-soft)" }}>
               Your civic journey, tracked end to end.{" "}
-              <span className="font-semibold" style={{ color: "#a83c14" }}>{tier} · {user.reputation} pts</span>
+              <span className="font-semibold" style={{ color: "var(--g-primary)" }}>{tier} · {user.reputation} pts</span>
             </p>
           </div>
         </div>
