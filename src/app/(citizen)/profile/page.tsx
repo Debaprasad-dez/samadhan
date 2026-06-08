@@ -7,6 +7,7 @@ import { TierChip } from "@/components/case/reputation-tier";
 import { TierEmblem } from "@/components/art/tier-emblem";
 import { BadgeGrid } from "@/components/citizen/badge-grid";
 import { SettingsForm } from "@/components/citizen/settings-form";
+import { ThemeGallery } from "@/components/citizen/theme-gallery";
 import { Card, CardContent } from "@/components/ui/card";
 
 export default async function ProfilePage() {
@@ -90,6 +91,16 @@ export default async function ProfilePage() {
           />
         </section>
       </div>
+
+      <section className="space-y-3">
+        <div>
+          <h2 className="font-display text-lg font-semibold">Appearance</h2>
+          <p className="text-muted-foreground text-sm">
+            Choose the heritage tradition that dresses your Samadhan.
+          </p>
+        </div>
+        <ThemeGallery />
+      </section>
     </div>
   );
 }

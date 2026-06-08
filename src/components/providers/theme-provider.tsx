@@ -31,6 +31,44 @@ export const THEME_LABELS: Record<ThemeName, string> = {
   "nilgiri-mist": "Nilgiri Mist",
 };
 
+// Heritage metadata for the theme picker (design addendum §8.2/§8.5) — the
+// tradition each theme honours + a respectful one-line note on the art form.
+export const THEME_META: Record<
+  ThemeName,
+  { tradition: string; blurb: string }
+> = {
+  "bharat-dawn": {
+    tradition: "Banaras Ghats",
+    blurb:
+      "Sunrise over the Ganga — marigold garlands, temple gold and the daily renewal of civic hope.",
+  },
+  "mithila-bloom": {
+    tradition: "Madhubani · Bihar",
+    blurb:
+      "Line-dense Mithila painting — fish, peacocks and lotus ponds in natural-dye colour.",
+  },
+  "warli-earth": {
+    tradition: "Warli · Maharashtra",
+    blurb:
+      "White rice-paste figures on mud-ochre — minimal tribal geometry and the tarpa dance.",
+  },
+  "mughal-indigo": {
+    tradition: "Mughal Miniature",
+    blurb:
+      "Indigo night, jali lattice and gold leaf — Indo-Islamic refinement and pietra dura.",
+  },
+  "coromandel-pattachitra": {
+    tradition: "Pattachitra · Odisha",
+    blurb:
+      "Palm-leaf etching, bold outlines and ornate floral borders — temple narrative art.",
+  },
+  "nilgiri-mist": {
+    tradition: "Kerala Mural",
+    blurb:
+      "Misty Western Ghats and backwaters — tea-estate calm with Theyyam vermillion.",
+  },
+};
+
 interface ThemeContextValue {
   theme: ThemeName;
   setTheme: (t: ThemeName) => void;
