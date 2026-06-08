@@ -1,7 +1,13 @@
 "use client";
 
 import Image, { type StaticImageData } from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useReducedMotion,
+} from "framer-motion";
 import { cn } from "@/lib/utils";
 import bharatDawn from "@/assets/heroes/bharat-dawn.png";
 
@@ -17,15 +23,31 @@ const HERO_IMG: Record<string, StaticImageData> = {
   "nilgiri-mist": bharatDawn,
 };
 
+// px the image extends past the hero (= max parallax travel). Larger → the
+// image lags the page more, so the parallax is clearly observable, while the
+// matching bleed keeps the edges from ever gapping.
+const BLEED = 240;
+
 /**
  * Themed hero. Renders the active theme's background image (following the live
- * data-theme attribute, so it swaps on theme change) under a set of cheap CSS
- * overlays that keep it alive: a slow Ken-Burns drift, time-of-day warmth, film
- * grain, vignette, and a fade into the page. Reduced-motion freezes the drift.
+ * data-theme attribute) under cheap CSS overlays that keep it alive: scroll
+ * parallax (the image drifts slower than the page), a slow Ken-Burns zoom,
+ * time-of-day warmth, film grain, vignette. Top/bottom feather to transparent so
+ * it melts into the page. Reduced-motion freezes parallax + drift.
  */
 export function SceneHero({ className }: { className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
   const [theme, setTheme] = useState("bharat-dawn");
   const [timeTint, setTimeTint] = useState<string | null>(null);
+
+  // Scroll parallax: translate the image as the hero scrolls through view.
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+  const yParallax = useTransform(scrollYProgress, [0, 1], [0, BLEED]);
+  const y = reduced ? 0 : yParallax;
 
   // Follow the document's data-theme attribute.
   useEffect(() => {
@@ -52,20 +74,33 @@ export function SceneHero({ className }: { className?: string }) {
 
   const img = HERO_IMG[theme] ?? HERO_IMG["bharat-dawn"];
 
+  // Feather the whole hero (image + grain + vignette together) to fully
+  // transparent at the top and bottom edges, so it melts into the page
+  // background with no visible border.
+  const fade =
+    "linear-gradient(to bottom, transparent 0%, #000 22%, #000 80%, transparent 100%)";
+
   return (
     <div
+      ref={ref}
       className={cn("relative overflow-hidden", className)}
-      style={{ height: 478 }}
+      style={{ height: 478, WebkitMaskImage: fade, maskImage: fade }}
     >
-      <Image
-        src={img}
-        alt=""
-        fill
-        priority
-        sizes="100vw"
-        placeholder="blur"
-        className="hero-kenburns object-cover object-[center_top]"
-      />
+      {/* parallax layer — bleeds past the hero on all sides so it never gaps */}
+      <motion.div
+        className="absolute"
+        style={{ y, top: -BLEED, bottom: -BLEED, left: 0, right: 0 }}
+      >
+        <Image
+          src={img}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          placeholder="blur"
+          className="hero-kenburns object-cover object-[center_top]"
+        />
+      </motion.div>
 
       {/* time-of-day warmth */}
       {timeTint && (
@@ -96,16 +131,6 @@ export function SceneHero({ className }: { className?: string }) {
           backgroundImage:
             "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
           backgroundSize: "170px 170px",
-        }}
-        aria-hidden
-      />
-
-      {/* fade into the page background (per-theme stage colour) */}
-      <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-[7]"
-        style={{
-          height: 120,
-          background: "linear-gradient(to bottom, transparent, var(--g-stage1) 94%)",
         }}
         aria-hidden
       />

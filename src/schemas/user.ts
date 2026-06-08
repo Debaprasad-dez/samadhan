@@ -1,4 +1,7 @@
 import { z } from "zod";
+import { LOCALES } from "@/lib/i18n";
+
+const LOCALE_CODES = LOCALES.map((l) => l.code);
 
 // E.164 India mobile (§9.1).
 export const phoneSchema = z
@@ -33,7 +36,10 @@ export type RoleSwitchInput = z.infer<typeof RoleSwitchInput>;
 
 // Profile settings (§6.2.8).
 export const UpdateSettingsInput = z.object({
-  language: z.enum(["en", "hi"]).optional(),
+  language: z
+    .string()
+    .refine((c) => LOCALE_CODES.includes(c), "Unsupported language")
+    .optional(),
   aiAssistLevel: z.enum(["full", "reduced", "off"]).optional(),
   showOnLeaderboard: z.boolean().optional(),
 });

@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { LOCALES } from "@/lib/i18n";
 
 export function SettingsForm({
   initial,
@@ -57,9 +58,12 @@ export function SettingsForm({
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="en">English</SelectItem>
-            <SelectItem value="hi">हिन्दी (Hindi)</SelectItem>
+          <SelectContent className="max-h-72">
+            {LOCALES.map((l) => (
+              <SelectItem key={l.code} value={l.code}>
+                {l.code === "en" ? "English" : `${l.native} · ${l.english}`}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
