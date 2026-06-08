@@ -56,6 +56,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { LeaveGuard } from "@/components/citizen/leave-guard";
 import type { Severity } from "@/types";
 
 const STEPS = ["Describe", "Categorise", "Evidence", "Confirm"];
@@ -245,8 +246,27 @@ export function IntakeWizard() {
     );
   }
 
+  // Guard against losing an in-progress complaint on navigation.
+  const dirty =
+    !createCase.isPending &&
+    !navigatingRef.current &&
+    (s.title.trim() !== "" ||
+      s.body.trim() !== "" ||
+      s.evidence.length > 0 ||
+      s.step > 1);
+
   return (
     <div className="mx-auto w-full max-w-[720px]">
+      <LeaveGuard
+        active={dirty}
+        onSaveDraft={() =>
+          toast.success("Draft saved — pick up anytime from File a complaint.")
+        }
+        onDiscard={() => {
+          s.reset();
+          toast.message("Draft discarded.");
+        }}
+      />
       {/* stepper */}
       <div className="mb-6">
         <div className="mb-2 flex items-center justify-between text-xs">
