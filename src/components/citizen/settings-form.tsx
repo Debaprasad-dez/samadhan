@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { LOCALES } from "@/lib/i18n";
+import { useT } from "@/components/providers/locale-provider";
 
 export function SettingsForm({
   initial,
@@ -26,6 +27,7 @@ export function SettingsForm({
   };
 }) {
   const router = useRouter();
+  const t = useT();
   const [language, setLanguage] = useState(initial.language);
   const [aiAssistLevel, setAi] = useState(initial.aiAssistLevel);
   const [showOnLeaderboard, setShow] = useState(initial.showOnLeaderboard);
@@ -42,7 +44,7 @@ export function SettingsForm({
       const d = await res.json();
       if (!res.ok) toast.error(d?.error?.message ?? "Couldn't save.");
       else {
-        toast.success("Settings saved.");
+        toast.success(t("settings.saved"));
         router.refresh();
       }
     } finally {
@@ -53,7 +55,7 @@ export function SettingsForm({
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label>Language</Label>
+        <Label>{t("settings.language")}</Label>
         <Select value={language} onValueChange={setLanguage}>
           <SelectTrigger>
             <SelectValue />
@@ -69,15 +71,15 @@ export function SettingsForm({
       </div>
 
       <div className="space-y-2">
-        <Label>AI assistance</Label>
+        <Label>{t("settings.aiAssist")}</Label>
         <Select value={aiAssistLevel} onValueChange={setAi}>
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="full">Full</SelectItem>
-            <SelectItem value="reduced">Reduced</SelectItem>
-            <SelectItem value="off">Off</SelectItem>
+            <SelectItem value="full">{t("settings.aiFull")}</SelectItem>
+            <SelectItem value="reduced">{t("settings.aiReduced")}</SelectItem>
+            <SelectItem value="off">{t("settings.aiOff")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -94,7 +96,7 @@ export function SettingsForm({
 
       <Button onClick={save} disabled={saving}>
         {saving && <Loader2 className="animate-spin" />}
-        Save settings
+        {t("settings.save")}
       </Button>
     </div>
   );

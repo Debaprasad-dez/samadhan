@@ -2,18 +2,20 @@
 
 import { Sun, Moon, Laptop } from "lucide-react";
 import { useTheme, type Mode } from "@/components/providers/theme-provider";
+import { useT } from "@/components/providers/locale-provider";
 import { cn } from "@/lib/utils";
 
 // Segmented Light / Dark / System control with a sliding active indicator
 // (design addendum §8.2). Used in the header switcher and the Settings gallery.
-const OPTIONS: { value: Mode; label: string; Icon: typeof Sun }[] = [
-  { value: "light", label: "Light", Icon: Sun },
-  { value: "dark", label: "Dark", Icon: Moon },
-  { value: "system", label: "Auto", Icon: Laptop },
+const OPTIONS: { value: Mode; key: string; Icon: typeof Sun }[] = [
+  { value: "light", key: "settings.modeLight", Icon: Sun },
+  { value: "dark", key: "settings.modeDark", Icon: Moon },
+  { value: "system", key: "settings.modeAuto", Icon: Laptop },
 ];
 
 export function ModeControl({ className }: { className?: string }) {
   const { mode, setMode } = useTheme();
+  const t = useT();
   return (
     <div
       role="radiogroup"
@@ -23,7 +25,7 @@ export function ModeControl({ className }: { className?: string }) {
         className,
       )}
     >
-      {OPTIONS.map(({ value, label, Icon }) => {
+      {OPTIONS.map(({ value, key, Icon }) => {
         const active = mode === value;
         return (
           <button
@@ -40,7 +42,7 @@ export function ModeControl({ className }: { className?: string }) {
             )}
           >
             <Icon className="h-3.5 w-3.5" />
-            {label}
+            {t(key)}
           </button>
         );
       })}

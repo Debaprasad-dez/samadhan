@@ -11,7 +11,8 @@
     "overview": "Overview",
     "officers": "Officers",
     "trends": "Trends",
-    "policy": "Policy"
+    "policy": "Policy",
+    "ward": "Ward"
   },
   "common": {
     "signIn": "Sign in",
@@ -20,7 +21,105 @@
     "loading": "Loading…",
     "retry": "Retry",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "back": "Back",
+    "close": "Close",
+    "continue": "Continue",
+    "submit": "Submit",
+    "viewAll": "View all",
+    "all": "All",
+    "map": "Map",
+    "search": "Search",
+    "upvote": "Upvote",
+    "saving": "Saving…"
+  },
+  "time": {
+    "morning": "Good morning",
+    "afternoon": "Good afternoon",
+    "evening": "Good evening",
+    "night": "Good evening",
+    "wakes": "the city wakes"
+  },
+  "home": {
+    "raiseVoice": "Raise your voice",
+    "fileComplaint": "File a complaint",
+    "fileSub": "Speak in Hindi or English — our AI will phrase it for the right department.",
+    "startCase": "Start a new case",
+    "startCaseSub": "Photos, location, evidence",
+    "voiceInput": "Voice input",
+    "recentCases": "Your recent cases",
+    "hotInWard": "Hot in your ward",
+    "journey": "Your civic journey, tracked end to end.",
+    "noCases": "No complaints filed yet. Your civic journey starts here.",
+    "trending": "Trending"
+  },
+  "chips": {
+    "water": "Water",
+    "roads": "Roads",
+    "garbage": "Garbage",
+    "power": "Power",
+    "streetlight": "Streetlight"
+  },
+  "status": {
+    "FILED": "Filed",
+    "IN_PROGRESS": "In progress",
+    "OFFICER_ASSIGNED": "Officer assigned",
+    "RESOLVED": "Resolved",
+    "REJECTED": "Rejected",
+    "PENDING": "Pending",
+    "CLOSED": "Closed",
+    "onTrack": "On track"
+  },
+  "auth": {
+    "welcome": "Welcome to Samadhan",
+    "subtitle": "Every complaint, a visible journey.",
+    "phone": "Mobile number",
+    "password": "Password",
+    "signInCta": "Sign in",
+    "demoHint": "Use a seeded demo account to explore."
+  },
+  "profile": {
+    "badges": "Badges",
+    "settings": "Settings",
+    "appearance": "Appearance",
+    "appearanceSub": "Choose the heritage tradition that dresses your Samadhan.",
+    "complaints": "Complaints",
+    "upvotesGiven": "Upvotes given",
+    "cosigns": "Co-signs",
+    "dayStreak": "-day streak"
+  },
+  "settings": {
+    "language": "Language",
+    "aiAssist": "AI assistance",
+    "aiFull": "Full",
+    "aiReduced": "Reduced",
+    "aiOff": "Off",
+    "showLeaderboard": "Show me on the public leaderboard",
+    "mode": "Mode",
+    "modeLight": "Light",
+    "modeDark": "Dark",
+    "modeAuto": "Auto",
+    "saved": "Settings saved.",
+    "save": "Save changes"
+  },
+  "leaveGuard": {
+    "title": "Save your complaint draft?",
+    "body": "You have an unsaved complaint in progress. Save it as a draft to finish later, or discard it. It won’t be filed until you submit.",
+    "keepEditing": "Keep editing",
+    "discard": "Discard",
+    "saveDraft": "Save draft",
+    "draftSaved": "Draft saved — pick up anytime from File a complaint.",
+    "draftDiscarded": "Draft discarded."
+  },
+  "empty": {
+    "casesTitle": "A new day, no issues yet",
+    "casesBody": "When you file a complaint, you’ll track it here end to end.",
+    "feedTitle": "The ward is quiet",
+    "feedBody": "Public complaints from your ward will appear here.",
+    "notifTitle": "You’re all caught up",
+    "searchTitle": "Nothing found",
+    "fileFirst": "File your first complaint"
   },
   "feed": { "title": "Public feed", "hot": "Top issues this week" },
   "cases": { "title": "My cases", "empty": "No complaints yet" }

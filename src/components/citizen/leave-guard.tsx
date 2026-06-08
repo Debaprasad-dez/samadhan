@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { useT } from "@/components/providers/locale-provider";
 
 type Pending = { url: string; pop: boolean };
 
@@ -33,6 +34,7 @@ export function LeaveGuard({
 }) {
   const router = useRouter();
   const pathname = usePathname();
+  const t = useT();
   const [pending, setPending] = useState<Pending | null>(null);
   const formUrlRef = useRef("");
 
@@ -136,25 +138,21 @@ export function LeaveGuard({
     >
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Save your complaint draft?</DialogTitle>
-          <DialogDescription>
-            You have an unsaved complaint in progress. Save it as a draft to
-            finish later, or discard it. It won&rsquo;t be filed until you
-            submit.
-          </DialogDescription>
+          <DialogTitle>{t("leaveGuard.title")}</DialogTitle>
+          <DialogDescription>{t("leaveGuard.body")}</DialogDescription>
         </DialogHeader>
         <DialogFooter className="gap-2 sm:justify-between">
           <Button variant="ghost" onClick={handleStay}>
-            Keep editing
+            {t("leaveGuard.keepEditing")}
           </Button>
           <div className="flex gap-2">
             <Button variant="outline" onClick={handleDiscard}>
               <Trash2 className="h-4 w-4" />
-              Discard
+              {t("leaveGuard.discard")}
             </Button>
             <Button onClick={handleSave}>
               <Save className="h-4 w-4" />
-              Save draft
+              {t("leaveGuard.saveDraft")}
             </Button>
           </div>
         </DialogFooter>

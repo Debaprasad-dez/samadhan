@@ -5,6 +5,7 @@ import { tierForScore } from "@/lib/reputation";
 import { ThemedHero } from "@/components/art/themed-hero";
 import { marigold, leaf } from "@/lib/art/core";
 import { RevealList } from "@/components/motion/reveal";
+import { getT } from "@/lib/t";
 import { cn } from "@/lib/utils";
 
 // Floating marigold-and-leaf sprig (design handoff decorate()) — perches over the
@@ -44,12 +45,6 @@ function SlaRing({ percent, status }: { percent: number; status: string }) {
   );
 }
 
-const STATUS_LABEL: Record<string, string> = {
-  FILED: "Filed", IN_PROGRESS: "In progress",
-  OFFICER_ASSIGNED: "Officer assigned", RESOLVED: "Resolved",
-  REJECTED: "Rejected", PENDING: "Pending", CLOSED: "Closed",
-};
-
 // Category thumb gradients are semantic (per department), not per-theme.
 const THUMB_STYLE: Record<string, { bg: string; color: string }> = {
   WATER:       { bg: "linear-gradient(150deg,#D9EEF0,#A9D4D8)", color: "#1F6E73" },
@@ -81,11 +76,11 @@ function CategoryThumb({ category }: { category: string }) {
 }
 
 const CHIPS = [
-  { label: "Water",       icon: `<path d="M12 2c3 4 5 6.5 5 9a5 5 0 0 1-10 0c0-2.5 2-5 5-9Z" fill="currentColor"/>` },
-  { label: "Roads",       icon: `<path d="M3 18h18M6 18l1.5-12h9L18 18M9 6v12M15 6v12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/>` },
-  { label: "Garbage",     icon: `<path d="M6 9h12l-1 11H7L6 9Zm2-3h8l1 3H7l1-3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>` },
-  { label: "Power",       icon: `<path d="M13 2 4 14h7l-1 9 9-12h-7l1-9Z" fill="currentColor"/>` },
-  { label: "Streetlight", icon: `<path d="M12 3v3M12 18v3M5 12H2M22 12h-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="4" fill="currentColor"/>` },
+  { slug: "WATER",       key: "water",       icon: `<path d="M12 2c3 4 5 6.5 5 9a5 5 0 0 1-10 0c0-2.5 2-5 5-9Z" fill="currentColor"/>` },
+  { slug: "ROADS",       key: "roads",       icon: `<path d="M3 18h18M6 18l1.5-12h9L18 18M9 6v12M15 6v12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/>` },
+  { slug: "GARBAGE",     key: "garbage",     icon: `<path d="M6 9h12l-1 11H7L6 9Zm2-3h8l1 3H7l1-3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>` },
+  { slug: "POWER",       key: "power",       icon: `<path d="M13 2 4 14h7l-1 9 9-12h-7l1-9Z" fill="currentColor"/>` },
+  { slug: "STREETLIGHT", key: "streetlight", icon: `<path d="M12 3v3M12 18v3M5 12H2M22 12h-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="4" fill="currentColor"/>` },
 ];
 
 export default async function CitizenHome() {
@@ -109,6 +104,7 @@ export default async function CitizenHome() {
 
   const tier = tierForScore(user.reputation);
   const firstName = user.name.split(" ")[0];
+  const t = getT(user.language ?? "en");
 
   return (
     <div className="flex flex-col">
@@ -154,14 +150,14 @@ export default async function CitizenHome() {
                 maskImage: "radial-gradient(120% 120% at 26% 44%,#000 40%,transparent 82%)",
               }} />
             <p className="font-display text-[13px] italic" style={{ color: "var(--g-primary-deep)" }}>
-              सुप्रभात — the city wakes
+              {t("time.morning")} — {t("time.wakes")}
             </p>
             <h1 className="font-display text-[33px] leading-[1.06] tracking-[-0.2px]" style={{ color: "var(--g-ink)" }}>
-              Good morning,<br />
+              {t("time.morning")},<br />
               <span style={{ color: "var(--g-primary-deep)" }}>{firstName}</span>
             </h1>
             <p className="mt-2 max-w-[225px] text-[12.5px] font-medium" style={{ color: "var(--g-ink-soft)" }}>
-              Your civic journey, tracked end to end.{" "}
+              {t("home.journey")}{" "}
               <span className="font-semibold" style={{ color: "var(--g-primary)" }}>{tier} · {user.reputation} pts</span>
             </p>
           </div>
@@ -201,10 +197,10 @@ export default async function CitizenHome() {
               </svg>
             </div>
 
-            <p className="relative z-[1] text-[10.5px] font-bold uppercase tracking-[2px]" style={{ color: "var(--g-primary)" }}>Raise your voice</p>
-            <h2 className="relative z-[1] font-display text-[23px] leading-[1.1]" style={{ color: "var(--g-ink)", marginTop: 6, marginBottom: 2 }}>File a complaint</h2>
+            <p className="relative z-[1] text-[10.5px] font-bold uppercase tracking-[2px]" style={{ color: "var(--g-primary)" }}>{t("home.raiseVoice")}</p>
+            <h2 className="relative z-[1] font-display text-[23px] leading-[1.1]" style={{ color: "var(--g-ink)", marginTop: 6, marginBottom: 2 }}>{t("home.fileComplaint")}</h2>
             <p className="relative z-[1] mb-4 max-w-[200px] text-[12px] leading-[1.4]" style={{ color: "var(--g-ink-soft)" }}>
-              Speak in Hindi or English — our AI will phrase it for the right department.
+              {t("home.fileSub")}
             </p>
 
             <div className="relative z-[1] flex items-stretch gap-3">
@@ -223,13 +219,13 @@ export default async function CitizenHome() {
                   </svg>
                 </span>
                 <span className="leading-[1.1]">
-                  <b className="block text-[15px] font-bold">Start a new case</b>
-                  <span className="text-[10.5px] font-medium opacity-90">Photos, location, evidence</span>
+                  <b className="block text-[15px] font-bold">{t("home.startCase")}</b>
+                  <span className="text-[10.5px] font-medium opacity-90">{t("home.startCaseSub")}</span>
                 </span>
               </Link>
 
               {/* btn-mic */}
-              <Link href="/file" aria-label="Voice input"
+              <Link href="/file" aria-label={t("home.voiceInput")}
                 className="relative flex w-[54px] flex-none items-center justify-center rounded-2xl"
                 style={{
                   background: "linear-gradient(160deg,color-mix(in srgb,var(--g-gold-lt) 55%,#fff),color-mix(in srgb,var(--g-gold-lt) 82%,var(--g-bg)))",
@@ -248,14 +244,14 @@ export default async function CitizenHome() {
 
             {/* category chips */}
             <div className="relative z-[1] -mb-1 mt-3 flex gap-1.5 overflow-x-auto pb-1 [scrollbar-width:none]">
-              {CHIPS.map(({ label, icon }) => (
-                <Link key={label} href={`/file?category=${label.toUpperCase()}`}
+              {CHIPS.map(({ slug, key, icon }) => (
+                <Link key={slug} href={`/file?category=${slug}`}
                   className="flex flex-none items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11.5px] font-semibold"
                   style={{ background: "var(--g-paper)", borderColor: "var(--g-line)", color: "var(--g-chip-ink)" }}>
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
                     style={{ color: "var(--g-primary)" }}
                     dangerouslySetInnerHTML={{ __html: icon }} />
-                  {label}
+                  {t(`chips.${key}`)}
                 </Link>
               ))}
             </div>
@@ -270,10 +266,10 @@ export default async function CitizenHome() {
                 <path d="M2.5 12.4h11M4.6 12.4a3.4 3.4 0 0 1 6.8 0" fill="color-mix(in srgb,var(--g-gold) 45%,transparent)" stroke="var(--g-gold)" strokeWidth="1.3" strokeLinecap="round" />
                 <path d="M8 3.3v1.5M3.6 5.3l1 1M12.4 5.3l-1 1" stroke="var(--g-gold)" strokeWidth="1.3" strokeLinecap="round" />
               </svg>
-              Your recent cases
+              {t("home.recentCases")}
             </h3>
             <Link href="/cases" className="flex items-center gap-1 text-[11.5px] font-semibold" style={{ color: "var(--g-primary)" }}>
-              All {caseCount}
+              {t("common.all")} {caseCount}
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
                 <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
@@ -283,7 +279,7 @@ export default async function CitizenHome() {
           {recent.length === 0 ? (
             <div className="rounded-[18px] p-8 text-center text-[13px]"
               style={{ background: "var(--g-card)", border: "1px solid var(--g-line)", color: "var(--g-ink-soft)" }}>
-              No complaints filed yet. Your civic journey starts here.
+              {t("home.noCases")}
             </div>
           ) : (
             <div className="flex flex-col gap-2.5">
@@ -305,7 +301,7 @@ export default async function CitizenHome() {
                             color: isWarn ? "color-mix(in srgb,var(--g-warn) 75%,var(--g-ink))" : "color-mix(in srgb,var(--g-ok) 78%,var(--g-ink))",
                           }}>
                           <span className="h-[5px] w-[5px] rounded-full" style={{ background: isWarn ? "var(--g-warn)" : "var(--g-ok)" }} />
-                          {STATUS_LABEL[c.status] ?? c.status}
+                          {t(`status.${c.status}`)}
                         </span>
                       </div>
                     </div>
@@ -333,10 +329,10 @@ export default async function CitizenHome() {
           <section>
             <div className="mb-3 flex items-center justify-between">
               <h3 className="font-display text-[18px] font-normal" style={{ color: "var(--g-ink)" }}>
-                Hot in your ward
+                {t("home.hotInWard")}
               </h3>
               <Link href="/feed" className="flex items-center gap-1 text-[11.5px] font-semibold" style={{ color: "var(--g-primary)" }}>
-                Map
+                {t("common.map")}
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
                   <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
@@ -356,7 +352,7 @@ export default async function CitizenHome() {
                       <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
                         <path d="M12 2c1 3-1 4 0 7 .6 1.8 3 2 3 5a6 6 0 0 1-12 0c0-2 1-3 2-2 .5-3 4-4 5-10Z" fill="#FF9A4D" />
                       </svg>
-                      Trending
+                      {t("home.trending")}
                     </span>
                   </div>
                   <div className="flex flex-col gap-2 px-3 py-3">
@@ -372,7 +368,7 @@ export default async function CitizenHome() {
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
                           <path d="M12 5l7 8h-4v6H9v-6H5l7-8Z" fill="currentColor" />
                         </svg>
-                        Upvote
+                        {t("common.upvote")}
                       </span>
                     </div>
                   </div>

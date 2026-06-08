@@ -8,6 +8,7 @@ import { TierEmblem } from "@/components/art/tier-emblem";
 import { BadgeGrid } from "@/components/citizen/badge-grid";
 import { SettingsForm } from "@/components/citizen/settings-form";
 import { ThemeGallery } from "@/components/citizen/theme-gallery";
+import { getT } from "@/lib/t";
 import { Card, CardContent } from "@/components/ui/card";
 
 export default async function ProfilePage() {
@@ -23,10 +24,11 @@ export default async function ProfilePage() {
 
   const earned = user.badges.map((b) => b.badgeId);
   const tier = tierForScore(user.reputation);
+  const t = getT(user.language ?? "en");
   const stats = [
-    { label: "Complaints", value: user._count.cases, icon: FileText },
-    { label: "Upvotes given", value: user._count.upvotes, icon: ThumbsUp },
-    { label: "Co-signs", value: user._count.cosigns, icon: Users },
+    { label: t("profile.complaints"), value: user._count.cases, icon: FileText },
+    { label: t("profile.upvotesGiven"), value: user._count.upvotes, icon: ThumbsUp },
+    { label: t("profile.cosigns"), value: user._count.cosigns, icon: Users },
   ];
 
   return (
@@ -48,7 +50,7 @@ export default async function ProfilePage() {
               <span className="font-baloo font-semibold">
                 {user.streakDays}
               </span>
-              -day streak
+              {t("profile.dayStreak")}
             </span>
           </div>
         </div>
@@ -75,13 +77,17 @@ export default async function ProfilePage() {
           </div>
 
           <section className="space-y-3">
-            <h2 className="font-display text-lg font-semibold">Badges</h2>
+            <h2 className="font-display text-lg font-semibold">
+              {t("profile.badges")}
+            </h2>
             <BadgeGrid earned={earned} />
           </section>
         </div>
 
         <section className="space-y-3">
-          <h2 className="font-display text-lg font-semibold">Settings</h2>
+          <h2 className="font-display text-lg font-semibold">
+            {t("profile.settings")}
+          </h2>
           <SettingsForm
             initial={{
               language: user.language,
@@ -94,9 +100,11 @@ export default async function ProfilePage() {
 
       <section className="space-y-3">
         <div>
-          <h2 className="font-display text-lg font-semibold">Appearance</h2>
+          <h2 className="font-display text-lg font-semibold">
+            {t("profile.appearance")}
+          </h2>
           <p className="text-muted-foreground text-sm">
-            Choose the heritage tradition that dresses your Samadhan.
+            {t("profile.appearanceSub")}
           </p>
         </div>
         <ThemeGallery />

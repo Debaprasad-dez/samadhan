@@ -57,6 +57,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { LeaveGuard } from "@/components/citizen/leave-guard";
+import { useT } from "@/components/providers/locale-provider";
 import type { Severity } from "@/types";
 
 const STEPS = ["Describe", "Categorise", "Evidence", "Confirm"];
@@ -67,6 +68,7 @@ export function IntakeWizard() {
   const params = useSearchParams();
   const user = useSession();
   const s = useIntakeStore();
+  const tr = useT();
 
   // Avoid hydration mismatch from persisted store: render only after mount.
   const [mounted, setMounted] = useState(false);
@@ -259,12 +261,10 @@ export function IntakeWizard() {
     <div className="mx-auto w-full max-w-[720px]">
       <LeaveGuard
         active={dirty}
-        onSaveDraft={() =>
-          toast.success("Draft saved — pick up anytime from File a complaint.")
-        }
+        onSaveDraft={() => toast.success(tr("leaveGuard.draftSaved"))}
         onDiscard={() => {
           s.reset();
-          toast.message("Draft discarded.");
+          toast.message(tr("leaveGuard.draftDiscarded"));
         }}
       />
       {/* stepper */}

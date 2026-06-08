@@ -7,6 +7,7 @@ import {
   THEME_LABELS,
 } from "@/components/providers/theme-provider";
 import { ModeControl } from "@/components/shared/mode-control";
+import { useT } from "@/components/providers/locale-provider";
 import { cn } from "@/lib/utils";
 
 // Compact theme selector (design simplification): each theme is one same-sized
@@ -14,6 +15,7 @@ import { cn } from "@/lib/utils";
 // no descriptions. `data-theme` makes every tile paint in its own palette.
 export function ThemeGallery() {
   const { theme, setTheme } = useTheme();
+  const t = useT();
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
@@ -60,7 +62,7 @@ export function ThemeGallery() {
 
       <div>
         <p className="text-muted-foreground mb-2 text-xs font-semibold uppercase tracking-wide">
-          Mode
+          {t("settings.mode")}
         </p>
         <ModeControl className="max-w-xs" />
       </div>

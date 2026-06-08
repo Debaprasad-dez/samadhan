@@ -1,10 +1,23 @@
 import en from "../../messages/en.json";
 import hi from "../../messages/hi.json";
+import bn from "../../messages/bn.json";
+import mr from "../../messages/mr.json";
+import gu from "../../messages/gu.json";
+import ta from "../../messages/ta.json";
+import te from "../../messages/te.json";
 
 // Registered translation dictionaries. A locale with no dictionary here falls
 // back to English per-key (see translate + getDict), so every option in LOCALES
 // stays usable while its messages/<code>.json is still being authored.
-export const dictionaries: Record<string, typeof en> = { en, hi };
+export const dictionaries: Record<string, typeof en> = {
+  en,
+  hi,
+  bn,
+  mr,
+  gu,
+  ta,
+  te,
+};
 export type Locale = string;
 export type Dict = typeof en;
 
