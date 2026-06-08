@@ -101,7 +101,9 @@
     "modeDark": "Dark",
     "modeAuto": "Auto",
     "saved": "Settings saved.",
-    "save": "Save changes"
+    "save": "Save changes",
+    "applying": "Applying your changes…",
+    "applyError": "Couldn’t save. Please try again."
   },
   "leaveGuard": {
     "title": "Save your complaint draft?",

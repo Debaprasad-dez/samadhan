@@ -5,11 +5,24 @@ import mr from "../../messages/mr.json";
 import gu from "../../messages/gu.json";
 import ta from "../../messages/ta.json";
 import te from "../../messages/te.json";
+import ur from "../../messages/ur.json";
+import kn from "../../messages/kn.json";
+import ml from "../../messages/ml.json";
+import or from "../../messages/or.json";
+import pa from "../../messages/pa.json";
+import as from "../../messages/as.json";
+import ne from "../../messages/ne.json";
+import sa from "../../messages/sa.json";
+import mai from "../../messages/mai.json";
+import kok from "../../messages/kok.json";
+import doi from "../../messages/doi.json";
 
 // Registered translation dictionaries. A locale with no dictionary here falls
 // back to English per-key (see translate + getDict), so every option in LOCALES
 // stays usable while its messages/<code>.json is still being authored.
-export const dictionaries: Record<string, typeof en> = {
+// Typed loosely: dictionaries may be partial (missing keys fall back to English
+// via translate), so they need not all match the English shape exactly.
+export const dictionaries: Record<string, unknown> = {
   en,
   hi,
   bn,
@@ -17,6 +30,17 @@ export const dictionaries: Record<string, typeof en> = {
   gu,
   ta,
   te,
+  ur,
+  kn,
+  ml,
+  or,
+  pa,
+  as,
+  ne,
+  sa,
+  mai,
+  kok,
+  doi,
 };
 export type Locale = string;
 export type Dict = typeof en;
@@ -54,12 +78,11 @@ export const LOCALES: LocaleInfo[] = [
 export const RTL_LOCALES = new Set(["ur", "ks", "sd"]);
 
 export function getDict(locale: string): Dict {
-  return dictionaries[locale] ?? en;
+  return (dictionaries[locale] as Dict) ?? en;
 }
 
-/** Resolve a dotted key path, falling back to the key itself. */
-export function translate(dict: Dict, key: string): string {
-  const value = key
+function resolve(dict: unknown, key: string): unknown {
+  return key
     .split(".")
     .reduce<unknown>(
       (o, k) =>
@@ -68,5 +91,16 @@ export function translate(dict: Dict, key: string): string {
           : undefined,
       dict,
     );
-  return typeof value === "string" ? value : key;
+}
+
+/**
+ * Resolve a dotted key path. Falls back to the English value when the active
+ * dictionary lacks the key (so partial translations show English, never a raw
+ * key), and finally to the key itself.
+ */
+export function translate(dict: Dict, key: string): string {
+  const value = resolve(dict, key);
+  if (typeof value === "string") return value;
+  const fallback = resolve(en, key);
+  return typeof fallback === "string" ? fallback : key;
 }

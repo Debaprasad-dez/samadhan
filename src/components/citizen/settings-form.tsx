@@ -35,6 +35,7 @@ export function SettingsForm({
 
   async function save() {
     setSaving(true);
+    const toastId = toast.loading(t("settings.applying"));
     try {
       const res = await fetch("/api/profile/settings", {
         method: "POST",
@@ -42,11 +43,16 @@ export function SettingsForm({
         body: JSON.stringify({ language, aiAssistLevel, showOnLeaderboard }),
       });
       const d = await res.json();
-      if (!res.ok) toast.error(d?.error?.message ?? "Couldn't save.");
-      else {
-        toast.success(t("settings.saved"));
+      if (!res.ok) {
+        toast.error(d?.error?.message ?? t("settings.applyError"), {
+          id: toastId,
+        });
+      } else {
+        toast.success(t("settings.saved"), { id: toastId });
         router.refresh();
       }
+    } catch {
+      toast.error(t("settings.applyError"), { id: toastId });
     } finally {
       setSaving(false);
     }
