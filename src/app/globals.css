@@ -317,6 +317,23 @@
   will-change: transform;
 }
 
+/* Route-navigation progress bar (loading.tsx). Eases to ~90% then holds until
+   the page replaces the loader. */
+.route-bar {
+  animation: route-bar 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform;
+}
+@keyframes route-bar {
+  0% {
+    transform: scaleX(0.04);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleX(0.9);
+    opacity: 1;
+  }
+}
+
 /* Themed theme-switch wipe (design addendum §8.4). */
 .theme-wipe {
   width: 40vmax;
