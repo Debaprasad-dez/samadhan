@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ThumbsUp, Users } from "lucide-react";
 import { StatusBadge, SeverityChip } from "@/components/case/status-badge";
 import { CategoryIcon } from "@/components/art/category-icon";
+import { CardArtwork } from "@/components/art/card-artwork";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatRelative, humanizeCode } from "@/lib/utils";
 import type { CaseListItem } from "@/hooks/use-cases";
@@ -13,7 +14,7 @@ export function CaseCard({ c }: { c: CaseListItem }) {
     <Link href={`/cases/${c.id}`} className="block">
       <Card className="transition-all hover:-translate-y-0.5 hover:shadow-elev-2">
         <CardContent className="flex gap-4 p-4">
-          {thumb?.kind === "photo" && (
+          {thumb?.kind === "photo" ? (
             <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md border">
               <Image
                 src={thumb.url}
@@ -23,6 +24,13 @@ export function CaseCard({ c }: { c: CaseListItem }) {
                 sizes="64px"
               />
             </div>
+          ) : (
+            <CardArtwork
+              category={c.departmentCode}
+              seed={c.id}
+              compact
+              className="h-16 w-16 shrink-0 rounded-md border"
+            />
           )}
           <div className="min-w-0 flex-1">
             <div className="flex items-center justify-between gap-2">

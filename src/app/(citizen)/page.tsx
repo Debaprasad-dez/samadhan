@@ -5,6 +5,7 @@ import { tierForScore } from "@/lib/reputation";
 import { ThemedHero } from "@/components/art/themed-hero";
 import { marigold, leaf } from "@/lib/art/core";
 import { RevealList } from "@/components/motion/reveal";
+import { CardArtwork } from "@/components/art/card-artwork";
 import { getT } from "@/lib/t";
 import { cn } from "@/lib/utils";
 
@@ -343,11 +344,13 @@ export default async function CitizenHome() {
                 <Link key={c.id} href={`/cases/${c.id}`}
                   className={cn("flex w-[208px] flex-none flex-col overflow-hidden rounded-[20px]")}
                   style={{ background: "var(--g-card)", border: "1px solid var(--g-line)", boxShadow: "0 14px 30px -22px rgba(20,12,6,.5)" }}>
-                  <div className="relative flex h-[104px] items-end px-3 pb-3 overflow-hidden"
-                    style={{ background: "linear-gradient(to bottom,color-mix(in srgb,var(--g-gold-lt) 50%,var(--g-paper)),var(--g-paper))" }}>
-                    <div className="absolute right-6 top-4 h-10 w-10 rounded-full opacity-70"
-                      style={{ background: "radial-gradient(circle,var(--g-glow) 30%,transparent 80%)" }} />
-                    <span className="relative z-[3] flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[9.5px] font-bold uppercase tracking-[.5px]"
+                  <div className="relative h-[104px]">
+                    <CardArtwork
+                      category={c.categoryId ?? undefined}
+                      seed={c.id}
+                      className="absolute inset-0"
+                    />
+                    <span className="absolute left-3 top-3 z-[3] flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[9.5px] font-bold uppercase tracking-[.5px]"
                       style={{ background: "rgba(20,12,6,.42)", backdropFilter: "blur(6px)", color: "#FFF0DC" }}>
                       <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
                         <path d="M12 2c1 3-1 4 0 7 .6 1.8 3 2 3 5a6 6 0 0 1-12 0c0-2 1-3 2-2 .5-3 4-4 5-10Z" fill="#FF9A4D" />
