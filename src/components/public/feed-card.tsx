@@ -25,6 +25,7 @@ export interface FeedItem {
   slaDueAt: string;
   escalated: boolean;
   viewerUpvoted?: boolean;
+  isOwn?: boolean;
 }
 
 export function FeedCard({ item }: { item: FeedItem }) {
@@ -71,19 +72,29 @@ export function FeedCard({ item }: { item: FeedItem }) {
         </Link>
 
         <div className="text-muted-foreground flex items-center justify-between border-t pt-2 text-xs">
-          <button
-            type="button"
-            onClick={toggle}
-            disabled={busy}
-            className={cn(
-              "inline-flex items-center gap-1 rounded-md px-2 py-1 transition-colors",
-              up ? "bg-brand-soft text-brand" : "hover:bg-surface-muted",
-            )}
-            aria-pressed={up}
-          >
-            <ThumbsUp className="h-3.5 w-3.5" />
-            {count}
-          </button>
+          {item.isOwn ? (
+            <span
+              className="text-muted-foreground inline-flex items-center gap-1 rounded-md px-2 py-1"
+              title="Your complaint"
+            >
+              <ThumbsUp className="h-3.5 w-3.5" />
+              {count}
+            </span>
+          ) : (
+            <button
+              type="button"
+              onClick={toggle}
+              disabled={busy}
+              className={cn(
+                "inline-flex items-center gap-1 rounded-md px-2 py-1 transition-colors",
+                up ? "bg-brand-soft text-brand" : "hover:bg-surface-muted",
+              )}
+              aria-pressed={up}
+            >
+              <ThumbsUp className="h-3.5 w-3.5" />
+              {count}
+            </button>
+          )}
           <span className="inline-flex items-center gap-1">
             <Users className="h-3.5 w-3.5" />
             {item.cosigns}

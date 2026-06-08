@@ -42,7 +42,15 @@ export default function FeedPage() {
         if (res.ok) {
           pageRef.current = page;
           setTotal(d.total ?? 0);
-          setItems((prev) => (reset ? d.cases : [...prev, ...d.cases]));
+          setItems((prev) => {
+            const merged: FeedItem[] = reset ? d.cases : [...prev, ...d.cases];
+            const seen = new Set<string>();
+            return merged.filter((x) => {
+              if (seen.has(x.id)) return false;
+              seen.add(x.id);
+              return true;
+            });
+          });
         }
       } finally {
         setLoading(false);

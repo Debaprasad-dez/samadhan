@@ -35,22 +35,29 @@ interface Row {
   slaDueAt: Date;
   escalated: boolean;
   viewerUpvoted?: boolean;
+  isOwn?: boolean;
 }
 
-function anonymise(c: {
-  id: string;
-  number: string;
-  wardCode: string;
-  departmentCode: string;
-  categoryId: string;
-  status: string;
-  severity: string;
-  body: string;
-  createdAt: Date;
-  slaDueAt: Date;
-  escalated: boolean;
-  _count: { upvotes: number; cosigns: number };
-}): Row {
+// Keeps filedById server-side (the feed is anonymised) — only the derived isOwn
+// boolean is sent to the client.
+function anonymise(
+  c: {
+    id: string;
+    number: string;
+    wardCode: string;
+    departmentCode: string;
+    categoryId: string;
+    status: string;
+    severity: string;
+    body: string;
+    createdAt: Date;
+    slaDueAt: Date;
+    escalated: boolean;
+    filedById: string;
+    _count: { upvotes: number; cosigns: number };
+  },
+  userId: string | undefined,
+): Row {
   return {
     id: c.id,
     number: c.number,
@@ -66,6 +73,7 @@ function anonymise(c: {
     createdAt: c.createdAt,
     slaDueAt: c.slaDueAt,
     escalated: c.escalated,
+    isOwn: !!userId && c.filedById === userId,
   };
 }
 
@@ -81,6 +89,7 @@ const SELECT = {
   createdAt: true,
   slaDueAt: true,
   escalated: true,
+  filedById: true,
   _count: { select: { upvotes: true, cosigns: true } },
 } as const;
 
@@ -112,7 +121,7 @@ export async function GET(req: Request) {
     const ordered = ids
       .map((id) => cases.find((c) => c.id === id))
       .filter((c): c is NonNullable<typeof c> => !!c)
-      .map(anonymise);
+      .map((c) => anonymise(c, user?.id));
     return ok({ cases: await attachViewer(ordered, user?.id) });
   }
 
@@ -124,7 +133,7 @@ export async function GET(req: Request) {
   const [rows, total] = await Promise.all([
     db.case.findMany({
       where,
-      orderBy: { createdAt: "desc" },
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
       skip: (page - 1) * limit,
       take: limit,
       select: SELECT,
@@ -133,7 +142,10 @@ export async function GET(req: Request) {
   ]);
 
   return ok({
-    cases: await attachViewer(rows.map(anonymise), user?.id),
+    cases: await attachViewer(
+      rows.map((c) => anonymise(c, user?.id)),
+      user?.id,
+    ),
     total,
     page,
   });
