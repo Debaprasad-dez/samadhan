@@ -55,6 +55,20 @@ export function SceneHero({ className }: { className?: string }) {
   const svgRef = useRef<SVGSVGElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const [theme, setTheme] = useState("bharat-dawn");
+  const [timeTint, setTimeTint] = useState<string | null>(null);
+
+  // Living detail (design addendum §5.3): the hero warms with the local time of
+  // day — gold at dawn, warm at dusk, cool at night, neutral midday.
+  useEffect(() => {
+    const h = new Date().getHours();
+    if (h >= 5 && h < 8)
+      setTimeTint("linear-gradient(180deg, hsl(38 92% 60% / .14), transparent 62%)");
+    else if (h >= 17 && h < 20)
+      setTimeTint("linear-gradient(0deg, hsl(18 88% 52% / .18), transparent 58%)");
+    else if (h >= 20 || h < 5)
+      setTimeTint("linear-gradient(180deg, hsl(224 55% 18% / .26), hsl(224 50% 10% / .14))");
+    else setTimeTint(null);
+  }, []);
 
   // Follow the document's data-theme attribute.
   useEffect(() => {
@@ -102,6 +116,15 @@ export function SceneHero({ className }: { className?: string }) {
         preserveAspectRatio="xMidYMax slice"
         aria-hidden
       />
+
+      {/* time-of-day warmth */}
+      {timeTint && (
+        <div
+          className="pointer-events-none absolute inset-0 z-[4]"
+          style={{ background: timeTint, mixBlendMode: "soft-light" }}
+          aria-hidden
+        />
+      )}
 
       {/* cinematic vignette */}
       <div
