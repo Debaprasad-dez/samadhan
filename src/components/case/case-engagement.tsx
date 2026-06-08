@@ -16,6 +16,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import { ParticleBurst } from "@/components/motion/particle-burst";
 
 export function CaseEngagement({
   caseId,
@@ -40,6 +41,7 @@ export function CaseEngagement({
   const [busy, setBusy] = useState(false);
   const [open, setOpen] = useState(false);
   const [reason, setReason] = useState("");
+  const [burst, setBurst] = useState(0);
 
   async function toggleUpvote() {
     setBusy(true);
@@ -50,6 +52,7 @@ export function CaseEngagement({
       else {
         setUp(d.upvoted);
         setCount(d.count);
+        if (d.upvoted) setBurst((b) => b + 1); // themed petal burst on upvote
       }
     } finally {
       setBusy(false);
@@ -96,15 +99,18 @@ export function CaseEngagement({
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <Button
-        variant={up ? "default" : "outline"}
-        size="sm"
-        onClick={toggleUpvote}
-        disabled={busy}
-      >
-        <ThumbsUp className={cn(up && "fill-current")} />
-        {up ? "Upvoted" : "Upvote"} · {count}
-      </Button>
+      <span className="relative inline-flex">
+        <ParticleBurst fireKey={burst} count={14} spread={56} />
+        <Button
+          variant={up ? "default" : "outline"}
+          size="sm"
+          onClick={toggleUpvote}
+          disabled={busy}
+        >
+          <ThumbsUp className={cn(up && "fill-current")} />
+          {up ? "Upvoted" : "Upvote"} · {count}
+        </Button>
+      </span>
 
       <Button
         variant="outline"

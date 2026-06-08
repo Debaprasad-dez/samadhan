@@ -11,7 +11,7 @@ import { EvidenceGallery } from "@/components/case/evidence-gallery";
 import { CaseEngagement } from "@/components/case/case-engagement";
 import { SlaPredictChip } from "@/components/case/sla-predict-chip";
 import { RtiDraftButton } from "@/components/case/rti-draft-button";
-import { Confetti } from "@/components/citizen/confetti";
+import { Celebration } from "@/components/motion/celebration";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { CaseStatus, Severity } from "@/types";
@@ -75,7 +75,7 @@ export default async function CaseDetail({
 
   return (
     <div className="space-y-6">
-      {isNew === "1" && <Confetti />}
+      {isNew === "1" && <Celebration />}
 
       {/* header */}
       <div className="flex flex-wrap items-start justify-between gap-4">

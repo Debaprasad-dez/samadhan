@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { tierForScore } from "@/lib/reputation";
 import { ThemedHero } from "@/components/art/themed-hero";
 import { marigold, leaf } from "@/lib/art/core";
+import { RevealList } from "@/components/motion/reveal";
 import { cn } from "@/lib/utils";
 
 // Floating marigold-and-leaf sprig (design handoff decorate()) — perches over the
@@ -167,8 +168,9 @@ export default async function CitizenHome() {
         </div>
       </div>
 
-      {/* ── Body: overlaps hero by ~46px. All colours from --g-* → reskins per theme ── */}
-      <div className="relative z-[9] -mx-4 -mt-12 flex flex-col gap-6 px-4 pb-28 md:-mx-6 md:px-6">
+      {/* ── Body: overlaps hero by ~46px. All colours from --g-* → reskins per theme.
+          RevealList staggers the cascade on load (§6.3). ── */}
+      <RevealList className="relative z-[9] -mx-4 -mt-12 flex flex-col gap-6 px-4 pb-28 md:-mx-6 md:px-6">
 
         {/* CTA card (+ floating marigold sprig sibling, so it isn't clipped) */}
         <div className="relative">
@@ -379,7 +381,7 @@ export default async function CitizenHome() {
             </div>
           </section>
         )}
-      </div>
+      </RevealList>
     </div>
   );
 }
