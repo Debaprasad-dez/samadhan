@@ -10,7 +10,6 @@ import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { ThemeTransition } from "@/components/shared/theme-transition";
 import { AmbientLamp } from "@/components/shared/ambient-lamp";
 import { NotificationBell } from "@/components/shared/notification-bell";
-import { LogoutButton } from "@/components/shared/logout-button";
 import type { SessionUser } from "@/types";
 
 const NAV = [
@@ -67,13 +66,13 @@ export function CitizenShell({
           <span className="text-muted-foreground hidden text-sm sm:inline">
             {user.name}
           </span>
-          <span
-            className="bg-brand-soft text-brand flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold"
-            aria-hidden
+          <Link
+            href="/profile"
+            aria-label={t("nav.profile")}
+            className="bg-brand-soft text-brand ring-brand/0 hover:ring-brand/40 ml-1 flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold ring-2 transition focus-visible:ring-brand"
           >
             {initials(user.name)}
-          </span>
-          <LogoutButton />
+          </Link>
         </div>
       </header>
 

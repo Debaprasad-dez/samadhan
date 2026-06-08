@@ -90,6 +90,7 @@
     "dayStreak": "-day streak"
   },
   "settings": {
+    "theme": "Theme",
     "language": "Language",
     "aiAssist": "AI assistance",
     "aiFull": "Full",

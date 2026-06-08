@@ -8,6 +8,7 @@ import { TierEmblem } from "@/components/art/tier-emblem";
 import { BadgeGrid } from "@/components/citizen/badge-grid";
 import { SettingsForm } from "@/components/citizen/settings-form";
 import { ThemeGallery } from "@/components/citizen/theme-gallery";
+import { LogoutButton } from "@/components/shared/logout-button";
 import { getT } from "@/lib/t";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -108,6 +109,16 @@ export default async function ProfilePage() {
           </p>
         </div>
         <ThemeGallery />
+      </section>
+
+      <section className="border-border flex items-center justify-between border-t pt-6">
+        <div>
+          <h2 className="font-display text-lg font-semibold">
+            {t("common.signOut")}
+          </h2>
+          <p className="text-muted-foreground text-sm">{user.name}</p>
+        </div>
+        <LogoutButton />
       </section>
     </div>
   );

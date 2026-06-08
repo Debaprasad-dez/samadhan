@@ -4,9 +4,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useT } from "@/components/providers/locale-provider";
+import { cn } from "@/lib/utils";
 
-export function LogoutButton() {
+export function LogoutButton({ className }: { className?: string }) {
   const router = useRouter();
+  const t = useT();
   const [loading, setLoading] = useState(false);
 
   async function onClick() {
@@ -22,14 +25,14 @@ export function LogoutButton() {
 
   return (
     <Button
-      variant="ghost"
-      size="sm"
+      variant="outline"
       onClick={onClick}
       disabled={loading}
-      aria-label="Sign out"
+      aria-label={t("common.signOut")}
+      className={cn("text-danger hover:text-danger", className)}
     >
       <LogOut />
-      <span className="hidden sm:inline">Sign out</span>
+      {t("common.signOut")}
     </Button>
   );
 }
