@@ -6,6 +6,7 @@ import { ThemedHero } from "@/components/art/themed-hero";
 import { marigold, leaf } from "@/lib/art/core";
 import { RevealList } from "@/components/motion/reveal";
 import { CardArtwork } from "@/components/art/card-artwork";
+import { VoiceMicButton } from "@/components/citizen/voice-capture";
 import { getT } from "@/lib/t";
 import { cn } from "@/lib/utils";
 
@@ -225,22 +226,8 @@ export default async function CitizenHome() {
                 </span>
               </Link>
 
-              {/* btn-mic */}
-              <Link href="/file" aria-label={t("home.voiceInput")}
-                className="relative flex w-[54px] flex-none items-center justify-center rounded-2xl"
-                style={{
-                  background: "linear-gradient(160deg,color-mix(in srgb,var(--g-gold-lt) 55%,#fff),color-mix(in srgb,var(--g-gold-lt) 82%,var(--g-bg)))",
-                  border: "1px solid color-mix(in srgb,var(--g-gold) 45%,transparent)",
-                  boxShadow: "0 10px 22px -12px color-mix(in srgb,var(--g-gold) 70%,transparent),inset 0 1px 0 rgba(255,255,255,.7)",
-                  color: "var(--g-primary-deep)",
-                }}>
-                <span className="pointer-events-none absolute inset-0 rounded-2xl" aria-hidden
-                  style={{ border: "1.5px solid color-mix(in srgb,var(--g-primary) 50%,transparent)", animation: "micpulse 2.6s ease-out infinite" }} />
-                <svg width="21" height="21" viewBox="0 0 24 24" fill="none">
-                  <rect x="9" y="2.5" width="6" height="12" rx="3" fill="currentColor" />
-                  <path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3.5M8.5 21.5h7" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" />
-                </svg>
-              </Link>
+              {/* btn-mic → opens the voice-capture dialog */}
+              <VoiceMicButton ariaLabel={t("home.voiceInput")} />
             </div>
 
             {/* category chips */}

@@ -124,6 +124,19 @@
     "searchTitle": "Nothing found",
     "fileFirst": "File your first complaint"
   },
+  "voice": {
+    "title": "Speak your complaint",
+    "sub": "We’ll transcribe what you say and start your case.",
+    "listening": "Listening…",
+    "paused": "Paused — tap the mic to resume",
+    "placeholder": "Your words will appear here as you speak…",
+    "stop": "Stop & continue",
+    "cancel": "Cancel",
+    "notSupported": "Voice input isn’t supported on this browser. You can type your complaint instead.",
+    "micDenied": "Microphone access was blocked. Enable it in your browser settings, then try again.",
+    "typeInstead": "Type it instead",
+    "retry": "Try again"
+  },
   "feed": { "title": "Public feed", "hot": "Top issues this week" },
   "cases": { "title": "My cases", "empty": "No complaints yet" }
 }
