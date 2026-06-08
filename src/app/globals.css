@@ -11,29 +11,27 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply text-foreground font-sans antialiased;
+    color: var(--g-ink);
     font-feature-settings:
       "rlig" 1,
       "calt" 1;
-    /* Atmosphere (design §9.1): faint grain + a soft two-corner gradient mesh,
-       all from theme tokens so it recolours across every theme×mode. Never flat. */
+    /* Gallery backdrop (design handoff §1): the per-theme paper/stage gradient
+       mesh + a faint grain. All from --g-* tokens so the whole page reskins the
+       instant data-theme changes, in either mode. Never flat. */
+    background-color: var(--g-stage2);
     background-image:
       radial-gradient(hsl(var(--text) / 0.035) 0.5px, transparent 0.6px),
       radial-gradient(
-        38rem 38rem at 100% -8%,
-        hsl(var(--brand) / 0.06),
-        transparent 62%
-      ),
-      radial-gradient(
-        34rem 34rem at -8% 108%,
-        hsl(var(--accent) / 0.05),
-        transparent 60%
+        120% 90% at 50% -10%,
+        var(--g-stage1) 0%,
+        var(--g-stage2) 45%,
+        var(--g-stage3) 100%
       );
     background-size:
       4px 4px,
-      auto,
       auto;
-    background-repeat: repeat, no-repeat, no-repeat;
+    background-repeat: repeat, no-repeat;
     background-attachment: fixed;
   }
 

@@ -618,3 +618,163 @@
 [data-theme="coromandel-pattachitra"] {
   --font-display: var(--font-yatra);
 }
+
+/* =============================================================================
+   GALLERY TOKENS (design_handoff/lib/app.css) — the "art tradition × token swap"
+   reskin layer. Namespaced `--g-*` (raw hex / gradients, consumed directly — NOT
+   via hsl()) so they never collide with the HSL design tokens above. Defined
+   mode-AGNOSTIC at [data-theme] level: setting data-theme alone reskins the whole
+   gallery surface (home hero overlay, CTA card, cases, chips), in either mode.
+   Each of the 6 app themes maps onto a gallery palette.
+   ============================================================================= */
+
+/* bharat-dawn ← Bharat Dawn */
+:root,
+[data-theme="bharat-dawn"] {
+  --g-bg: #fbfaf6;
+  --g-paper: #f7f2e7;
+  --g-ink: #2c1b10;
+  --g-ink-soft: #6e5746;
+  --g-ink-faint: #9c8472;
+  --g-primary: #c8501e;
+  --g-primary-deep: #a83c14;
+  --g-accent: #be3455;
+  --g-gold: #c9962e;
+  --g-gold-lt: #e9c56a;
+  --g-glow: #f0a24a;
+  --g-line: #e7dcc8;
+  --g-card: #ffffffee;
+  --g-ok: #3e7c54;
+  --g-warn: #c9962e;
+  --g-stage1: #efe7d6;
+  --g-stage2: #e7dcc6;
+  --g-stage3: #ddcfb3;
+  --g-btn-grad: linear-gradient(135deg, #d8631e 0%, #c8501e 45%, #a83c14 100%);
+  --g-btn-ink: #fff6e9;
+  --g-chip-ink: var(--g-ink-soft);
+}
+
+/* mithila-bloom ← Mithila Bloom */
+[data-theme="mithila-bloom"] {
+  --g-bg: #f6efdf;
+  --g-paper: #f1e7d2;
+  --g-ink: #241a12;
+  --g-ink-soft: #5c4a36;
+  --g-ink-faint: #8c765c;
+  --g-primary: #b5322f;
+  --g-primary-deep: #8e2422;
+  --g-accent: #0e7c7b;
+  --g-gold: #e0a211;
+  --g-gold-lt: #f0c64b;
+  --g-glow: #e6a817;
+  --g-line: #e1d2b4;
+  --g-card: #fffdf7ee;
+  --g-ok: #0e7c7b;
+  --g-warn: #e0a211;
+  --g-stage1: #e7d9bd;
+  --g-stage2: #ddc9a6;
+  --g-stage3: #cdb487;
+  --g-btn-grad: linear-gradient(135deg, #c53c36 0%, #b5322f 45%, #8e2422 100%);
+  --g-btn-ink: #fff6e9;
+  --g-chip-ink: var(--g-ink-soft);
+}
+
+/* warli-earth ← Warli Monochrome */
+[data-theme="warli-earth"] {
+  --g-bg: #f2e6cc;
+  --g-paper: #ebd8b4;
+  --g-ink: #2c1a08;
+  --g-ink-soft: #6a4a28;
+  --g-ink-faint: #9a7a54;
+  --g-primary: #8b4a1a;
+  --g-primary-deep: #6e3812;
+  --g-accent: #5a8c3c;
+  --g-gold: #c4840a;
+  --g-gold-lt: #e0a830;
+  --g-glow: #c4840a;
+  --g-line: #dec8a0;
+  --g-card: #fffdf4ee;
+  --g-ok: #5a8c3c;
+  --g-warn: #c4840a;
+  --g-stage1: #e8d8b0;
+  --g-stage2: #dcc898;
+  --g-stage3: #ccb87c;
+  --g-btn-grad: linear-gradient(135deg, #9e5520 0%, #8b4a1a 45%, #6e3812 100%);
+  --g-btn-ink: #fff6e9;
+  --g-chip-ink: var(--g-ink-soft);
+}
+
+/* mughal-indigo ← Mughal Indigo (dark) */
+[data-theme="mughal-indigo"] {
+  --g-bg: #10153a;
+  --g-paper: #1a2150;
+  --g-ink: #f3ecda;
+  --g-ink-soft: #c5c2d8;
+  --g-ink-faint: #8e8db0;
+  --g-primary: #c9a227;
+  --g-primary-deep: #a8851a;
+  --g-accent: #1f9e72;
+  --g-gold: #d4af37;
+  --g-gold-lt: #ebd584;
+  --g-glow: #d4af37;
+  --g-line: #2c3470;
+  --g-card: #1c2358f2;
+  --g-ok: #1f9e72;
+  --g-warn: #d4af37;
+  --g-stage1: #0c1030;
+  --g-stage2: #0a0d28;
+  --g-stage3: #070920;
+  --g-btn-grad: linear-gradient(135deg, #d9b43a 0%, #c9a227 45%, #a8851a 100%);
+  --g-btn-ink: #1a1330;
+  --g-chip-ink: var(--g-ink-soft);
+}
+
+/* coromandel-pattachitra ← Pattachitra Rust (dark red) */
+[data-theme="coromandel-pattachitra"] {
+  --g-bg: #7a1408;
+  --g-paper: #621008;
+  --g-ink: #f5e8c0;
+  --g-ink-soft: #d4c090;
+  --g-ink-faint: #a89060;
+  --g-primary: #d4a017;
+  --g-primary-deep: #b88410;
+  --g-accent: #1a6080;
+  --g-gold: #d4a017;
+  --g-gold-lt: #f0c840;
+  --g-glow: #e0b828;
+  --g-line: #5a1008;
+  --g-card: #6e1008cc;
+  --g-ok: #3a8a40;
+  --g-warn: #d4a017;
+  --g-stage1: #5a1008;
+  --g-stage2: #4a0c06;
+  --g-stage3: #3a0804;
+  --g-btn-grad: linear-gradient(135deg, #e0b020 0%, #d4a017 45%, #b88410 100%);
+  --g-btn-ink: #3a0804;
+  --g-chip-ink: #d4c090;
+}
+
+/* nilgiri-mist ← Pichwai Cyan (dark teal) */
+[data-theme="nilgiri-mist"] {
+  --g-bg: #083444;
+  --g-paper: #0c3e50;
+  --g-ink: #f5edd5;
+  --g-ink-soft: #c5d8dc;
+  --g-ink-faint: #88b0b8;
+  --g-primary: #d4a017;
+  --g-primary-deep: #b88410;
+  --g-accent: #6bbcbc;
+  --g-gold: #d4af37;
+  --g-gold-lt: #ebd584;
+  --g-glow: #d4a017;
+  --g-line: #144858;
+  --g-card: #0c3e50f0;
+  --g-ok: #6bbcbc;
+  --g-warn: #d4a017;
+  --g-stage1: #062c3c;
+  --g-stage2: #052430;
+  --g-stage3: #041c24;
+  --g-btn-grad: linear-gradient(135deg, #e0b828 0%, #d4a017 45%, #b88410 100%);
+  --g-btn-ink: #08222c;
+  --g-chip-ink: var(--g-ink-soft);
+}
