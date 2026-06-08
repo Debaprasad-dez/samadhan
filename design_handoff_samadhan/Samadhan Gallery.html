@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="bharat">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Samadhan — Screen Gallery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit:ital@0;1&family=Mukta:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link href="lib/app.css" rel="stylesheet" />
+<style>
+  body{display:block;background:radial-gradient(130% 80% at 50% -10%, #efe7d6, #e7dcc6 45%, #d9cab0 100%);min-height:100vh;padding:0;}
+  .wrap{max-width:1280px;margin:0 auto;padding:56px 28px 90px;}
+  .masthead{text-align:center;margin-bottom:8px;}
+  .logo{display:inline-flex;align-items:center;gap:11px;margin-bottom:18px;}
+  .logo .mk{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(150deg,#F6B45A,#C8501E 70%);box-shadow:0 8px 18px -6px rgba(168,60,20,.6),inset 0 1px 0 rgba(255,255,255,.4);}
+  .logo .mk svg{width:25px;height:25px;}
+  .logo .nm{font-family:'Tiro Devanagari Sanskrit',serif;font-size:26px;color:#2C1B10;line-height:1;}
+  .logo .nm small{display:block;font-family:'Mukta';font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#8a6f57;font-weight:600;margin-top:4px;}
+  h1{font-family:'Tiro Devanagari Sanskrit',serif;font-weight:400;font-size:38px;color:#2C1B10;margin:0 auto;max-width:700px;line-height:1.12;letter-spacing:-.3px;}
+  .sub{font-family:'Mukta';font-size:15px;color:#6E5746;max-width:540px;margin:14px auto 0;line-height:1.55;}
+  .group{margin-top:52px;}
+  .ghead{display:flex;align-items:baseline;gap:12px;margin:0 4px 20px;border-bottom:1px solid #e3d6bd;padding-bottom:12px;}
+  .ghead h2{font-family:'Tiro Devanagari Sanskrit',serif;font-weight:400;font-size:22px;color:#2C1B10;margin:0;}
+  .ghead span{font-family:'Mukta';font-size:12.5px;color:#9C8472;font-weight:500;}
+  .row{display:flex;flex-wrap:wrap;gap:28px;}
+  .item{width:290px;}
+  .item .shot{position:relative;border-radius:30px;overflow:hidden;background:#0e0b08;padding:7px;box-shadow:0 28px 56px -26px rgba(40,26,12,.6),0 10px 24px -14px rgba(40,26,12,.45);transition:transform .25s cubic-bezier(.2,.9,.3,1.2),box-shadow .25s;}
+  .item:hover .shot{transform:translateY(-6px);box-shadow:0 42px 76px -28px rgba(40,26,12,.65);}
+  .item .shot iframe{width:412px;height:880px;border:none;border-radius:24px;display:block;background:#FBFAF6;transform:scale(.68);transform-origin:top left;margin-right:-131px;margin-bottom:-282px;pointer-events:none;}
+  .item .shot a.lk{position:absolute;inset:0;z-index:2;}
+  .item .cap{margin-top:14px;padding:0 4px;}
+  .item .cap b{font-family:'Tiro Devanagari Sanskrit',serif;font-weight:400;font-size:17px;color:#2C1B10;display:block;}
+  .item .cap span{font-family:'Mukta';font-size:12px;color:#7a6450;}
+  .illus-row{display:flex;flex-wrap:wrap;gap:22px;}
+  .illus{width:244px;}
+  .illus .fr{border-radius:18px;overflow:hidden;box-shadow:0 22px 48px -26px rgba(40,26,12,.55);transition:transform .25s;}
+  .illus:hover .fr{transform:translateY(-5px);}
+  .illus iframe{width:244px;height:304px;border:none;display:block;pointer-events:none;background:#FBFAF6;}
+  .illus .cap{margin-top:12px;padding:0 2px;}
+  .illus .cap b{font-family:'Tiro Devanagari Sanskrit',serif;font-size:15px;color:#2C1B10;display:block;}
+  .illus .cap span{font-family:'Mukta';font-size:11.5px;color:#7a6450;}
+  .note{font-family:'Mukta';font-size:12px;color:#9C8472;text-align:center;margin-top:10px;}
+  .badge-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px;}
+  .badge-row i{font-style:normal;font-family:'Mukta';font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:100px;background:#EDE6D6;color:#7a6450;letter-spacing:.3px;}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="masthead">
+      <div class="logo">
+        <span class="mk"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3c.6 2.4 2.2 4 4.6 4.6C14.2 8.2 12.6 9.8 12 12.2 11.4 9.8 9.8 8.2 7.4 7.6 9.8 7 11.4 5.4 12 3Z" fill="#fff"/><path d="M5 13c1.8.4 2.9 1.5 3.3 3.3.4-1.8 1.5-2.9 3.3-3.3-1.8-.4-2.9-1.5-3.3-3.3C7.9 11.5 6.8 12.6 5 13Z" fill="#fff" opacity=".82"/><path d="M15.2 14.5c1.4.3 2.2 1.1 2.5 2.5.3-1.4 1.1-2.2 2.5-2.5-1.4-.3-2.2-1.1-2.5-2.5-.3 1.4-1.1 2.2-2.5 2.5Z" fill="#fff" opacity=".66"/></svg></span>
+        <span class="nm">समाधान<small>Samadhan</small></span>
+      </div>
+      <h1>Eight art traditions.<br>One civic app.</h1>
+      <p class="sub">A mobile-first complaint platform where calm, professional structure is the canvas — and India's living visual heritage is the brushstroke. Tap any screen to open it.</p>
+    </div>
+
+    <div class="group">
+      <div class="ghead"><h2>Core flow</h2><span>Bharat Dawn theme · Varanasi sunrise</span></div>
+      <div class="row" id="flow"></div>
+    </div>
+
+    <div class="group">
+      <div class="ghead"><h2>Eight heritage themes</h2><span>One reskinnable system — art tradition × CSS token swap</span></div>
+      <div class="row" id="themes"></div>
+    </div>
+
+    <div class="group">
+      <div class="ghead"><h2>Illustrations</h2><span>Standalone art — procedural SVG, ambient motion, film grain</span></div>
+      <div class="illus-row" id="illus"></div>
+      <p class="note">Each is a self-contained living composition — not an exported bitmap. Grain, atmospheric depth and ambient motion are built in.</p>
+    </div>
+  </div>
+<script>
+const flow=[
+  ['screens/home-bharat-dawn.html','Home','Hero, file CTA, recent cases'],
+  ['screens/file-complaint.html','File a complaint','Step 1 · category, voice, AI polish'],
+  ['screens/case-detail.html','Case detail','SLA ring, timeline, evidence'],
+  ['screens/empty-state.html','Empty state','Citizen at dawn illustration'],
+  ['screens/theme-picker.html','Theme picker','Museum of eight traditions'],
+];
+const themes=[
+  ['screens/home-bharat-dawn.html',  'Bharat Dawn',      'Banaras ghats sunrise'],
+  ['screens/home-mithila-bloom.html','Mithila Bloom',    'Madhubani painting'],
+  ['screens/home-mughal-indigo.html','Mughal Indigo',    'Mughal miniature'],
+  ['screens/home-warli.html',        'Warli Monochrome', 'Maharashtra tribal art'],
+  ['screens/home-pattachitra.html',  'Pattachitra Rust', 'Odisha scroll painting'],
+  ['screens/home-deccan.html',       'Deccan Noir',      'Bidriware inlay · Bidar'],
+  ['screens/home-kerala.html',       'Kerala Mural',     'Panchavarnam temple mural'],
+  ['screens/home-pichwai.html',      'Pichwai Cyan',     'Nathdwara cloth painting'],
+];
+const illus=[
+  ['illustrations/bharat-dawn-ghats.html',    'Bharat Dawn',      'Sunrise over the Varanasi ghats'],
+  ['illustrations/mithila-bloom-peacock.html','Mithila Bloom',    'Peacock, Surya & lotus pond'],
+  ['illustrations/mughal-indigo-arch.html',   'Mughal Indigo',    'Cusped arch, jali & crescent'],
+  ['illustrations/bharat-dawn-empty.html',    'Citizen at Dawn',  'Empty-state contemplative art'],
+  ['illustrations/warli-monochrome.html',     'Warli Monochrome', 'Tarpa dance on terracotta'],
+  ['illustrations/pattachitra-rust.html',     'Pattachitra Rust', 'Peacock, fish border & lotus'],
+  ['illustrations/deccan-noir.html',          'Deccan Noir',      'Silver arabesque on black zinc'],
+  ['illustrations/kerala-mural.html',         'Kerala Mural',     'Dancer, lamp & elephant'],
+  ['illustrations/pichwai-cyan.html',         'Pichwai Cyan',     'Gold lotus & cows under full moon'],
+];
+function screenCard([href,title,sub]){
+  return `<div class="item"><div class="shot"><iframe src="${href}" scrolling="no" tabindex="-1"></iframe><a class="lk" href="${href}"></a></div><div class="cap"><b>${title}</b><span>${sub}</span></div></div>`;
+}
+function illusCard([href,title,sub]){
+  return `<div class="illus"><a href="${href}" style="text-decoration:none"><div class="fr"><iframe src="${href}" scrolling="no" tabindex="-1"></iframe></div><div class="cap"><b>${title}</b><span>${sub}</span></div></a></div>`;
+}
+document.getElementById('flow').innerHTML=flow.map(screenCard).join('');
+document.getElementById('themes').innerHTML=themes.map(screenCard).join('');
+document.getElementById('illus').innerHTML=illus.map(illusCard).join('');
+</script>
+</body>
+</html>

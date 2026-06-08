@@ -44,8 +44,14 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={fontVariables}>
       <head>
-        {/* No-flash: set data-theme/data-mode before first paint (design §2.2). */}
-        <script dangerouslySetInnerHTML={{ __html: themeNoFlashScript }} />
+        {/* No-flash: set data-theme/data-mode before first paint (design §2.2).
+            suppressHydrationWarning: browser extensions inject their own <script>
+            into <head> before React hydrates, shifting this node's index and
+            tripping a benign mismatch — same guard next-themes uses. */}
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: themeNoFlashScript }}
+        />
       </head>
       <body className="min-h-dvh bg-background text-foreground font-sans antialiased">
         <ThemeProvider>

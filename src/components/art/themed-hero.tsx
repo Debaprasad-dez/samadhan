@@ -5,38 +5,36 @@ import type { ComponentType } from "react";
 import { useTheme, type ThemeName } from "@/components/providers/theme-provider";
 import { Skeleton } from "@/components/ui/skeleton";
 
-// Per-theme heroes are code-split (design §10.1): only the active theme's hero
-// chunk is fetched, keeping the art bundle lean.
+// Per-theme heroes are code-split: only the active theme's chunk loads.
+// Each hero is a self-contained procedural SVG component (design handoff §3).
 type HeroProps = { className?: string };
-const loading = () => <Skeleton className="aspect-[2/1] w-full rounded-lg" />;
+const loading = () => <Skeleton className="h-[478px] w-full" />;
 
 const HEROES: Record<ThemeName, ComponentType<HeroProps>> = {
   "bharat-dawn": dynamic(
     () => import("./heroes/bharat-dawn").then((m) => m.HeroBharatDawn),
-    { loading },
+    { loading, ssr: false },
   ),
+  // Other themes: fall back to bharat-dawn until each is ported.
   "mithila-bloom": dynamic(
-    () => import("./heroes/mithila-bloom").then((m) => m.HeroMithilaBloom),
-    { loading },
+    () => import("./heroes/bharat-dawn").then((m) => m.HeroBharatDawn),
+    { loading, ssr: false },
   ),
   "warli-earth": dynamic(
-    () => import("./heroes/warli-earth").then((m) => m.HeroWarliEarth),
-    { loading },
+    () => import("./heroes/bharat-dawn").then((m) => m.HeroBharatDawn),
+    { loading, ssr: false },
   ),
   "mughal-indigo": dynamic(
-    () => import("./heroes/mughal-indigo").then((m) => m.HeroMughalIndigo),
-    { loading },
+    () => import("./heroes/bharat-dawn").then((m) => m.HeroBharatDawn),
+    { loading, ssr: false },
   ),
   "coromandel-pattachitra": dynamic(
-    () =>
-      import("./heroes/coromandel-pattachitra").then(
-        (m) => m.HeroCoromandelPattachitra,
-      ),
-    { loading },
+    () => import("./heroes/bharat-dawn").then((m) => m.HeroBharatDawn),
+    { loading, ssr: false },
   ),
   "nilgiri-mist": dynamic(
-    () => import("./heroes/nilgiri-mist").then((m) => m.HeroNilgiriMist),
-    { loading },
+    () => import("./heroes/bharat-dawn").then((m) => m.HeroBharatDawn),
+    { loading, ssr: false },
   ),
 };
 

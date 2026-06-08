@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="bharat">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Samadhan — File a complaint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit:ital@0;1&family=Mukta:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link href="../lib/app.css" rel="stylesheet" /><link href="../lib/screens.css" rel="stylesheet" />
+<style>
+  .topacc{position:absolute;top:34px;right:8px;z-index:0;pointer-events:none;opacity:.9;}
+  .topbar{position:relative;}
+</style>
+</head>
+<body>
+  <div class="device">
+    <div class="screen" data-screen-label="File complaint · Step 1">
+      <div class="statusbar" style="color:var(--ink)">
+        <div class="t"><span class="sun-dot"></span>6:14</div>
+        <div class="r">
+          <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="4.5" width="3" height="6.5" rx="1"/><rect x="9" y="2" width="3" height="9" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1" opacity=".35"/></svg>
+          <svg width="16" height="11" viewBox="0 0 16 11" fill="none"><path d="M8 10.2 3.5 5.6a6.3 6.3 0 0 1 9 0L8 10.2Z" fill="currentColor"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="1" y="1" width="20" height="10" rx="3" stroke="currentColor" stroke-width="1.2" opacity=".5"/><rect x="3" y="3" width="15" height="6" rx="1.5" fill="currentColor"/><rect x="22.5" y="4" width="1.8" height="4" rx="1" fill="currentColor" opacity=".5"/></svg>
+        </div>
+      </div>
+
+      <div class="scroll">
+        <div class="topbar">
+          <div class="topacc" id="topacc"></div>
+          <a class="iconbtn" href="home-bharat-dawn.html"><svg viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="ttl"><small>New case</small>File a complaint</div>
+          <a class="iconbtn" href="home-bharat-dawn.html"><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
+        </div>
+        <div class="stepbar"><i class="on"></i><i></i><i></i><i></i></div>
+
+        <div class="form">
+          <div class="flabel">What kind of issue?</div>
+          <div class="chipgrid">
+            <div class="selchip"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2c3 4 5 6.5 5 9a5 5 0 0 1-10 0c0-2.5 2-5 5-9Z" fill="currentColor"/></svg>Water</div>
+            <div class="selchip"><svg viewBox="0 0 24 24" fill="none"><path d="M3 18h18M6 18l1.5-12h9L18 18M9 6v12M15 6v12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Roads</div>
+            <div class="selchip"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9h12l-1 11H7L6 9Zm2-3h8l1 3H7l1-3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Garbage</div>
+            <div class="selchip sel"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v3M5 12H2M22 12h-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="4" fill="currentColor"/><path d="M12 16v6M9 22h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Streetlight</div>
+            <div class="selchip"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z" fill="currentColor"/></svg>Power</div>
+            <div class="selchip"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v5M12 16h0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Other</div>
+          </div>
+
+          <div class="flabel">Tell us what's happening</div>
+          <div class="textwrap">
+            <textarea rows="3">The streetlight outside 14 Assi Ghat Road has been dead for a week. The whole lane is dark after sunset and it feels unsafe for women returning home.</textarea>
+            <div class="tools">
+              <button class="minimic" aria-label="Voice input"><svg viewBox="0 0 24 24" fill="none"><rect x="9" y="2.5" width="6" height="12" rx="3" fill="currentColor"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3.5M8.5 21.5h7" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></button>
+              <button class="ai-pill"><svg class="spark" viewBox="0 0 24 24" fill="none"><path d="M12 3l1.8 4.7L18.5 9.5 13.8 11.3 12 16l-1.8-4.7L5.5 9.5l4.7-1.8L12 3Z" fill="currentColor"/><path d="M19 14l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2Z" fill="currentColor"/></svg>Polish with AI</button>
+              <span class="charcount">186 / 600</span>
+            </div>
+          </div>
+          <div class="ai-note">
+            <div class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l1.8 4.7L18.5 9.5 13.8 11.3 12 16l-1.8-4.7L5.5 9.5l4.7-1.8L12 3Z" fill="currentColor"/></svg></div>
+            <p><b>Samadhan AI</b> will route this to the <b>Electricity Dept · Ward 12</b> and translate it into the officer's working language. You can review before sending.</p>
+          </div>
+
+          <div class="flabel">Where is it?</div>
+          <div class="locfield">
+            <div class="pin"><svg viewBox="0 0 24 24" fill="none"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="10" r="2.4" fill="currentColor"/></svg></div>
+            <div class="lx"><b>14 Assi Ghat Road</b><span>Ward 12 · Varanasi · auto-detected</span></div>
+            <span class="chg">Change</span>
+          </div>
+          <div class="minimap">
+            <svg viewBox="0 0 340 80" preserveAspectRatio="xMidYMid slice"><rect width="340" height="80" fill="#EDE6D6"/>
+              <path d="M0 50 H340M120 0 V80M230 0 V80" stroke="#D8CBB0" stroke-width="8"/><path d="M0 22 H340" stroke="#D8CBB0" stroke-width="5"/>
+              <rect x="20" y="10" width="40" height="26" fill="#E0D2B4"/><rect x="150" y="56" width="50" height="20" fill="#E0D2B4"/><rect x="250" y="8" width="60" height="30" fill="#E0D2B4"/>
+              <path d="M40 30 C90 40 120 60 175 44" stroke="#5FA3C9" stroke-width="6" fill="none" opacity=".7"/>
+              <g transform="translate(170 46)"><circle r="10" fill="#C8501E" opacity=".25"/><path d="M0 -9 a6 6 0 1 1 -.01 0 Z" fill="#C8501E"/><path d="M0 -2 v8" stroke="#C8501E" stroke-width="2"/></g>
+            </svg>
+          </div>
+
+          <div class="flabel">Add evidence <span class="opt">· optional</span></div>
+          <div class="photos">
+            <div class="photo"><svg viewBox="0 0 80 80" preserveAspectRatio="xMidYMid slice"><rect width="80" height="80" fill="#2B2B38"/><rect x="36" y="14" width="8" height="40" rx="3" fill="#4A4A5A"/><path d="M40 14 q14 0 16 12 l-32 0 q2 -12 16 -12Z" fill="#3A3A48"/><circle cx="40" cy="20" r="3" fill="#6A6A30"/><rect x="20" y="54" width="40" height="26" fill="#23232E"/></svg><div class="x">×</div></div>
+            <div class="addphoto"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Photo</div>
+            <div class="addphoto"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="13" rx="2.5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12.5" r="3.2" stroke="currentColor" stroke-width="1.8"/><path d="M8 6l1.5-2.5h5L16 6" stroke="currentColor" stroke-width="1.8"/></svg>Camera</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footbar">
+        <button class="btn-primary" onclick="location.href='case-detail.html'">Continue · Review <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+      <div class="home-ind"></div>
+    </div>
+  </div>
+<script src="../lib/art-core.js"></script>
+<script>
+  document.getElementById('topacc').innerHTML=SAMADHAN.sunRays(110,'#C8501E',0.08);
+</script>
+</body>
+</html>

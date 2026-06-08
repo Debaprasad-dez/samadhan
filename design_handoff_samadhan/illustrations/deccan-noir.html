@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="deccan">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Samadhan Art — Deccan Noir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit:ital@0;1&family=Mukta:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link href="../lib/app.css" rel="stylesheet" />
+<style>
+  body{display:flex;align-items:center;justify-content:center;min-height:100%;padding:28px;}
+  .frame{position:relative;width:min(440px,92vw);}
+  .art-card{position:relative;border-radius:26px;overflow:hidden;aspect-ratio:390 / 478;
+    box-shadow:0 40px 80px -34px rgba(40,26,12,.6),0 16px 30px -20px rgba(40,26,12,.5);
+    background:var(--bg);border:1px solid color-mix(in srgb,var(--line) 80%,transparent);}
+  .art-card svg.scene{position:absolute;inset:0;width:100%;height:100%;display:block;}
+  .grain{z-index:6;}
+  .cap{margin-top:18px;text-align:center;}
+  .cap h1{font-family:var(--display);font-weight:400;font-size:24px;color:var(--ink);margin:0;}
+  .cap p{font-family:var(--body);font-size:13px;color:var(--ink-soft);margin:6px 0 0;letter-spacing:.2px;}
+</style>
+</head>
+<body class="bare" style="background:radial-gradient(120% 90% at 50% -10%, var(--stage1), var(--stage2) 45%, var(--stage3));">
+  <div class="frame">
+    <div class="art-card">
+      <svg class="scene" id="scene" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+      <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(130% 90% at 50% 30%,transparent 55%,rgba(40,22,8,.12) 100%);z-index:5;"></div>
+      <div style="position:absolute;inset:-40px;pointer-events:none;mix-blend-mode:soft-light;opacity:.38;background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>&quot;);background-size:170px 170px;z-index:6;"></div>
+    </div>
+    <div class="cap"><h1>Deccan Noir</h1><p>Bidriware — silver arabesque on black zinc</p></div>
+  </div>
+<script src="../lib/art-core.js"></script>
+<script src="../lib/art-deccan.js"></script>
+<script>
+  const sc=document.getElementById('scene');
+  SAMADHAN.scenes['deccan'](sc);
+  SAMADHAN.motion(sc, document.querySelector('.art-card'), null);
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="bharat">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Samadhan — Empty state</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit:ital@0;1&family=Mukta:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link href="../lib/app.css" rel="stylesheet" /><link href="../lib/screens.css" rel="stylesheet" />
+<style>
+  .empty .art .grain{inset:-10px;opacity:.5;}
+  /* entrance: animate FROM hidden only when motion is allowed; visible end-state is the base */
+  @media (prefers-reduced-motion: no-preference){
+    .empty.intro .art{animation:rise .9s cubic-bezier(.2,.8,.3,1) both;}
+    .empty.intro h2{animation:rise .9s .12s cubic-bezier(.2,.8,.3,1) both;}
+    .empty.intro p{animation:rise .9s .2s cubic-bezier(.2,.8,.3,1) both;}
+    .empty.intro .btn-primary{animation:rise .9s .28s cubic-bezier(.2,.8,.3,1) both;}
+    @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  }
+</style>
+</head>
+<body>
+  <div class="device">
+    <div class="screen" data-screen-label="Empty state · no cases">
+      <div class="statusbar" style="color:var(--ink)">
+        <div class="t"><span class="sun-dot"></span>6:20</div>
+        <div class="r">
+          <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="4.5" width="3" height="6.5" rx="1"/><rect x="9" y="2" width="3" height="9" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1" opacity=".35"/></svg>
+          <svg width="16" height="11" viewBox="0 0 16 11" fill="none"><path d="M8 10.2 3.5 5.6a6.3 6.3 0 0 1 9 0L8 10.2Z" fill="currentColor"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="1" y="1" width="20" height="10" rx="3" stroke="currentColor" stroke-width="1.2" opacity=".5"/><rect x="3" y="3" width="15" height="6" rx="1.5" fill="currentColor"/><rect x="22.5" y="4" width="1.8" height="4" rx="1" fill="currentColor" opacity=".5"/></svg>
+        </div>
+      </div>
+
+      <div class="topbar"><a class="iconbtn" href="home-bharat-dawn.html"><svg viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="ttl">Your cases</div></div>
+
+      <div class="empty">
+        <div class="art"><svg class="scene" id="scene" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg><div class="grain"></div></div>
+        <h2>A new day, no issues yet</h2>
+        <p>When you raise a complaint, it'll live here — tracked from sunrise to resolved. Your ward is waiting for your voice.</p>
+        <button class="btn-primary" onclick="location.href='file-complaint.html'"><svg viewBox="0 0 24 24" fill="none"><rect x="9" y="2.5" width="6" height="11" rx="3" fill="currentColor"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>File your first complaint</button>
+      </div>
+
+      <div class="botnav"><div class="navwrap">
+        <a class="nav" href="home-bharat-dawn.html"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11 12 4l8 7v8a1 1 0 0 1-1 1h-4v-5h-6v5H5a1 1 0 0 1-1-1v-8Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Home</a>
+        <a class="nav on"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="3.5" width="16" height="17" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Cases</a>
+        <a class="nav center" href="file-complaint.html"><svg viewBox="0 0 24 24" fill="none"><rect x="9" y="2.5" width="6" height="11" rx="3" fill="currentColor"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg><span>File</span></a>
+        <a class="nav"><svg viewBox="0 0 24 24" fill="none"><path d="M3 21V10l9-7 9 7v11h-6v-6H9v6H3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>Ward</a>
+        <a class="nav" href="theme-picker.html"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.6" stroke="currentColor" stroke-width="1.8"/><path d="M5 20c.8-3.8 3.6-5.5 7-5.5s6.2 1.7 7 5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>You</a>
+      </div></div>
+      <div class="home-ind"></div>
+    </div>
+  </div>
+<script src="../lib/art-core.js"></script>
+<script src="../lib/art-bharat.js"></script>
+<script>
+  const sc=document.getElementById('scene');
+  SAMADHAN.scenes.empty(sc);
+  SAMADHAN.motion(sc, document.querySelector('.empty .art'), null);
+  // play the entrance once, but only as enhancement (base state is already visible)
+  if(matchMedia('(prefers-reduced-motion: no-preference)').matches){
+    requestAnimationFrame(()=>document.querySelector('.empty').classList.add('intro'));
+  }
+</script>
+</body>
+</html>

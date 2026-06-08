@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="bharat">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Samadhan — Theme picker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit:ital@0;1&family=Mukta:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link href="../lib/app.css" rel="stylesheet" /><link href="../lib/screens.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="device">
+    <div class="screen" data-screen-label="Theme picker">
+      <div class="statusbar" style="color:var(--ink)">
+        <div class="t"><span class="sun-dot"></span>6:22</div>
+        <div class="r">
+          <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="4.5" width="3" height="6.5" rx="1"/><rect x="9" y="2" width="3" height="9" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1" opacity=".35"/></svg>
+          <svg width="16" height="11" viewBox="0 0 16 11" fill="none"><path d="M8 10.2 3.5 5.6a6.3 6.3 0 0 1 9 0L8 10.2Z" fill="currentColor"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="1" y="1" width="20" height="10" rx="3" stroke="currentColor" stroke-width="1.2" opacity=".5"/><rect x="3" y="3" width="15" height="6" rx="1.5" fill="currentColor"/><rect x="22.5" y="4" width="1.8" height="4" rx="1" fill="currentColor" opacity=".5"/></svg>
+        </div>
+      </div>
+      <div class="scroll">
+        <div class="tp-head">
+          <div class="topbar" style="padding:0;background:none;margin-bottom:14px;">
+            <a class="iconbtn" href="home-bharat-dawn.html"><svg viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            <div style="flex:1"></div>
+          </div>
+          <h1>Choose your heritage</h1>
+          <p>Samadhan dresses itself in eight of India's living art traditions. Pick the one that feels like home — every screen reskins instantly.</p>
+        </div>
+        <div class="tp-grid" id="grid"></div>
+        <div style="height:30px"></div>
+      </div>
+      <div class="home-ind"></div>
+    </div>
+  </div>
+<script src="../lib/art-core.js"></script>
+<script src="../lib/art-bharat.js"></script>
+<script src="../lib/art-mithila.js"></script>
+<script src="../lib/art-mughal.js"></script>
+<script src="../lib/art-warli.js"></script>
+<script src="../lib/art-pattachitra.js"></script>
+<script src="../lib/art-deccan.js"></script>
+<script src="../lib/art-kerala.js"></script>
+<script src="../lib/art-pichwai.js"></script>
+<script>
+const THEMES=[
+  {key:'bharat',      name:'Bharat Dawn',      tradition:'Banaras Ghats',         badge:'Active',     ds:'Sunrise over the Varanasi riverfront — marigold, saffron and temple-gold on warm ivory paper.', sw:['#FBFAF6','#C8501E','#BE3455','#C9962E','#3E7C54'], link:'home-bharat-dawn.html'},
+  {key:'mithila',     name:'Mithila Bloom',     tradition:'Madhubani Painting',    badge:'Colourful',  ds:'Double-outline fish, peacocks and lotus ponds in the bold folk idiom of Bihar.',                 sw:['#F6EFDF','#B5322F','#0E7C7B','#E0A211','#5C8C3F'], link:'home-mithila-bloom.html'},
+  {key:'mughal',      name:'Mughal Indigo',     tradition:'Mughal Miniature',      badge:'Luxury',     ds:'Jali lattice, cusped arches and gold-leaf arabesque under a crescent moon.',                    sw:['#10153A','#D4AF37','#1F9E72','#EBD584','#2A3576'], link:'home-mughal-indigo.html'},
+  {key:'warli',       name:'Warli Monochrome',  tradition:'Warli Tribal Art',      badge:'Folk',       ds:'White chalk stick figures in geometric precision on terracotta mud — Maharashtra tribal art.',    sw:['#F2E6CC','#8B4A1A','#5A8C3C','#C4840A','#EBD8B4'], link:'home-warli.html'},
+  {key:'pattachitra', name:'Pattachitra Rust',  tradition:'Odisha Scroll Painting',badge:'Vivid',      ds:'Lacquer-red ground, bold lampblack outlines, turmeric gold and fish-eye borders from Puri.',      sw:['#7A1408','#D4A017','#1A6080','#F0C840','#621008'], link:'home-pattachitra.html'},
+  {key:'deccan',      name:'Deccan Noir',       tradition:'Bidriware · Bidar',     badge:'Minimal',    ds:'Near-black zinc alloy inlaid with silver arabesques — zero colour, maximum geometric precision.',   sw:['#080A0C','#C0C0C8','#4A7C50','#D8D8E0','#1E2024'], link:'home-deccan.html'},
+  {key:'kerala',      name:'Kerala Mural',      tradition:'Kerala Temple Murals',  badge:'Classical',  ds:'Panchavarnam five-colour palette — vermilion, turmeric, green, black and chalk on lime plaster.',  sw:['#EDD8A0','#8B1A00','#1A5C30','#C47808','#1A0F06'], link:'home-kerala.html'},
+  {key:'pichwai',     name:'Pichwai Cyan',      tradition:'Nathdwara Painting',    badge:'Devotional', ds:'Deep peacock-teal cloth painting dense with gold lotus blooms, cows and a full Purnima moon.',       sw:['#083444','#D4A017','#6BBCBC','#EBD584','#0C3E50'], link:'home-pichwai.html'},
+];
+const grid=document.getElementById('grid');
+THEMES.forEach((t,i)=>{
+  const card=document.createElement('div');
+  card.className='tcard'+(i===0?' on':'');
+  card.setAttribute('data-theme-card',t.key);
+  card.innerHTML=`
+    <div class="prev"><svg class="scene" preserveAspectRatio="xMidYMin slice" aria-hidden="true"></svg>
+      <span class="badge"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l2.4 6.2L21 9.6l-5 4.3L17.6 21 12 17.3 6.4 21 8 13.9l-5-4.3 6.6-.4L12 3Z" fill="currentColor"/></svg>${t.badge}</span></div>
+    <div class="meta">
+      <div class="nm">${t.name}<span class="tr">${t.tradition}</span></div>
+      <div class="ds">${t.ds}</div>
+      <div class="swatches">${t.sw.map(c=>`<i style="background:${c}"></i>`).join('')}<span class="lbl">${i===0?'In use':'Tap to preview'}</span></div>
+    </div>`;
+  grid.appendChild(card);
+  const sc=card.querySelector('.scene');
+  (SAMADHAN.scenes[t.key]||SAMADHAN.scenes.bharat)(sc);
+  card.addEventListener('click',()=>{ if(t.link) location.href=t.link; });
+});
+document.querySelectorAll('.tcard .scene').forEach(sc=>SAMADHAN.motion(sc,null,null));
+</script>
+</body>
+</html>
