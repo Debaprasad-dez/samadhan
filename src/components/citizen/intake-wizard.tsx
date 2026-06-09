@@ -19,6 +19,7 @@ import {
 import { WARDS, DEPARTMENTS, CATEGORIES } from "@/lib/seed-data";
 import { humanizeCode } from "@/lib/utils";
 import { useIntakeStore } from "@/store/intake";
+import { usePrefsStore } from "@/store/prefs";
 import { useSession } from "@/hooks/use-session";
 import {
   useDraft,
@@ -69,10 +70,20 @@ export function IntakeWizard() {
   const user = useSession();
   const s = useIntakeStore();
   const tr = useT();
+  const prefWard = usePrefsStore((p) => p.wardCode);
 
   // Avoid hydration mismatch from persisted store: render only after mount.
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
+
+  // Default the ward to the citizen's chosen/home ward (still editable here).
+  useEffect(() => {
+    if (mounted && !s.wardCode) {
+      const w = prefWard || user?.wardCode;
+      if (w) s.setField("wardCode", w);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mounted]);
 
   // Once we navigate away on submit, stop the step→URL effect clobbering it.
   const navigatingRef = useRef(false);

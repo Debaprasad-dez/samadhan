@@ -38,9 +38,23 @@ interface SpeechRec {
 }
 type SpeechCtor = new () => SpeechRec;
 
+// Speech-recognition locales (BCP-47) for India's major languages. The browser
+// STT engine handles the actual recognition per code.
 const LANGS = [
-  { code: "en-IN", label: "EN" },
-  { code: "hi-IN", label: "हिं" },
+  { code: "en-IN", label: "English" },
+  { code: "hi-IN", label: "हिन्दी" },
+  { code: "bn-IN", label: "বাংলা" },
+  { code: "mr-IN", label: "मराठी" },
+  { code: "te-IN", label: "తెలుగు" },
+  { code: "ta-IN", label: "தமிழ்" },
+  { code: "gu-IN", label: "ગુજરાતી" },
+  { code: "kn-IN", label: "ಕನ್ನಡ" },
+  { code: "ml-IN", label: "മലയാളം" },
+  { code: "pa-Guru-IN", label: "ਪੰਜਾਬੀ" },
+  { code: "ur-IN", label: "اردو" },
+  { code: "or-IN", label: "ଓଡ଼ିଆ" },
+  { code: "as-IN", label: "অসমীয়া" },
+  { code: "ne-NP", label: "नेपाली" },
 ];
 
 /**
@@ -271,22 +285,21 @@ export function VoiceMicButton({ ariaLabel }: { ariaLabel: string }) {
               </div>
 
               {/* Language */}
-              <div className="flex items-center justify-center gap-1">
-                {LANGS.map((l) => (
-                  <button
-                    key={l.code}
-                    type="button"
-                    onClick={() => setLang(l.code)}
-                    className={cn(
-                      "rounded-full px-3 py-1 text-xs font-semibold transition-colors",
-                      lang === l.code
-                        ? "bg-brand text-brand-foreground"
-                        : "text-muted-foreground hover:text-foreground",
-                    )}
-                  >
-                    {l.label}
-                  </button>
-                ))}
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-muted-foreground text-xs">
+                  {t("settings.language")}
+                </span>
+                <select
+                  value={lang}
+                  onChange={(e) => setLang(e.target.value)}
+                  className="border-border-strong bg-surface text-foreground focus:ring-ring rounded-md border px-2 py-1 text-xs shadow-sm focus:outline-none focus:ring-1"
+                >
+                  {LANGS.map((l) => (
+                    <option key={l.code} value={l.code}>
+                      {l.label}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
           )}

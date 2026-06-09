@@ -62,12 +62,12 @@
     "streetlight": "Streetlight"
   },
   "status": {
-    "FILED": "Filed",
+    "OPEN": "Open",
+    "ACKNOWLEDGED": "Acknowledged",
     "IN_PROGRESS": "In progress",
-    "OFFICER_ASSIGNED": "Officer assigned",
+    "AWAITING_INFO": "Awaiting info",
     "RESOLVED": "Resolved",
-    "REJECTED": "Rejected",
-    "PENDING": "Pending",
+    "ESCALATED": "Escalated",
     "CLOSED": "Closed",
     "onTrack": "On track"
   },

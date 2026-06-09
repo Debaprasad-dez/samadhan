@@ -7,6 +7,8 @@ import { marigold, leaf } from "@/lib/art/core";
 import { RevealList } from "@/components/motion/reveal";
 import { CardArtwork } from "@/components/art/card-artwork";
 import { VoiceMicButton } from "@/components/citizen/voice-capture";
+import { WardSelector } from "@/components/citizen/ward-selector";
+import { CategoryChips } from "@/components/citizen/category-chips";
 import { getT } from "@/lib/t";
 import { cn } from "@/lib/utils";
 
@@ -14,19 +16,27 @@ import { cn } from "@/lib/utils";
 // CTA card's top-right corner; the .bloom class gives it a gentle sway.
 const SPRIG = `${leaf(64, 22)}${leaf(22, 40)}${marigold(36, 30, 12, false)}${marigold(62, 40, 9, false)}${marigold(50, 22, 7, true)}`;
 
+// Resolved/closed cases are "on track" (green); everything else is in-flight.
+const SETTLED = new Set(["RESOLVED", "CLOSED"]);
+
 function slaPercent(status: string): number {
-  if (status === "FILED") return 10;
-  if (status === "IN_PROGRESS") return 65;
-  if (status === "OFFICER_ASSIGNED") return 30;
-  if (status === "RESOLVED" || status === "REJECTED" || status === "CLOSED") return 100;
-  return 15;
+  switch (status) {
+    case "OPEN": return 10;
+    case "ACKNOWLEDGED": return 25;
+    case "AWAITING_INFO": return 45;
+    case "IN_PROGRESS": return 60;
+    case "ESCALATED": return 85;
+    case "RESOLVED":
+    case "CLOSED": return 100;
+    default: return 15;
+  }
 }
 
 function SlaRing({ percent, status }: { percent: number; status: string }) {
   const r = 15;
   const circ = 2 * Math.PI * r;
   const offset = circ * (1 - Math.min(percent, 100) / 100);
-  const isWarn = status === "IN_PROGRESS" || status === "FILED" || status === "PENDING";
+  const isWarn = !SETTLED.has(status);
   const stroke = isWarn ? "var(--g-warn)" : "var(--g-ok)";
   return (
     <svg width="34" height="34" viewBox="0 0 36 36" aria-hidden>
@@ -77,14 +87,6 @@ function CategoryThumb({ category }: { category: string }) {
   );
 }
 
-const CHIPS = [
-  { slug: "WATER",       key: "water",       icon: `<path d="M12 2c3 4 5 6.5 5 9a5 5 0 0 1-10 0c0-2.5 2-5 5-9Z" fill="currentColor"/>` },
-  { slug: "ROADS",       key: "roads",       icon: `<path d="M3 18h18M6 18l1.5-12h9L18 18M9 6v12M15 6v12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/>` },
-  { slug: "GARBAGE",     key: "garbage",     icon: `<path d="M6 9h12l-1 11H7L6 9Zm2-3h8l1 3H7l1-3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>` },
-  { slug: "POWER",       key: "power",       icon: `<path d="M13 2 4 14h7l-1 9 9-12h-7l1-9Z" fill="currentColor"/>` },
-  { slug: "STREETLIGHT", key: "streetlight", icon: `<path d="M12 3v3M12 18v3M5 12H2M22 12h-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="4" fill="currentColor"/>` },
-];
-
 export default async function CitizenHome() {
   const user = await requireRole(["CITIZEN"]);
 
@@ -132,14 +134,7 @@ export default async function CitizenHome() {
               <p className="font-display text-lg leading-none" style={{ color: "var(--g-ink)" }}>समाधान</p>
               <p className="mt-0.5 text-[9.5px] font-semibold uppercase tracking-[2.5px]" style={{ color: "var(--g-ink-soft)" }}>Samadhan</p>
             </div>
-            <div className="ml-auto flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-semibold"
-              style={{ background: "color-mix(in srgb,var(--g-card) 72%,transparent)", backdropFilter: "blur(8px)", border: "1px solid color-mix(in srgb,var(--g-ink) 14%,transparent)", color: "var(--g-ink-soft)", boxShadow: "0 4px 14px -8px rgba(20,12,6,.45)" }}>
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
-                <path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z" stroke="currentColor" strokeWidth="1.8"/>
-                <circle cx="12" cy="10" r="2.4" fill="currentColor"/>
-              </svg>
-              {user.wardCode ? `Ward ${user.wardCode}` : "Samadhan"}
-            </div>
+            <WardSelector initialWard={user.wardCode ?? undefined} />
           </div>
 
           {/* greeting with frosted veil */}
@@ -230,19 +225,8 @@ export default async function CitizenHome() {
               <VoiceMicButton ariaLabel={t("home.voiceInput")} />
             </div>
 
-            {/* category chips */}
-            <div className="relative z-[1] -mb-1 mt-3 flex gap-1.5 overflow-x-auto pb-1 [scrollbar-width:none]">
-              {CHIPS.map(({ slug, key, icon }) => (
-                <Link key={slug} href={`/file?category=${slug}`}
-                  className="flex flex-none items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11.5px] font-semibold"
-                  style={{ background: "var(--g-paper)", borderColor: "var(--g-line)", color: "var(--g-chip-ink)" }}>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-                    style={{ color: "var(--g-primary)" }}
-                    dangerouslySetInnerHTML={{ __html: icon }} />
-                  {t(`chips.${key}`)}
-                </Link>
-              ))}
-            </div>
+            {/* category chips → drop a #tag into the draft description */}
+            <CategoryChips />
           </div>
         </div>
 
@@ -273,7 +257,7 @@ export default async function CitizenHome() {
             <div className="flex flex-col gap-2.5">
               {recent.map((c) => {
                 const pct = slaPercent(c.status);
-                const isWarn = c.status === "IN_PROGRESS" || c.status === "FILED" || c.status === "PENDING";
+                const isWarn = !SETTLED.has(c.status);
                 return (
                   <Link key={c.id} href={`/cases/${c.id}`}
                     className="relative flex items-center gap-3 overflow-hidden rounded-[18px] p-3 transition-shadow hover:shadow-md"
