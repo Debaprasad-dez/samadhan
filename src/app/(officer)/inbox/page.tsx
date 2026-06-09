@@ -6,10 +6,15 @@ import { toast } from "sonner";
 import {
   Loader2,
   AlertTriangle,
+  AlertCircle,
+  ArrowDownCircle,
   ChevronRight,
+  MoreVertical,
   MapPin,
   Users,
   Clock,
+  ExternalLink,
+  type LucideIcon,
 } from "lucide-react";
 import { useInbox, useCaseEvent, type InboxItem } from "@/hooks/use-officer";
 import { StatusBadge, SeverityChip } from "@/components/case/status-badge";
@@ -25,6 +30,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import { cn, humanizeCode, formatRelative } from "@/lib/utils";
 import type { CaseStatus } from "@/types";
 
@@ -44,6 +57,16 @@ const STATUS_OPTIONS: CaseStatus[] = [
   "ESCALATED",
   "RESOLVED",
 ];
+
+// Severity → an icon + colour for the leading badge (urgency at a glance).
+const SEVERITY: Record<
+  string,
+  { Icon: LucideIcon; color: string; bg: string }
+> = {
+  HIGH: { Icon: AlertTriangle, color: "text-danger", bg: "bg-danger/10" },
+  MEDIUM: { Icon: AlertCircle, color: "text-warning", bg: "bg-warning/10" },
+  LOW: { Icon: ArrowDownCircle, color: "text-info", bg: "bg-info/10" },
+};
 
 export default function OfficerInbox() {
   const router = useRouter();
@@ -158,91 +181,147 @@ export default function OfficerInbox() {
           description="No open cases in your queue. Beautifully clear."
         />
       ) : (
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           {cases.map((c) => {
             const overdue = new Date(c.slaDueAt).getTime() < Date.now();
+            const sev = SEVERITY[c.severity] ?? SEVERITY.MEDIUM;
+            const SevIcon = sev.Icon;
             return (
               <Card key={c.id} className="transition-shadow hover:shadow-elev-1">
-                <CardContent className="flex flex-wrap items-center gap-x-3 gap-y-2 p-2.5">
+                <CardContent className="flex items-start gap-3 p-4 sm:gap-4">
                   <input
                     type="checkbox"
                     checked={selected.has(c.id)}
                     onChange={() => toggleSelect(c.id)}
-                    className="h-4 w-4 shrink-0"
+                    className="accent-brand mt-1 h-5 w-5 shrink-0 rounded"
                     aria-label={`Select ${c.number}`}
                   />
+
+                  {/* severity icon */}
                   <span
-                    title="Priority rank"
-                    className="bg-surface-muted text-muted-foreground grid h-7 min-w-[28px] shrink-0 place-items-center rounded-md px-1 font-mono text-xs font-semibold"
+                    title={`${humanizeCode(c.severity)} severity`}
+                    className={cn(
+                      "mt-0.5 grid h-11 w-11 shrink-0 place-items-center rounded-full",
+                      sev.bg,
+                    )}
                   >
-                    #{c.rank}
+                    <SevIcon className={cn("h-5 w-5", sev.color)} />
                   </span>
 
-                  {/* title + meta (tap to open) */}
-                  <button
-                    type="button"
-                    onClick={() => router.push(`/case/${c.id}`)}
-                    className="min-w-0 flex-1 text-left"
-                  >
-                    <p className="truncate text-sm font-medium">{c.title}</p>
-                    <p className="text-muted-foreground mt-0.5 flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-xs">
-                      <span className="font-mono">{c.number}</span>
-                      <span className="inline-flex items-center gap-1">
-                        <MapPin className="h-3 w-3" /> {c.wardCode}
-                      </span>
-                      <span className="inline-flex items-center gap-1">
-                        <Users className="h-3 w-3" /> {c._count.cosigns}
-                      </span>
-                      <span
-                        className={cn(
-                          "inline-flex items-center gap-1",
-                          overdue && "text-danger font-medium",
-                        )}
+                  {/* body */}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-start justify-between gap-3">
+                      {/* title + number + meta (tap to open) */}
+                      <button
+                        type="button"
+                        onClick={() => router.push(`/case/${c.id}`)}
+                        className="min-w-0 flex-1 text-left"
                       >
-                        {overdue ? (
-                          <>
-                            <AlertTriangle className="h-3 w-3" /> Overdue
-                          </>
-                        ) : (
-                          <>
-                            <Clock className="h-3 w-3" /> {formatRelative(c.slaDueAt)}
-                          </>
-                        )}
-                      </span>
-                    </p>
-                  </button>
+                        <p className="truncate text-base font-bold sm:text-lg">
+                          {c.title}
+                        </p>
+                        <p className="text-muted-foreground font-mono text-sm">
+                          {c.number}
+                        </p>
+                        <p className="text-muted-foreground mt-1 flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-sm">
+                          <span className="inline-flex items-center gap-1">
+                            <MapPin className="h-3.5 w-3.5" /> {c.wardCode}
+                          </span>
+                          <span className="text-border-strong">|</span>
+                          <span className="inline-flex items-center gap-1">
+                            <Users className="h-3.5 w-3.5" /> {c._count.cosigns}
+                          </span>
+                          <span className="text-border-strong">|</span>
+                          <span
+                            className={cn(
+                              "inline-flex items-center gap-1",
+                              overdue && "text-danger font-medium",
+                            )}
+                          >
+                            {overdue ? (
+                              <>
+                                <AlertTriangle className="h-3.5 w-3.5" /> Overdue
+                              </>
+                            ) : (
+                              <>
+                                <Clock className="h-3.5 w-3.5" />{" "}
+                                {formatRelative(c.slaDueAt)}
+                              </>
+                            )}
+                          </span>
+                        </p>
+                      </button>
 
-                  <SeverityChip severity={c.severity} />
-                  <StatusBadge status={c.status} />
+                      {/* severity + status pills + more menu */}
+                      <div className="flex shrink-0 items-center gap-2">
+                        <SeverityChip severity={c.severity} />
+                        <span className="hidden sm:inline-flex">
+                          <StatusBadge status={c.status} />
+                        </span>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8"
+                              aria-label="More actions"
+                            >
+                              <MoreVertical />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                              onClick={() => router.push(`/case/${c.id}`)}
+                            >
+                              <ExternalLink className="h-4 w-4" />
+                              Open case
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuLabel>Set status</DropdownMenuLabel>
+                            {STATUS_OPTIONS.map((s) => (
+                              <DropdownMenuItem
+                                key={s}
+                                disabled={c.status === s}
+                                onClick={() => act(c, s, humanizeCode(s))}
+                              >
+                                {humanizeCode(s)}
+                              </DropdownMenuItem>
+                            ))}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    </div>
 
-                  {/* update status from the card */}
-                  <Select
-                    value={STATUS_OPTIONS.includes(c.status) ? c.status : ""}
-                    onValueChange={(v) =>
-                      act(c, v as CaseStatus, humanizeCode(v))
-                    }
-                  >
-                    <SelectTrigger className="h-8 w-[136px]" aria-label="Update status">
-                      <SelectValue placeholder="Set status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {STATUS_OPTIONS.map((s) => (
-                        <SelectItem key={s} value={s}>
-                          {humanizeCode(s)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => router.push(`/case/${c.id}`)}
-                    aria-label={`Open ${c.number}`}
-                  >
-                    Open
-                    <ChevronRight />
-                  </Button>
+                    {/* bottom controls */}
+                    <div className="mt-3 flex items-center justify-end gap-2">
+                      <Select
+                        value={STATUS_OPTIONS.includes(c.status) ? c.status : ""}
+                        onValueChange={(v) => act(c, v as CaseStatus, humanizeCode(v))}
+                      >
+                        <SelectTrigger
+                          className="h-9 w-[150px]"
+                          aria-label="Update status"
+                        >
+                          <SelectValue placeholder="Set status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {STATUS_OPTIONS.map((s) => (
+                            <SelectItem key={s} value={s}>
+                              {humanizeCode(s)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Button
+                        variant="secondary"
+                        onClick={() => router.push(`/case/${c.id}`)}
+                        aria-label={`Open ${c.number}`}
+                      >
+                        Open
+                        <ChevronRight />
+                      </Button>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             );
