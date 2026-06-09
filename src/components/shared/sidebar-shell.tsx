@@ -140,11 +140,9 @@ export function SidebarShell({
           </div>
         </header>
 
-        <main className="flex-1 px-4 py-6 md:px-8">{children}</main>
-
-        {/* mobile horizontal nav */}
+        {/* mobile tab nav — sits at the top, sticky under the header */}
         <nav
-          className="bg-background flex items-center gap-1 overflow-x-auto border-t px-2 py-2 lg:hidden"
+          className="bg-background/95 border-border sticky top-16 z-10 flex items-center gap-1 overflow-x-auto border-b px-2 py-2 backdrop-blur-md lg:hidden"
           aria-label="Primary mobile"
         >
           {flat.map((it) => {
@@ -155,8 +153,10 @@ export function SidebarShell({
                 key={it.href}
                 href={it.href}
                 className={cn(
-                  "flex items-center gap-1.5 whitespace-nowrap rounded-md px-3 py-1.5 text-sm",
-                  active ? "bg-brand-soft text-brand" : "text-muted-foreground",
+                  "flex items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-2 text-sm font-medium transition-colors",
+                  active
+                    ? "bg-brand-soft text-brand"
+                    : "text-muted-foreground hover:bg-surface-muted",
                 )}
               >
                 <Icon className="h-4 w-4" />
@@ -165,6 +165,8 @@ export function SidebarShell({
             );
           })}
         </nav>
+
+        <main className="flex-1 px-4 py-6 md:px-8">{children}</main>
       </div>
     </div>
   );

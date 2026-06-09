@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ThumbsUp, Users, MapPin } from "lucide-react";
+import { ThumbsUp, Users, MapPin, Clock, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
-import { StatusBadge } from "@/components/case/status-badge";
+import { StatusBadge, SeverityChip } from "@/components/case/status-badge";
+import { CategoryIcon } from "@/components/art/category-icon";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn, humanizeCode, formatRelative } from "@/lib/utils";
-import type { CaseStatus } from "@/types";
+import type { CaseStatus, Severity } from "@/types";
 
 export interface FeedItem {
   id: string;
@@ -27,6 +28,13 @@ export interface FeedItem {
   viewerUpvoted?: boolean;
   isOwn?: boolean;
 }
+
+// Severity → a left accent bar, so urgency reads at a glance.
+const SEV_ACCENT: Record<string, string> = {
+  HIGH: "border-l-danger",
+  MEDIUM: "border-l-warning",
+  LOW: "border-l-info",
+};
 
 export function FeedCard({ item }: { item: FeedItem }) {
   const [count, setCount] = useState(item.upvotes);
@@ -52,55 +60,80 @@ export function FeedCard({ item }: { item: FeedItem }) {
   }
 
   return (
-    <Card className="flex h-full flex-col">
-      <CardContent className="flex flex-1 flex-col gap-2 p-4">
-        <div className="flex items-center justify-between gap-2">
-          <span className="text-muted-foreground inline-flex items-center gap-1 text-xs">
-            <MapPin className="h-3 w-3" />
-            {item.author}
+    <Card
+      className={cn(
+        "group flex h-full flex-col overflow-hidden border-l-4 transition-all hover:-translate-y-0.5 hover:shadow-elev-2",
+        SEV_ACCENT[item.severity] ?? "border-l-border-strong",
+      )}
+    >
+      <CardContent className="flex flex-1 flex-col gap-3 p-4">
+        {/* department chip + status */}
+        <div className="flex items-start justify-between gap-2">
+          <span className="bg-surface-muted text-foreground inline-flex items-center gap-1.5 rounded-full py-1 pl-1.5 pr-2.5 text-[11px] font-semibold">
+            <span className="bg-brand-soft text-brand grid h-5 w-5 place-items-center rounded-full">
+              <CategoryIcon department={item.departmentCode} className="h-3 w-3" />
+            </span>
+            {humanizeCode(item.departmentCode)}
           </span>
           <StatusBadge status={item.status} />
         </div>
 
-        <Link href={`/cases/${item.id}`} className="group flex-1">
-          <p className="text-muted-foreground text-[11px] font-medium uppercase">
-            {humanizeCode(item.departmentCode)} · {item.categoryName}
+        {/* category + snippet */}
+        <Link href={`/cases/${item.id}`} className="flex-1">
+          <p className="text-brand text-[11px] font-semibold uppercase tracking-wide">
+            {item.categoryName}
           </p>
-          <p className="mt-1 line-clamp-3 text-sm group-hover:underline">
+          <p className="text-foreground/90 group-hover:text-foreground mt-1 line-clamp-3 text-sm leading-relaxed">
             {item.snippet}
           </p>
         </Link>
 
-        <div className="text-muted-foreground flex items-center justify-between border-t pt-2 text-xs">
+        {/* meta */}
+        <div className="text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+          <SeverityChip severity={item.severity as Severity} />
+          {item.escalated && (
+            <span className="text-danger inline-flex items-center gap-1 font-medium">
+              <AlertTriangle className="h-3 w-3" /> Escalated
+            </span>
+          )}
+          <span className="inline-flex items-center gap-1">
+            <MapPin className="h-3 w-3" /> Ward {item.wardCode}
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <Clock className="h-3 w-3" /> {formatRelative(item.createdAt)}
+          </span>
+        </div>
+
+        {/* engagement */}
+        <div className="border-border mt-auto flex items-center justify-between border-t pt-3">
           {item.isOwn ? (
             <span
-              className="text-muted-foreground inline-flex items-center gap-1 rounded-md px-2 py-1"
+              className="text-muted-foreground inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold"
               title="Your complaint"
             >
-              <ThumbsUp className="h-3.5 w-3.5" />
-              {count}
+              <ThumbsUp className="h-3.5 w-3.5" /> {count}
             </span>
           ) : (
             <button
               type="button"
               onClick={toggle}
               disabled={busy}
-              className={cn(
-                "inline-flex items-center gap-1 rounded-md px-2 py-1 transition-colors",
-                up ? "bg-brand-soft text-brand" : "hover:bg-surface-muted",
-              )}
               aria-pressed={up}
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
+                up
+                  ? "border-brand bg-brand-soft text-brand"
+                  : "border-border text-muted-foreground hover:bg-surface-muted hover:text-foreground",
+              )}
             >
-              <ThumbsUp className="h-3.5 w-3.5" />
+              <ThumbsUp className={cn("h-3.5 w-3.5", up && "fill-current")} />
               {count}
             </button>
           )}
-          <span className="inline-flex items-center gap-1">
+          <span className="text-muted-foreground inline-flex items-center gap-1.5 text-xs">
             <Users className="h-3.5 w-3.5" />
-            {item.cosigns}
+            {item.cosigns} backed
           </span>
-          <span>Ward {item.wardCode}</span>
-          <span>{formatRelative(item.createdAt)}</span>
         </div>
       </CardContent>
     </Card>
