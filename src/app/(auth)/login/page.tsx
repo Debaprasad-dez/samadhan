@@ -11,20 +11,33 @@ export default async function LoginPage() {
   if (user) redirect(homePathForRole(user.role));
 
   return (
-    <div className="flex min-h-dvh flex-col items-center justify-center gap-6 px-4 py-10">
-      <Brand href="/login" />
-      <div className="border-border shadow-elev-1 w-full max-w-md overflow-hidden rounded-lg border">
+    <div className="relative flex min-h-dvh flex-col overflow-hidden">
+      {/* Full-window hero behind the form. SceneHero feathers its own top and
+          bottom edges to transparent, so it melts into the page background. */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-0">
         <ThemedHero />
       </div>
-      <Suspense fallback={null}>
-        <LoginForm />
-      </Suspense>
-      <Link
-        href="/role-switch"
-        className="text-muted-foreground hover:text-foreground text-sm underline-offset-4 hover:underline"
-      >
-        Just exploring? Try a demo persona →
-      </Link>
+
+      {/* Content sits over the hero; the form is pulled up so it overlaps the
+          lower half of the image rather than dropping below it. */}
+      <div className="relative z-10 mx-auto flex w-full max-w-md flex-1 flex-col items-center px-4 pb-12">
+        <div className="pt-24 sm:pt-28">
+          <Brand href="/login" size="lg" />
+        </div>
+
+        <div className="mt-10 w-full">
+          <Suspense fallback={null}>
+            <LoginForm />
+          </Suspense>
+        </div>
+
+        <Link
+          href="/role-switch"
+          className="text-muted-foreground hover:text-foreground mt-6 text-sm underline-offset-4 hover:underline"
+        >
+          Just exploring? Try a demo persona →
+        </Link>
+      </div>
     </div>
   );
 }

@@ -39,24 +39,37 @@ export function BrandMark({ className }: { className?: string }) {
   );
 }
 
+const SIZES = {
+  md: { mark: "h-7 w-7", text: "text-xl", gap: "gap-2" },
+  lg: { mark: "h-12 w-12", text: "text-4xl", gap: "gap-3" },
+} as const;
+
 export function Brand({
   href = "/",
   markOnly = false,
+  size = "md",
   className,
 }: {
   href?: string;
   markOnly?: boolean;
+  size?: keyof typeof SIZES;
   className?: string;
 }) {
+  const s = SIZES[size];
   return (
     <Link
       href={href}
       aria-label="Samadhan home"
-      className={cn("flex items-center gap-2", className)}
+      className={cn("flex items-center", s.gap, className)}
     >
-      <BrandMark className="h-7 w-7" />
+      <BrandMark className={s.mark} />
       {!markOnly && (
-        <span className="font-display text-foreground text-xl font-semibold tracking-tight">
+        <span
+          className={cn(
+            "font-display text-foreground font-semibold tracking-tight",
+            s.text,
+          )}
+        >
           Samadhan
         </span>
       )}
