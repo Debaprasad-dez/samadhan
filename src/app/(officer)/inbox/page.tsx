@@ -1,14 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
-  Keyboard,
   Loader2,
   AlertTriangle,
-  Check,
-  PlayCircle,
   ChevronRight,
   MapPin,
   Users,
@@ -22,12 +19,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { EmptyState } from "@/components/shared/empty-state";
 import { EmptyInbox } from "@/components/art/empty";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { cn, formatRelative } from "@/lib/utils";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { cn, humanizeCode, formatRelative } from "@/lib/utils";
 import type { CaseStatus } from "@/types";
 
 const STATUS_FILTERS = [
@@ -38,30 +36,14 @@ const STATUS_FILTERS = [
   { k: "ESCALATED", l: "Escalated" },
 ];
 
-const SHORTCUTS = [
-  ["J / ↓", "Next"],
-  ["K / ↑", "Previous"],
-  ["Enter / C", "Open case"],
-  ["A", "Acknowledge"],
-  ["I", "Move to in progress"],
-  ["/", "Focus filter"],
-  ["?", "This help"],
+// Statuses an officer can move a case to, from the card.
+const STATUS_OPTIONS: CaseStatus[] = [
+  "ACKNOWLEDGED",
+  "IN_PROGRESS",
+  "AWAITING_INFO",
+  "ESCALATED",
+  "RESOLVED",
 ];
-
-// Severity → left accent colour, so urgency is readable at a glance.
-const SEV_ACCENT: Record<string, string> = {
-  HIGH: "border-l-danger",
-  MEDIUM: "border-l-warning",
-  LOW: "border-l-info",
-};
-
-// The single obvious next step for a worker, given the case status.
-function nextAction(status: string): { next: CaseStatus; label: string } | null {
-  if (status === "OPEN") return { next: "ACKNOWLEDGED", label: "Acknowledge" };
-  if (status === "ACKNOWLEDGED")
-    return { next: "IN_PROGRESS", label: "Start work" };
-  return null;
-}
 
 export default function OfficerInbox() {
   const router = useRouter();
@@ -70,16 +52,17 @@ export default function OfficerInbox() {
   const { data, isLoading, isError, refetch } = useInbox({ status, severity });
   const event = useCaseEvent();
 
-  const cases: InboxItem[] = data?.cases ?? [];
-  const [cursor, setCursor] = useState(0);
+  const cases = useMemo<InboxItem[]>(() => data?.cases ?? [], [data]);
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [helpOpen, setHelpOpen] = useState(false);
-  const filterRef = useRef<HTMLInputElement>(null);
 
-  // Keep the cursor in range when the filtered list shrinks.
+  // Keep selection valid as the list changes.
   useEffect(() => {
-    setCursor((c) => Math.min(c, Math.max(0, cases.length - 1)));
-  }, [cases.length]);
+    setSelected((s) => {
+      const ids = new Set(cases.map((c) => c.id));
+      const next = new Set([...s].filter((id) => ids.has(id)));
+      return next.size === s.size ? s : next;
+    });
+  }, [cases]);
 
   function act(c: InboxItem | undefined, next: CaseStatus, label: string) {
     if (!c) return;
@@ -91,44 +74,6 @@ export default function OfficerInbox() {
       },
     );
   }
-
-  // Keyboard shortcuts (§5.5.1).
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      const tag = (e.target as HTMLElement).tagName;
-      if (tag === "INPUT" || tag === "TEXTAREA") {
-        if (e.key === "Escape") (e.target as HTMLElement).blur();
-        return;
-      }
-      if (e.key === "?") {
-        setHelpOpen(true);
-        return;
-      }
-      if (e.key === "/") {
-        e.preventDefault();
-        filterRef.current?.focus();
-        return;
-      }
-      if (!cases.length) return;
-      const k = e.key.toLowerCase();
-      if (e.key === "ArrowDown" || k === "j") {
-        e.preventDefault();
-        setCursor((c) => Math.min(cases.length - 1, c + 1));
-      } else if (e.key === "ArrowUp" || k === "k") {
-        e.preventDefault();
-        setCursor((c) => Math.max(0, c - 1));
-      } else if (e.key === "Enter" || k === "c") {
-        router.push(`/case/${cases[cursor]?.id}`);
-      } else if (k === "a") {
-        act(cases[cursor], "ACKNOWLEDGED", "Acknowledged");
-      } else if (k === "i") {
-        act(cases[cursor], "IN_PROGRESS", "In progress");
-      }
-    }
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cases, cursor]);
 
   function toggleSelect(id: string) {
     setSelected((s) => {
@@ -151,22 +96,16 @@ export default function OfficerInbox() {
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-display text-3xl font-semibold">Inbox</h1>
-          <p className="text-muted-foreground text-sm">
-            Prioritised queue · {data?.total ?? 0} cases
-          </p>
-        </div>
-        <Button variant="ghost" size="icon" aria-label="Keyboard shortcuts" onClick={() => setHelpOpen(true)}>
-          <Keyboard />
-        </Button>
+      <div>
+        <h1 className="font-display text-3xl font-semibold">Inbox</h1>
+        <p className="text-muted-foreground text-sm">
+          Prioritised queue · {data?.total ?? 0} cases
+        </p>
       </div>
 
       {/* filters */}
       <div className="flex flex-wrap items-center gap-2">
         <input
-          ref={filterRef}
           value={severity}
           onChange={(e) => setSeverity(e.target.value.toUpperCase())}
           placeholder="Filter severity (LOW / MEDIUM / HIGH)"
@@ -200,7 +139,7 @@ export default function OfficerInbox() {
       {isLoading ? (
         <div className="space-y-2">
           {Array.from({ length: 8 }).map((_, i) => (
-            <Skeleton key={i} className="h-16 w-full" />
+            <Skeleton key={i} className="h-14 w-full" />
           ))}
         </div>
       ) : isError ? (
@@ -219,37 +158,25 @@ export default function OfficerInbox() {
           description="No open cases in your queue. Beautifully clear."
         />
       ) : (
-        <div className="space-y-2.5">
-          {cases.map((c, i) => {
+        <div className="space-y-2">
+          {cases.map((c) => {
             const overdue = new Date(c.slaDueAt).getTime() < Date.now();
-            const action = nextAction(c.status);
-            const active = i === cursor;
             return (
-              <Card
-                key={c.id}
-                className={cn(
-                  "border-l-4 transition-shadow",
-                  SEV_ACCENT[c.severity] ?? "border-l-border-strong",
-                  active ? "ring-brand/60 shadow-elev-2 ring-2" : "hover:shadow-elev-1",
-                )}
-              >
-                <CardContent className="flex flex-col gap-3 p-3 sm:flex-row sm:items-center sm:gap-4 sm:p-4">
-                  {/* select + priority rank */}
-                  <div className="flex items-center gap-3 sm:flex-col sm:gap-1.5">
-                    <input
-                      type="checkbox"
-                      checked={selected.has(c.id)}
-                      onChange={() => toggleSelect(c.id)}
-                      className="h-4 w-4"
-                      aria-label={`Select ${c.number}`}
-                    />
-                    <span
-                      title="Priority rank"
-                      className="bg-surface-muted text-muted-foreground grid h-7 min-w-[28px] place-items-center rounded-md px-1.5 font-mono text-xs font-semibold"
-                    >
-                      #{c.rank}
-                    </span>
-                  </div>
+              <Card key={c.id} className="transition-shadow hover:shadow-elev-1">
+                <CardContent className="flex flex-wrap items-center gap-x-3 gap-y-2 p-2.5">
+                  <input
+                    type="checkbox"
+                    checked={selected.has(c.id)}
+                    onChange={() => toggleSelect(c.id)}
+                    className="h-4 w-4 shrink-0"
+                    aria-label={`Select ${c.number}`}
+                  />
+                  <span
+                    title="Priority rank"
+                    className="bg-surface-muted text-muted-foreground grid h-7 min-w-[28px] shrink-0 place-items-center rounded-md px-1 font-mono text-xs font-semibold"
+                  >
+                    #{c.rank}
+                  </span>
 
                   {/* title + meta (tap to open) */}
                   <button
@@ -257,64 +184,65 @@ export default function OfficerInbox() {
                     onClick={() => router.push(`/case/${c.id}`)}
                     className="min-w-0 flex-1 text-left"
                   >
-                    <p className="truncate font-semibold">{c.title}</p>
-                    <div className="text-muted-foreground mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+                    <p className="truncate text-sm font-medium">{c.title}</p>
+                    <p className="text-muted-foreground mt-0.5 flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-xs">
                       <span className="font-mono">{c.number}</span>
                       <span className="inline-flex items-center gap-1">
-                        <MapPin className="h-3 w-3" /> Ward {c.wardCode}
+                        <MapPin className="h-3 w-3" /> {c.wardCode}
                       </span>
                       <span className="inline-flex items-center gap-1">
                         <Users className="h-3 w-3" /> {c._count.cosigns}
                       </span>
-                    </div>
+                      <span
+                        className={cn(
+                          "inline-flex items-center gap-1",
+                          overdue && "text-danger font-medium",
+                        )}
+                      >
+                        {overdue ? (
+                          <>
+                            <AlertTriangle className="h-3 w-3" /> Overdue
+                          </>
+                        ) : (
+                          <>
+                            <Clock className="h-3 w-3" /> {formatRelative(c.slaDueAt)}
+                          </>
+                        )}
+                      </span>
+                    </p>
                   </button>
 
-                  {/* status / severity / SLA */}
-                  <div className="flex flex-wrap items-center gap-2">
-                    <SeverityChip severity={c.severity} />
-                    <StatusBadge status={c.status} />
-                    <span
-                      className={cn(
-                        "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium",
-                        overdue
-                          ? "bg-danger/10 text-danger"
-                          : "bg-surface-muted text-muted-foreground",
-                      )}
-                    >
-                      {overdue ? (
-                        <AlertTriangle className="h-3 w-3" />
-                      ) : (
-                        <Clock className="h-3 w-3" />
-                      )}
-                      {overdue ? "Overdue" : `Due ${formatRelative(c.slaDueAt)}`}
-                    </span>
-                  </div>
+                  <SeverityChip severity={c.severity} />
+                  <StatusBadge status={c.status} />
 
-                  {/* one obvious action + open */}
-                  <div className="flex items-center gap-2 sm:ml-auto">
-                    {action && (
-                      <Button
-                        size="sm"
-                        onClick={() => act(c, action.next, action.label)}
-                        disabled={event.isPending}
-                      >
-                        {action.next === "ACKNOWLEDGED" ? (
-                          <Check />
-                        ) : (
-                          <PlayCircle />
-                        )}
-                        {action.label}
-                      </Button>
-                    )}
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => router.push(`/case/${c.id}`)}
-                    >
-                      Open
-                      <ChevronRight />
-                    </Button>
-                  </div>
+                  {/* update status from the card */}
+                  <Select
+                    value={STATUS_OPTIONS.includes(c.status) ? c.status : ""}
+                    onValueChange={(v) =>
+                      act(c, v as CaseStatus, humanizeCode(v))
+                    }
+                  >
+                    <SelectTrigger className="h-8 w-[136px]" aria-label="Update status">
+                      <SelectValue placeholder="Set status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {STATUS_OPTIONS.map((s) => (
+                        <SelectItem key={s} value={s}>
+                          {humanizeCode(s)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => router.push(`/case/${c.id}`)}
+                    aria-label={`Open ${c.number}`}
+                  >
+                    Open
+                    <ChevronRight />
+                  </Button>
                 </CardContent>
               </Card>
             );
@@ -327,24 +255,6 @@ export default function OfficerInbox() {
           <Loader2 className="h-3 w-3 animate-spin" /> updating…
         </p>
       )}
-
-      <Dialog open={helpOpen} onOpenChange={setHelpOpen}>
-        <DialogContent className="max-w-sm">
-          <DialogHeader>
-            <DialogTitle>Keyboard shortcuts</DialogTitle>
-          </DialogHeader>
-          <ul className="space-y-1.5 text-sm">
-            {SHORTCUTS.map(([k, d]) => (
-              <li key={k} className="flex items-center justify-between">
-                <span className="text-muted-foreground">{d}</span>
-                <kbd className="bg-surface-muted rounded px-1.5 py-0.5 font-mono text-xs">
-                  {k}
-                </kbd>
-              </li>
-            ))}
-          </ul>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
