@@ -6,11 +6,17 @@ import { cn } from "@/lib/utils";
  * circle) with an open seam at the top, and a gold checkmark in the centre —
  * "a complaint brought to resolution". Recolours per theme via CSS tokens.
  */
-export function BrandMark({ className }: { className?: string }) {
+export function BrandMark({
+  className,
+  animated = false,
+}: {
+  className?: string;
+  animated?: boolean;
+}) {
   return (
     <svg
       viewBox="0 0 32 32"
-      className={cn("shrink-0", className)}
+      className={cn("shrink-0", animated && "brand-float-anim", className)}
       role="img"
       aria-label="Samadhan"
     >
@@ -25,6 +31,7 @@ export function BrandMark({ className }: { className?: string }) {
         strokeLinecap="round"
         strokeDasharray="64 18"
         transform="rotate(-58 16 16)"
+        className={animated ? "brand-ring-anim" : undefined}
       />
       {/* gold resolution check */}
       <path
@@ -34,6 +41,7 @@ export function BrandMark({ className }: { className?: string }) {
         strokeWidth="2.6"
         strokeLinecap="round"
         strokeLinejoin="round"
+        className={animated ? "brand-check-anim" : undefined}
       />
     </svg>
   );
@@ -48,11 +56,13 @@ export function Brand({
   href = "/",
   markOnly = false,
   size = "md",
+  animated = false,
   className,
 }: {
   href?: string;
   markOnly?: boolean;
   size?: keyof typeof SIZES;
+  animated?: boolean;
   className?: string;
 }) {
   const s = SIZES[size];
@@ -62,7 +72,7 @@ export function Brand({
       aria-label="Samadhan home"
       className={cn("flex items-center", s.gap, className)}
     >
-      <BrandMark className={s.mark} />
+      <BrandMark className={s.mark} animated={animated} />
       {!markOnly && (
         <span
           className={cn(

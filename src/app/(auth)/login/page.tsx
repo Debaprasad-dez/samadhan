@@ -18,14 +18,24 @@ export default async function LoginPage() {
         <ThemedHero />
       </div>
 
-      {/* Content sits over the hero; the form is pulled up so it overlaps the
-          lower half of the image rather than dropping below it. */}
-      <div className="relative z-10 mx-auto flex w-full max-w-md flex-1 flex-col items-center px-4 pb-12">
-        <div className="pt-24 sm:pt-28">
-          <Brand href="/login" size="lg" />
+      {/* Content sits over the hero, vertically centred. */}
+      <div className="relative z-10 mx-auto flex min-h-dvh w-full max-w-md flex-1 flex-col items-center justify-center px-4 py-12">
+        <div className="relative mb-9">
+          {/* frosted blur so the brand reads cleanly over the busy art */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -inset-x-10 -inset-y-6 -z-10 rounded-[2.5rem]"
+            style={{
+              background:
+                "radial-gradient(60% 60% at 50% 50%, color-mix(in srgb,var(--g-bg) 72%,transparent) 0%, transparent 72%)",
+              backdropFilter: "blur(10px)",
+              WebkitBackdropFilter: "blur(10px)",
+            }}
+          />
+          <Brand href="/login" size="lg" animated />
         </div>
 
-        <div className="mt-10 w-full">
+        <div className="w-full">
           <Suspense fallback={null}>
             <LoginForm />
           </Suspense>
