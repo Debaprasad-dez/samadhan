@@ -3,7 +3,17 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Keyboard, Loader2, AlertTriangle } from "lucide-react";
+import {
+  Keyboard,
+  Loader2,
+  AlertTriangle,
+  Check,
+  PlayCircle,
+  ChevronRight,
+  MapPin,
+  Users,
+  Clock,
+} from "lucide-react";
 import { useInbox, useCaseEvent, type InboxItem } from "@/hooks/use-officer";
 import { StatusBadge, SeverityChip } from "@/components/case/status-badge";
 import { Button } from "@/components/ui/button";
@@ -37,6 +47,21 @@ const SHORTCUTS = [
   ["/", "Focus filter"],
   ["?", "This help"],
 ];
+
+// Severity → left accent colour, so urgency is readable at a glance.
+const SEV_ACCENT: Record<string, string> = {
+  HIGH: "border-l-danger",
+  MEDIUM: "border-l-warning",
+  LOW: "border-l-info",
+};
+
+// The single obvious next step for a worker, given the case status.
+function nextAction(status: string): { next: CaseStatus; label: string } | null {
+  if (status === "OPEN") return { next: "ACKNOWLEDGED", label: "Acknowledge" };
+  if (status === "ACKNOWLEDGED")
+    return { next: "IN_PROGRESS", label: "Start work" };
+  return null;
+}
 
 export default function OfficerInbox() {
   const router = useRouter();
@@ -144,8 +169,8 @@ export default function OfficerInbox() {
           ref={filterRef}
           value={severity}
           onChange={(e) => setSeverity(e.target.value.toUpperCase())}
-          placeholder="Filter severity (LOW/MEDIUM/HIGH) — press /"
-          className="border-input bg-background h-8 w-72 rounded-md border px-3 text-sm"
+          placeholder="Filter severity (LOW / MEDIUM / HIGH)"
+          className="border-border-strong bg-surface h-9 w-full rounded-md border px-3 text-sm shadow-sm sm:w-72"
         />
         {STATUS_FILTERS.map((f) => (
           <button
@@ -194,55 +219,104 @@ export default function OfficerInbox() {
           description="No open cases in your queue. Beautifully clear."
         />
       ) : (
-        <div className="overflow-hidden rounded-lg border">
+        <div className="space-y-2.5">
           {cases.map((c, i) => {
             const overdue = new Date(c.slaDueAt).getTime() < Date.now();
+            const action = nextAction(c.status);
+            const active = i === cursor;
             return (
-              <div
+              <Card
                 key={c.id}
-                onClick={() => router.push(`/case/${c.id}`)}
                 className={cn(
-                  "flex cursor-pointer items-center gap-3 border-b px-3 py-2.5 text-sm last:border-0",
-                  i === cursor ? "bg-brand-soft" : "hover:bg-surface-muted",
+                  "border-l-4 transition-shadow",
+                  SEV_ACCENT[c.severity] ?? "border-l-border-strong",
+                  active ? "ring-brand/60 shadow-elev-2 ring-2" : "hover:shadow-elev-1",
                 )}
               >
-                <input
-                  type="checkbox"
-                  checked={selected.has(c.id)}
-                  onClick={(e) => e.stopPropagation()}
-                  onChange={() => toggleSelect(c.id)}
-                  className="h-4 w-4 shrink-0"
-                  aria-label={`Select ${c.number}`}
-                />
-                <span
-                  className="bg-surface-muted w-10 shrink-0 rounded text-center font-mono text-xs"
-                  title="Priority rank"
-                >
-                  {c.rank}
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate font-medium">{c.title}</p>
-                  <p className="text-muted-foreground font-mono text-xs">
-                    {c.number} · Ward {c.wardCode} · {c._count.cosigns} co-signs
-                  </p>
-                </div>
-                <SeverityChip severity={c.severity} />
-                <StatusBadge status={c.status} />
-                <span
-                  className={cn(
-                    "w-20 shrink-0 text-right text-xs",
-                    overdue ? "text-danger font-medium" : "text-muted-foreground",
-                  )}
-                >
-                  {overdue ? (
-                    <span className="inline-flex items-center gap-1">
-                      <AlertTriangle className="h-3 w-3" /> overdue
+                <CardContent className="flex flex-col gap-3 p-3 sm:flex-row sm:items-center sm:gap-4 sm:p-4">
+                  {/* select + priority rank */}
+                  <div className="flex items-center gap-3 sm:flex-col sm:gap-1.5">
+                    <input
+                      type="checkbox"
+                      checked={selected.has(c.id)}
+                      onChange={() => toggleSelect(c.id)}
+                      className="h-4 w-4"
+                      aria-label={`Select ${c.number}`}
+                    />
+                    <span
+                      title="Priority rank"
+                      className="bg-surface-muted text-muted-foreground grid h-7 min-w-[28px] place-items-center rounded-md px-1.5 font-mono text-xs font-semibold"
+                    >
+                      #{c.rank}
                     </span>
-                  ) : (
-                    `due ${formatRelative(c.slaDueAt)}`
-                  )}
-                </span>
-              </div>
+                  </div>
+
+                  {/* title + meta (tap to open) */}
+                  <button
+                    type="button"
+                    onClick={() => router.push(`/case/${c.id}`)}
+                    className="min-w-0 flex-1 text-left"
+                  >
+                    <p className="truncate font-semibold">{c.title}</p>
+                    <div className="text-muted-foreground mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+                      <span className="font-mono">{c.number}</span>
+                      <span className="inline-flex items-center gap-1">
+                        <MapPin className="h-3 w-3" /> Ward {c.wardCode}
+                      </span>
+                      <span className="inline-flex items-center gap-1">
+                        <Users className="h-3 w-3" /> {c._count.cosigns}
+                      </span>
+                    </div>
+                  </button>
+
+                  {/* status / severity / SLA */}
+                  <div className="flex flex-wrap items-center gap-2">
+                    <SeverityChip severity={c.severity} />
+                    <StatusBadge status={c.status} />
+                    <span
+                      className={cn(
+                        "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium",
+                        overdue
+                          ? "bg-danger/10 text-danger"
+                          : "bg-surface-muted text-muted-foreground",
+                      )}
+                    >
+                      {overdue ? (
+                        <AlertTriangle className="h-3 w-3" />
+                      ) : (
+                        <Clock className="h-3 w-3" />
+                      )}
+                      {overdue ? "Overdue" : `Due ${formatRelative(c.slaDueAt)}`}
+                    </span>
+                  </div>
+
+                  {/* one obvious action + open */}
+                  <div className="flex items-center gap-2 sm:ml-auto">
+                    {action && (
+                      <Button
+                        size="sm"
+                        onClick={() => act(c, action.next, action.label)}
+                        disabled={event.isPending}
+                      >
+                        {action.next === "ACKNOWLEDGED" ? (
+                          <Check />
+                        ) : (
+                          <PlayCircle />
+                        )}
+                        {action.label}
+                      </Button>
+                    )}
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => router.push(`/case/${c.id}`)}
+                    >
+                      Open
+                      <ChevronRight />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
             );
           })}
         </div>
