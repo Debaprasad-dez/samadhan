@@ -69,7 +69,11 @@
     "REJECTED": "நிராகரிப்பு",
     "PENDING": "நிலுவையில்",
     "CLOSED": "மூடப்பட்டது",
-    "onTrack": "சரியான பாதையில்"
+    "onTrack": "சரியான பாதையில்",
+    "OPEN": "Open",
+    "ACKNOWLEDGED": "Acknowledged",
+    "AWAITING_INFO": "Awaiting info",
+    "ESCALATED": "Escalated"
   },
   "auth": {
     "welcome": "சமாதானுக்கு வரவேற்கிறோம்",
@@ -101,7 +105,10 @@
     "modeDark": "இருள்",
     "modeAuto": "தானியங்கி",
     "saved": "அமைப்புகள் சேமிக்கப்பட்டன.",
-    "save": "மாற்றங்களைச் சேமி"
+    "save": "மாற்றங்களைச் சேமி",
+    "theme": "Theme",
+    "applying": "Applying your changes…",
+    "applyError": "Couldn’t save. Please try again."
   },
   "leaveGuard": {
     "title": "உங்கள் புகார் வரைவைச் சேமிக்கவா?",
@@ -121,6 +128,97 @@
     "searchTitle": "எதுவும் கிடைக்கவில்லை",
     "fileFirst": "உங்கள் முதல் புகாரைப் பதிவு செய்யுங்கள்"
   },
-  "feed": { "title": "பொது ஊட்டம்", "hot": "இந்த வாரத்தின் முக்கியச் சிக்கல்கள்" },
-  "cases": { "title": "எனது வழக்குகள்", "empty": "இன்னும் புகார் இல்லை" }
+  "feed": {
+    "title": "பொது ஊட்டம்",
+    "hot": "இந்த வாரத்தின் முக்கியச் சிக்கல்கள்"
+  },
+  "cases": {
+    "title": "எனது வழக்குகள்",
+    "empty": "இன்னும் புகார் இல்லை"
+  },
+  "voice": {
+    "title": "Speak your complaint",
+    "sub": "We’ll transcribe what you say and start your case.",
+    "listening": "Listening…",
+    "paused": "Paused — tap the mic to resume",
+    "placeholder": "Your words will appear here as you speak…",
+    "stop": "Stop & continue",
+    "cancel": "Cancel",
+    "notSupported": "Voice input isn’t supported on this browser. You can type your complaint instead.",
+    "micDenied": "Microphone access was blocked. Enable it in your browser settings, then try again.",
+    "typeInstead": "Type it instead",
+    "retry": "Try again"
+  },
+  "officer": {
+    "inbox": "Inbox",
+    "inboxSub": "Prioritised queue",
+    "clusters": "Clusters",
+    "clustersSub": "Grouped by theme",
+    "metrics": "My metrics",
+    "metricsSub": "Real-time performance",
+    "open": "Open",
+    "inProgress": "In progress",
+    "resolved": "Resolved",
+    "escalated": "Escalated",
+    "acknowledged": "Acknowledged",
+    "awaitingInfo": "Awaiting info",
+    "resolvedMonth": "Resolved (this month)",
+    "avgResolution": "Avg resolution",
+    "slaMet": "SLA met",
+    "avgQuality": "Avg quality",
+    "filterSeverity": "Filter severity (LOW / MEDIUM / HIGH)",
+    "acknowledgeSelected": "Acknowledge selected",
+    "setStatus": "Set status",
+    "openCase": "Open case",
+    "allDepartments": "All departments",
+    "department": "department"
+  },
+  "admin": {
+    "overview": "Overview",
+    "overviewSub": "System health & trends",
+    "officers": "Officers",
+    "officersSub": "Team & performance",
+    "trends": "Trends",
+    "trendsSub": "City insights",
+    "policy": "Policy",
+    "policySub": "Resolutions & data",
+    "operations": "Operations",
+    "insights": "Insights"
+  },
+  "actions": {
+    "updateStatus": "Update status",
+    "assignTo": "Assign to",
+    "reassign": "Reassign",
+    "escalate": "Escalate",
+    "resolve": "Resolve",
+    "close": "Close",
+    "requestInfo": "Request info",
+    "addNote": "Add note",
+    "viewDetails": "View details",
+    "selectStatus": "Select a status",
+    "noAction": "No action available"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "All caught up",
+    "caseAssigned": "Case assigned to you",
+    "statusUpdate": "Case status updated",
+    "infoRequested": "Information requested",
+    "caseResolved": "Case resolved",
+    "newCosign": "New co-sign on your case",
+    "escalated": "Case escalated"
+  },
+  "worker": {
+    "myDashboard": "My dashboard",
+    "casesSummary": "Cases summary",
+    "recentActivity": "Recent activity",
+    "noActivity": "No recent activity"
+  },
+  "translate": {
+    "originalLanguage": "Original language",
+    "targetLanguage": "Translate to",
+    "translating": "Translating…",
+    "translateError": "Couldn't translate. Try again.",
+    "viewing": "Viewing in {{lang}}"
+  }
 }

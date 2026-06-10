@@ -138,5 +138,77 @@
     "retry": "Try again"
   },
   "feed": { "title": "Public feed", "hot": "Top issues this week" },
-  "cases": { "title": "My cases", "empty": "No complaints yet" }
+  "cases": { "title": "My cases", "empty": "No complaints yet" },
+  "officer": {
+    "inbox": "Inbox",
+    "inboxSub": "Prioritised queue",
+    "clusters": "Clusters",
+    "clustersSub": "Grouped by theme",
+    "metrics": "My metrics",
+    "metricsSub": "Real-time performance",
+    "open": "Open",
+    "inProgress": "In progress",
+    "resolved": "Resolved",
+    "escalated": "Escalated",
+    "acknowledged": "Acknowledged",
+    "awaitingInfo": "Awaiting info",
+    "resolvedMonth": "Resolved (this month)",
+    "avgResolution": "Avg resolution",
+    "slaMet": "SLA met",
+    "avgQuality": "Avg quality",
+    "filterSeverity": "Filter severity (LOW / MEDIUM / HIGH)",
+    "acknowledgeSelected": "Acknowledge selected",
+    "setStatus": "Set status",
+    "openCase": "Open case",
+    "allDepartments": "All departments",
+    "department": "department"
+  },
+  "admin": {
+    "overview": "Overview",
+    "overviewSub": "System health & trends",
+    "officers": "Officers",
+    "officersSub": "Team & performance",
+    "trends": "Trends",
+    "trendsSub": "City insights",
+    "policy": "Policy",
+    "policySub": "Resolutions & data",
+    "operations": "Operations",
+    "insights": "Insights"
+  },
+  "actions": {
+    "updateStatus": "Update status",
+    "assignTo": "Assign to",
+    "reassign": "Reassign",
+    "escalate": "Escalate",
+    "resolve": "Resolve",
+    "close": "Close",
+    "requestInfo": "Request info",
+    "addNote": "Add note",
+    "viewDetails": "View details",
+    "selectStatus": "Select a status",
+    "noAction": "No action available"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "All caught up",
+    "caseAssigned": "Case assigned to you",
+    "statusUpdate": "Case status updated",
+    "infoRequested": "Information requested",
+    "caseResolved": "Case resolved",
+    "newCosign": "New co-sign on your case",
+    "escalated": "Case escalated"
+  },
+  "worker": {
+    "myDashboard": "My dashboard",
+    "casesSummary": "Cases summary",
+    "recentActivity": "Recent activity",
+    "noActivity": "No recent activity"
+  },
+  "translate": {
+    "originalLanguage": "Original language",
+    "targetLanguage": "Translate to",
+    "translating": "Translating…",
+    "translateError": "Couldn't translate. Try again.",
+    "viewing": "Viewing in {{lang}}"
+  }
 }

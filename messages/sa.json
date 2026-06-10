@@ -69,7 +69,11 @@
     "REJECTED": "अस्वीकृतम्",
     "PENDING": "विचाराधीनम्",
     "CLOSED": "पिहितम्",
-    "onTrack": "समीचीनमार्गे"
+    "onTrack": "समीचीनमार्गे",
+    "OPEN": "Open",
+    "ACKNOWLEDGED": "Acknowledged",
+    "AWAITING_INFO": "Awaiting info",
+    "ESCALATED": "Escalated"
   },
   "auth": {
     "welcome": "समाधाने स्वागतम्",
@@ -103,7 +107,8 @@
     "saved": "व्यवस्थाः रक्षिताः।",
     "save": "परिवर्तनानि रक्षतु",
     "applying": "भवतः परिवर्तनानि प्रयुज्यन्ते…",
-    "applyError": "रक्षितुं न शक्यते। पुनः प्रयतताम्।"
+    "applyError": "रक्षितुं न शक्यते। पुनः प्रयतताम्।",
+    "theme": "Theme"
   },
   "leaveGuard": {
     "title": "भवतः अभियोगस्य प्रारूपं रक्षतु?",
@@ -123,6 +128,97 @@
     "searchTitle": "किमपि न प्राप्तम्",
     "fileFirst": "स्वकीयं प्रथमम् अभियोगम् अभिलेखयतु"
   },
-  "feed": { "title": "सार्वजनिकप्रवाहः", "hot": "अस्मिन् सप्ताहे प्रमुखाः समस्याः" },
-  "cases": { "title": "मम प्रकरणानि", "empty": "अधुना कोऽपि अभियोगः नास्ति" }
+  "feed": {
+    "title": "सार्वजनिकप्रवाहः",
+    "hot": "अस्मिन् सप्ताहे प्रमुखाः समस्याः"
+  },
+  "cases": {
+    "title": "मम प्रकरणानि",
+    "empty": "अधुना कोऽपि अभियोगः नास्ति"
+  },
+  "voice": {
+    "title": "Speak your complaint",
+    "sub": "We’ll transcribe what you say and start your case.",
+    "listening": "Listening…",
+    "paused": "Paused — tap the mic to resume",
+    "placeholder": "Your words will appear here as you speak…",
+    "stop": "Stop & continue",
+    "cancel": "Cancel",
+    "notSupported": "Voice input isn’t supported on this browser. You can type your complaint instead.",
+    "micDenied": "Microphone access was blocked. Enable it in your browser settings, then try again.",
+    "typeInstead": "Type it instead",
+    "retry": "Try again"
+  },
+  "officer": {
+    "inbox": "Inbox",
+    "inboxSub": "Prioritised queue",
+    "clusters": "Clusters",
+    "clustersSub": "Grouped by theme",
+    "metrics": "My metrics",
+    "metricsSub": "Real-time performance",
+    "open": "Open",
+    "inProgress": "In progress",
+    "resolved": "Resolved",
+    "escalated": "Escalated",
+    "acknowledged": "Acknowledged",
+    "awaitingInfo": "Awaiting info",
+    "resolvedMonth": "Resolved (this month)",
+    "avgResolution": "Avg resolution",
+    "slaMet": "SLA met",
+    "avgQuality": "Avg quality",
+    "filterSeverity": "Filter severity (LOW / MEDIUM / HIGH)",
+    "acknowledgeSelected": "Acknowledge selected",
+    "setStatus": "Set status",
+    "openCase": "Open case",
+    "allDepartments": "All departments",
+    "department": "department"
+  },
+  "admin": {
+    "overview": "Overview",
+    "overviewSub": "System health & trends",
+    "officers": "Officers",
+    "officersSub": "Team & performance",
+    "trends": "Trends",
+    "trendsSub": "City insights",
+    "policy": "Policy",
+    "policySub": "Resolutions & data",
+    "operations": "Operations",
+    "insights": "Insights"
+  },
+  "actions": {
+    "updateStatus": "Update status",
+    "assignTo": "Assign to",
+    "reassign": "Reassign",
+    "escalate": "Escalate",
+    "resolve": "Resolve",
+    "close": "Close",
+    "requestInfo": "Request info",
+    "addNote": "Add note",
+    "viewDetails": "View details",
+    "selectStatus": "Select a status",
+    "noAction": "No action available"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "All caught up",
+    "caseAssigned": "Case assigned to you",
+    "statusUpdate": "Case status updated",
+    "infoRequested": "Information requested",
+    "caseResolved": "Case resolved",
+    "newCosign": "New co-sign on your case",
+    "escalated": "Case escalated"
+  },
+  "worker": {
+    "myDashboard": "My dashboard",
+    "casesSummary": "Cases summary",
+    "recentActivity": "Recent activity",
+    "noActivity": "No recent activity"
+  },
+  "translate": {
+    "originalLanguage": "Original language",
+    "targetLanguage": "Translate to",
+    "translating": "Translating…",
+    "translateError": "Couldn't translate. Try again.",
+    "viewing": "Viewing in {{lang}}"
+  }
 }

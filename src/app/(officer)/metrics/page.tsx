@@ -1,8 +1,26 @@
 import { startOfMonth } from "date-fns";
+import {
+  Clock,
+  AlertCircle,
+  CheckCircle2,
+  TrendingUp,
+  Target,
+  Star,
+  type LucideIcon,
+} from "lucide-react";
 import { requireRole } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { humanizeCode } from "@/lib/utils";
+import { humanizeCode, cn } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
+
+interface MetricCard {
+  label: string;
+  value: string;
+  icon: LucideIcon;
+  color: "text-danger" | "text-warning" | "text-info" | "text-success";
+  bgColor: "bg-danger/10" | "bg-warning/10" | "bg-info/10" | "bg-success/10";
+  subtitle?: string;
+}
 
 export default async function OfficerMetrics() {
   const user = await requireRole(["OFFICER"]);
@@ -62,17 +80,61 @@ export default async function OfficerMetrics() {
       ? 0
       : qScores.reduce((a, c) => a + (c.qualityScore ?? 0), 0) / qScores.length;
 
-  const tiles = [
-    { label: "Open", value: String(open) },
-    { label: "In progress", value: String(inProgress) },
-    { label: "Resolved (this month)", value: String(resolvedMonth) },
-    { label: "Avg resolution", value: `${avgDays.toFixed(1)}d` },
-    { label: "SLA met", value: `${slaMet.toFixed(0)}%` },
-    { label: "Avg quality", value: `${qAvg.toFixed(1)}/10` },
+  const queueMetrics: MetricCard[] = [
+    {
+      label: "Open",
+      value: String(open),
+      icon: AlertCircle,
+      color: "text-danger",
+      bgColor: "bg-danger/10",
+      subtitle: "Awaiting action",
+    },
+    {
+      label: "In progress",
+      value: String(inProgress),
+      icon: Clock,
+      color: "text-warning",
+      bgColor: "bg-warning/10",
+      subtitle: "Currently working",
+    },
+  ];
+
+  const performanceMetrics: MetricCard[] = [
+    {
+      label: "Resolved this month",
+      value: String(resolvedMonth),
+      icon: CheckCircle2,
+      color: "text-success",
+      bgColor: "bg-success/10",
+    },
+    {
+      label: "Avg resolution",
+      value: `${avgDays.toFixed(1)}d`,
+      icon: TrendingUp,
+      color: "text-info",
+      bgColor: "bg-info/10",
+    },
+  ];
+
+  const qualityMetrics: MetricCard[] = [
+    {
+      label: "SLA met",
+      value: `${slaMet.toFixed(0)}%`,
+      icon: Target,
+      color: "text-success",
+      bgColor: "bg-success/10",
+    },
+    {
+      label: "Avg quality",
+      value: `${qAvg.toFixed(1)}/10`,
+      icon: Star,
+      color: "text-warning",
+      bgColor: "bg-warning/10",
+    },
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
         <h1 className="font-display text-3xl font-semibold">My metrics</h1>
         <p className="text-muted-foreground text-sm">
@@ -82,17 +144,65 @@ export default async function OfficerMetrics() {
           · real-time
         </p>
       </div>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {tiles.map((t) => (
-          <Card key={t.label}>
-            <CardContent className="p-5">
-              <p className="text-muted-foreground text-sm">{t.label}</p>
-              <p className="font-display mt-1 text-3xl font-semibold">
-                {t.value}
-              </p>
-            </CardContent>
-          </Card>
-        ))}
+
+      {/* Queue Status */}
+      <MetricsGroup title="Queue status" metrics={queueMetrics} />
+
+      {/* Performance */}
+      <MetricsGroup title="Performance" metrics={performanceMetrics} />
+
+      {/* Quality */}
+      <MetricsGroup title="Quality" metrics={qualityMetrics} />
+    </div>
+  );
+}
+
+function MetricsGroup({
+  title,
+  metrics,
+}: {
+  title: string;
+  metrics: MetricCard[];
+}) {
+  return (
+    <div className="space-y-3">
+      <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+        {title}
+      </h2>
+      <div className="grid gap-3 sm:grid-cols-2">
+        {metrics.map((m) => {
+          const Icon = m.icon;
+          return (
+            <Card key={m.label} className="overflow-hidden transition-shadow hover:shadow-elev-1">
+              <CardContent className="flex items-start gap-3 p-4">
+                {/* icon badge */}
+                <span
+                  className={cn(
+                    "grid h-10 w-10 shrink-0 place-items-center rounded-lg",
+                    m.bgColor,
+                  )}
+                >
+                  <Icon className={cn("h-5 w-5", m.color)} />
+                </span>
+
+                {/* label + value + subtitle */}
+                <div className="min-w-0 flex-1">
+                  <p className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
+                    {m.label}
+                  </p>
+                  <p className="font-display mt-0.5 text-2xl font-bold">
+                    {m.value}
+                  </p>
+                  {m.subtitle && (
+                    <p className="text-muted-foreground mt-1 text-xs">
+                      {m.subtitle}
+                    </p>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
     </div>
   );
