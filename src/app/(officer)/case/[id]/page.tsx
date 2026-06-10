@@ -10,6 +10,7 @@ import { CaseTimeline } from "@/components/case/case-timeline";
 import { EvidenceGallery } from "@/components/case/evidence-gallery";
 import { CaseActions } from "@/components/officer/case-actions";
 import { AiBrief } from "@/components/officer/ai-brief";
+import { ComplaintBody } from "@/components/officer/complaint-body";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { CaseStatus, Severity } from "@/types";
@@ -104,10 +105,8 @@ export default async function OfficerCaseView({
         {/* left: case + timeline */}
         <div className="space-y-6">
           <Card>
-            <CardContent className="space-y-3 p-5">
-              <p className="whitespace-pre-wrap text-sm leading-relaxed">
-                {c.body}
-              </p>
+            <CardContent className="space-y-5 p-5">
+              <ComplaintBody body={c.body} />
               <div className="text-muted-foreground flex flex-wrap gap-x-4 gap-y-1 border-t pt-3 text-xs">
                 <span>Filed by {c.filedBy.name}</span>
                 <span>Reputation {c.filedBy.reputation}</span>
