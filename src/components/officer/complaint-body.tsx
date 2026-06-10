@@ -67,7 +67,6 @@ export function ComplaintBody({
   }
 
   const displayText = translated || body;
-  const displayLang = viewLang || originalLang;
 
   return (
     <div className="space-y-3">

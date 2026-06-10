@@ -1,16 +1,17 @@
 import type { ZodType } from "zod";
 
 const KEY = process.env.OPENROUTER_API_KEY;
-const MODEL = process.env.OPENROUTER_MODEL ?? "openai/gpt-oss-120b";
+const MODEL = process.env.OPENROUTER_MODEL ?? "openai/gpt-oss-120b:free";
 const TIMEOUT_MS = 12_000; // §5.4 cross-cutting
 
-// Free models rate-limit aggressively upstream. Try a chain so a single 429 doesn't
-// force a fallback. Override with OPENROUTER_MODELS (comma-separated).
+// Only free OpenRouter models — ordered by capability for this use-case.
+// Override with OPENROUTER_MODELS env var (comma-separated).
 const MODELS = (
   process.env.OPENROUTER_MODELS?.split(",").map((s) => s.trim()).filter(Boolean) ?? [
     MODEL,
-    "meta-llama/llama-3.3-70b-instruct:free",
-    "google/gemini-2.0-flash-exp:free",
+    "google/gemma-4-26b-a4b-it:free",
+    "nvidia/nemotron-3-ultra-550b-a55b:free",
+    "openrouter/free",
   ]
 ).filter((m, i, a) => a.indexOf(m) === i);
 
@@ -103,6 +104,61 @@ async function chat(
   } finally {
     clearTimeout(timer);
   }
+}
+
+/**
+ * Call the model, return raw text output.
+ * On failure returns null (caller decides fallback).
+ */
+export async function callText(opts: {
+  system: string;
+  user: string;
+  temperature?: number;
+}): Promise<string | null> {
+  if (!aiEnabled()) return null;
+
+  const url = PROXY_URL ?? DIRECT_URL;
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (!PROXY_URL && keyValid()) {
+    headers["Authorization"] = `Bearer ${KEY}`;
+    headers["HTTP-Referer"] = "https://samadhan.local";
+    headers["X-Title"] = "Samadhan";
+  }
+
+  for (const model of MODELS) {
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+      let res: Response;
+      try {
+        res = await fetch(url, {
+          method: "POST",
+          headers,
+          body: JSON.stringify({
+            model,
+            messages: [
+              { role: "system", content: opts.system },
+              { role: "user", content: opts.user },
+            ],
+            temperature: opts.temperature ?? 0.1,
+          }),
+          signal: controller.signal,
+        });
+      } finally {
+        clearTimeout(timer);
+      }
+      if (!res.ok) continue; // try next model on HTTP error (rate limit etc.)
+      const data = (await res.json()) as {
+        choices?: { message?: { content?: string } }[];
+      };
+      const text = data.choices?.[0]?.message?.content ?? "";
+      if (text) return text.trim();
+    } catch {
+      // timeout / network → try next model
+    }
+  }
+
+  return null;
 }
 
 /**
