@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { getCurrentUser, homePathForRole } from "@/lib/auth";
 import { Brand } from "@/components/shared/brand";
 import { LoginForm } from "@/components/auth/login-form";
-import { ThemedHero } from "@/components/art/themed-hero";
+import { LoginBackdrop } from "@/components/art/login-backdrop";
 
 export default async function LoginPage() {
   const user = await getCurrentUser();
@@ -12,11 +12,8 @@ export default async function LoginPage() {
 
   return (
     <div className="relative flex min-h-dvh flex-col overflow-hidden">
-      {/* Full-window hero behind the form. SceneHero feathers its own top and
-          bottom edges to transparent, so it melts into the page background. */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-0">
-        <ThemedHero />
-      </div>
+      {/* Full-screen hero scene panning right→left in an infinite loop. */}
+      <LoginBackdrop />
 
       {/* Content sits over the hero, vertically centred. */}
       <div className="relative z-10 mx-auto flex min-h-dvh w-full max-w-md flex-1 flex-col items-center justify-center px-4 py-12">

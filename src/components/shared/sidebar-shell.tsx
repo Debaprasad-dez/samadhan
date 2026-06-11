@@ -10,22 +10,24 @@ import {
   Users,
   TrendingUp,
   FileText,
+  Settings,
   type LucideIcon,
 } from "lucide-react";
 import { cn, initials } from "@/lib/utils";
 import { Brand } from "@/components/shared/brand";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
-import { AmbientLamp } from "@/components/shared/ambient-lamp";
 import { LogoutButton } from "@/components/shared/logout-button";
+import { useT } from "@/components/providers/locale-provider";
 import type { SessionUser } from "@/types";
 
 interface NavItem {
   href: string;
-  label: string;
+  /** i18n key (e.g. "nav.inbox"); resolved through useT at render. */
+  labelKey: string;
   icon: LucideIcon;
 }
 interface NavGroup {
-  label?: string;
+  labelKey?: string;
   items: NavItem[];
 }
 
@@ -35,25 +37,26 @@ const NAV: Record<"officer" | "admin", NavGroup[]> = {
   officer: [
     {
       items: [
-        { href: "/inbox", label: "Inbox", icon: Inbox },
-        { href: "/clusters", label: "Clusters", icon: Boxes },
-        { href: "/metrics", label: "My metrics", icon: BarChart3 },
+        { href: "/inbox", labelKey: "nav.inbox", icon: Inbox },
+        { href: "/clusters", labelKey: "nav.clusters", icon: Boxes },
+        { href: "/metrics", labelKey: "nav.metrics", icon: BarChart3 },
+        { href: "/settings", labelKey: "nav.settings", icon: Settings },
       ],
     },
   ],
   admin: [
     {
-      label: "Operations",
+      labelKey: "admin.operations",
       items: [
-        { href: "/overview", label: "Overview", icon: LayoutDashboard },
-        { href: "/officers", label: "Officers", icon: Users },
+        { href: "/overview", labelKey: "nav.overview", icon: LayoutDashboard },
+        { href: "/officers", labelKey: "nav.officers", icon: Users },
       ],
     },
     {
-      label: "Insights",
+      labelKey: "admin.insights",
       items: [
-        { href: "/trends", label: "Trends", icon: TrendingUp },
-        { href: "/policy", label: "Policy", icon: FileText },
+        { href: "/trends", labelKey: "nav.trends", icon: TrendingUp },
+        { href: "/policy", labelKey: "nav.policy", icon: FileText },
       ],
     },
   ],
@@ -70,6 +73,7 @@ export function SidebarShell({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const t = useT();
   const groups = NAV[variant];
   const homeHref = groups[0]?.items[0]?.href ?? "/";
   const flat = groups.flatMap((g) => g.items);
@@ -83,9 +87,9 @@ export function SidebarShell({
         <nav className="flex-1 space-y-4 px-3 py-2" aria-label="Primary">
           {groups.map((group, gi) => (
             <div key={gi} className="space-y-1">
-              {group.label && (
+              {group.labelKey && (
                 <p className="text-muted-foreground px-3 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-wider">
-                  {group.label}
+                  {t(group.labelKey)}
                 </p>
               )}
               {group.items.map((it) => {
@@ -106,7 +110,7 @@ export function SidebarShell({
                       <span className="bg-brand absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-r-full" />
                     )}
                     <Icon className="h-[18px] w-[18px]" />
-                    {it.label}
+                    {t(it.labelKey)}
                   </Link>
                 );
               })}
@@ -125,7 +129,6 @@ export function SidebarShell({
           </div>
           <div className="hidden lg:block" />
           <div className="flex items-center gap-2">
-            <AmbientLamp className="hidden sm:inline-flex" />
             <ThemeToggle />
             <span
               className="bg-brand-soft text-brand ring-brand/40 flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold ring-1"
@@ -160,7 +163,7 @@ export function SidebarShell({
                 )}
               >
                 <Icon className="h-4 w-4" />
-                {it.label}
+                {t(it.labelKey)}
               </Link>
             );
           })}

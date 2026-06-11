@@ -12,7 +12,8 @@
     "officers": "افسران",
     "trends": "رجحانات",
     "policy": "پالیسی",
-    "ward": "وارڈ"
+    "ward": "وارڈ",
+    "settings": "ترتیبات"
   },
   "common": {
     "signIn": "سائن ان کریں",
@@ -32,7 +33,8 @@
     "map": "نقشہ",
     "search": "تلاش کریں",
     "upvote": "حمایت",
-    "saving": "محفوظ ہو رہا ہے…"
+    "saving": "محفوظ ہو رہا ہے…",
+    "open": "کھولیں"
   },
   "time": {
     "morning": "صبح بخیر",
@@ -65,15 +67,15 @@
     "FILED": "درج",
     "IN_PROGRESS": "جاری",
     "OFFICER_ASSIGNED": "افسر مقرر",
-    "RESOLVED": "حل ہو گیا",
+    "RESOLVED": "حل شدہ",
     "REJECTED": "مسترد",
     "PENDING": "زیرِ التوا",
     "CLOSED": "بند",
     "onTrack": "درست راستے پر",
-    "OPEN": "Open",
-    "ACKNOWLEDGED": "Acknowledged",
-    "AWAITING_INFO": "Awaiting info",
-    "ESCALATED": "Escalated"
+    "OPEN": "کھلا",
+    "ACKNOWLEDGED": "تسلیم شدہ",
+    "AWAITING_INFO": "معلومات کا منتظر",
+    "ESCALATED": "اوپر بھیجا"
   },
   "auth": {
     "welcome": "سمادھان میں خوش آمدید",
@@ -106,9 +108,11 @@
     "modeAuto": "خودکار",
     "saved": "ترتیبات محفوظ ہو گئیں۔",
     "save": "تبدیلیاں محفوظ کریں",
-    "applying": "آپ کی تبدیلیاں لاگو ہو رہی ہیں…",
-    "applyError": "محفوظ نہ ہو سکا۔ دوبارہ کوشش کریں۔",
-    "theme": "Theme"
+    "applying": "آپ کی تبدیلیاں لاگو کی جا رہی ہیں…",
+    "applyError": "محفوظ نہیں ہو سکا۔ براہ کرم دوبارہ کوشش کریں۔",
+    "theme": "Theme",
+    "title": "ترتیبات",
+    "languageSub": "اپنے ڈیش بورڈ کی زبان منتخب کریں۔"
   },
   "leaveGuard": {
     "title": "اپنی شکایت کا مسودہ محفوظ کریں؟",
@@ -150,11 +154,11 @@
     "retry": "Try again"
   },
   "officer": {
-    "inbox": "Inbox",
-    "inboxSub": "Prioritised queue",
-    "clusters": "Clusters",
-    "clustersSub": "Grouped by theme",
-    "metrics": "My metrics",
+    "inbox": "ان باکس",
+    "inboxSub": "ترجیحی فہرست",
+    "clusters": "کلسٹرز",
+    "clustersSub": "AI-گروہ بند نظامی مسائل · پچھلے 14 دن",
+    "metrics": "میرے اعداد و شمار",
     "metricsSub": "Real-time performance",
     "open": "Open",
     "inProgress": "In progress",
@@ -163,15 +167,34 @@
     "acknowledged": "Acknowledged",
     "awaitingInfo": "Awaiting info",
     "resolvedMonth": "Resolved (this month)",
-    "avgResolution": "Avg resolution",
-    "slaMet": "SLA met",
-    "avgQuality": "Avg quality",
-    "filterSeverity": "Filter severity (LOW / MEDIUM / HIGH)",
-    "acknowledgeSelected": "Acknowledge selected",
-    "setStatus": "Set status",
-    "openCase": "Open case",
-    "allDepartments": "All departments",
-    "department": "department"
+    "avgResolution": "اوسط حل",
+    "slaMet": "SLA مکمل",
+    "avgQuality": "اوسط معیار",
+    "filterSeverity": "شدت چھانٹیں (LOW / MEDIUM / HIGH)",
+    "acknowledgeSelected": "منتخب کو تسلیم کریں",
+    "setStatus": "حیثیت مقرر کریں",
+    "openCase": "مقدمہ کھولیں",
+    "allDepartments": "تمام محکمے",
+    "department": "محکمہ",
+    "casesCount": "مقدمات",
+    "selected": "منتخب",
+    "loadError": "ان باکس لوڈ نہیں ہو سکا۔",
+    "inboxZero": "ان باکس خالی",
+    "inboxZeroSub": "آپ کی فہرست میں کوئی کھلا مقدمہ نہیں۔ بالکل صاف۔",
+    "overdue": "تاخیر شدہ",
+    "updating": "اپ ڈیٹ ہو رہا ہے…",
+    "clustersUpdated": "اپ ڈیٹ",
+    "recompute": "کلسٹرز دوبارہ شمار کریں",
+    "clustersEmpty": "اس ہفتے کوئی نظامی کلسٹر نہیں ملا",
+    "clustersEmptySub": "جب متعلقہ شکایات وارڈز میں گروہ بند ہوں گی تو یہاں نظر آئیں گی۔",
+    "wardsLabel": "وارڈ",
+    "realtime": "ریئل ٹائم",
+    "queueStatus": "قطار کی حیثیت",
+    "performance": "کارکردگی",
+    "quality": "معیار",
+    "awaitingAction": "کارروائی کا منتظر",
+    "currentlyWorking": "فی الحال کام جاری",
+    "resolvedThisMonth": "اس ماہ حل شدہ"
   },
   "admin": {
     "overview": "Overview",
@@ -219,6 +242,43 @@
     "targetLanguage": "Translate to",
     "translating": "Translating…",
     "translateError": "Couldn't translate. Try again.",
-    "viewing": "Viewing in {{lang}}"
+    "viewing": "Viewing in {{lang}}",
+    "action": "ترجمہ",
+    "original": "اصل",
+    "viewingIn": "دیکھ رہے ہیں"
+  },
+  "severity": {
+    "LOW": "کم",
+    "MEDIUM": "درمیانہ",
+    "HIGH": "زیادہ"
+  },
+  "case": {
+    "complaintDetails": "شکایت کی تفصیلات",
+    "filedBy": "درج کیا",
+    "reputation": "ساکھ",
+    "coSigners": "شریک دستخط کنندگان",
+    "upvotes": "اپ ووٹ",
+    "filed": "درج",
+    "evidence": "ثبوت",
+    "timeline": "ٹائم لائن",
+    "similar": "اسی طرح کے حل شدہ مقدمات",
+    "noneYet": "ابھی کوئی نہیں۔",
+    "quality": "معیار",
+    "readAloud": "بلند آواز سے پڑھیں",
+    "stopReading": "پڑھنا روکیں"
+  },
+  "timeline": {
+    "CREATED": "شکایت درج",
+    "ACKNOWLEDGED": "تسلیم شدہ",
+    "STATUS_CHANGED": "حیثیت تبدیل",
+    "COMMENT_ADDED": "تبصرہ شامل",
+    "EVIDENCE_ADDED": "ثبوت شامل",
+    "INFO_REQUESTED": "معلومات طلب",
+    "INFO_PROVIDED": "معلومات فراہم",
+    "RESOLVED": "حل شدہ",
+    "REOPENED": "دوبارہ کھولا",
+    "ESCALATED": "اوپر بھیجا",
+    "CLOSED": "بند",
+    "REASSIGNED": "دوبارہ تفویض"
   }
 }

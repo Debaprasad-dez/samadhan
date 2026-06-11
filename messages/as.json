@@ -12,7 +12,8 @@
     "officers": "বিষয়া",
     "trends": "ধাৰা",
     "policy": "নীতি",
-    "ward": "ৱাৰ্ড"
+    "ward": "ৱাৰ্ড",
+    "settings": "ছেটিংছ"
   },
   "common": {
     "signIn": "ছাইন ইন কৰক",
@@ -32,7 +33,8 @@
     "map": "মানচিত্ৰ",
     "search": "সন্ধান কৰক",
     "upvote": "সমৰ্থন",
-    "saving": "সংৰক্ষণ হৈ আছে…"
+    "saving": "সংৰক্ষণ হৈ আছে…",
+    "open": "খোলক"
   },
   "time": {
     "morning": "শুভ ৰাতিপুৱা",
@@ -70,10 +72,10 @@
     "PENDING": "বিচাৰাধীন",
     "CLOSED": "বন্ধ",
     "onTrack": "সঠিক পথত",
-    "OPEN": "Open",
-    "ACKNOWLEDGED": "Acknowledged",
-    "AWAITING_INFO": "Awaiting info",
-    "ESCALATED": "Escalated"
+    "OPEN": "খোলা",
+    "ACKNOWLEDGED": "স্বীকৃত",
+    "AWAITING_INFO": "তথ্যৰ অপেক্ষাত",
+    "ESCALATED": "ওপৰলৈ পঠোৱা হ’ল"
   },
   "auth": {
     "welcome": "সমাধানলৈ স্বাগতম",
@@ -104,11 +106,13 @@
     "modeLight": "পাতল",
     "modeDark": "গাঢ়",
     "modeAuto": "স্বয়ংক্ৰিয়",
-    "saved": "ছেটিংছ সংৰক্ষণ হ’ল।",
+    "saved": "ছেটিংছ ছেভ কৰা হ’ল।",
     "save": "সালসলনি সংৰক্ষণ কৰক",
-    "applying": "আপোনাৰ সালসলনি প্ৰয়োগ হৈ আছে…",
-    "applyError": "সংৰক্ষণ কৰিব নোৱাৰি। পুনৰ চেষ্টা কৰক।",
-    "theme": "Theme"
+    "applying": "আপোনাৰ সালসলনিসমূহ প্ৰয়োগ কৰা হৈছে…",
+    "applyError": "ছেভ কৰিব পৰা নগ’ল। অনুগ্ৰহ কৰি পুনৰ চেষ্টা কৰক।",
+    "theme": "Theme",
+    "title": "ছেটিংছ",
+    "languageSub": "আপোনাৰ ডেছবৰ্ডৰ ভাষা বাছনি কৰক।"
   },
   "leaveGuard": {
     "title": "আপোনাৰ অভিযোগৰ খচৰা সংৰক্ষণ কৰিবনে?",
@@ -150,11 +154,11 @@
     "retry": "Try again"
   },
   "officer": {
-    "inbox": "Inbox",
-    "inboxSub": "Prioritised queue",
-    "clusters": "Clusters",
-    "clustersSub": "Grouped by theme",
-    "metrics": "My metrics",
+    "inbox": "ইনবক্স",
+    "inboxSub": "অগ্ৰাধিকাৰ তালিকা",
+    "clusters": "গোট",
+    "clustersSub": "AI-গোটবদ্ধ প্ৰণালীগত সমস্যা · যোৱা ১৪ দিন",
+    "metrics": "মোৰ পৰিসংখ্যা",
     "metricsSub": "Real-time performance",
     "open": "Open",
     "inProgress": "In progress",
@@ -163,15 +167,34 @@
     "acknowledged": "Acknowledged",
     "awaitingInfo": "Awaiting info",
     "resolvedMonth": "Resolved (this month)",
-    "avgResolution": "Avg resolution",
-    "slaMet": "SLA met",
-    "avgQuality": "Avg quality",
-    "filterSeverity": "Filter severity (LOW / MEDIUM / HIGH)",
-    "acknowledgeSelected": "Acknowledge selected",
-    "setStatus": "Set status",
-    "openCase": "Open case",
-    "allDepartments": "All departments",
-    "department": "department"
+    "avgResolution": "গড় সমাধান",
+    "slaMet": "SLA সম্পূৰ্ণ",
+    "avgQuality": "গড় মান",
+    "filterSeverity": "তীব্ৰতা ফিল্টাৰ কৰক (LOW / MEDIUM / HIGH)",
+    "acknowledgeSelected": "নিৰ্বাচিত স্বীকাৰ কৰক",
+    "setStatus": "অৱস্থা ছেট কৰক",
+    "openCase": "গোচৰ খোলক",
+    "allDepartments": "সকলো বিভাগ",
+    "department": "বিভাগ",
+    "casesCount": "গোচৰ",
+    "selected": "নিৰ্বাচিত",
+    "loadError": "ইনবক্স ল’ড কৰিব পৰা নগ’ল।",
+    "inboxZero": "ইনবক্স খালী",
+    "inboxZeroSub": "আপোনাৰ তালিকাত কোনো খোলা গোচৰ নাই। একেবাৰে পৰিষ্কাৰ।",
+    "overdue": "বিলম্বিত",
+    "updating": "আপডেট হৈ আছে…",
+    "clustersUpdated": "আপডেট",
+    "recompute": "গোট পুনৰ গণনা কৰক",
+    "clustersEmpty": "এই সপ্তাহত কোনো প্ৰণালীগত গোট পোৱা নগ’ল",
+    "clustersEmptySub": "সম্পৰ্কিত অভিযোগ ৱাৰ্ডসমূহত গোটবদ্ধ হ’লে ইয়াত দেখা যাব।",
+    "wardsLabel": "ৱাৰ্ড",
+    "realtime": "ৰিয়েল-টাইম",
+    "queueStatus": "শাৰী অৱস্থা",
+    "performance": "কাৰ্যক্ষমতা",
+    "quality": "মান",
+    "awaitingAction": "ব্যৱস্থাৰ অপেক্ষাত",
+    "currentlyWorking": "বৰ্তমান কাম চলি আছে",
+    "resolvedThisMonth": "এই মাহত সমাধান"
   },
   "admin": {
     "overview": "Overview",
@@ -219,6 +242,43 @@
     "targetLanguage": "Translate to",
     "translating": "Translating…",
     "translateError": "Couldn't translate. Try again.",
-    "viewing": "Viewing in {{lang}}"
+    "viewing": "Viewing in {{lang}}",
+    "action": "অনুবাদ",
+    "original": "মূল",
+    "viewingIn": "চাই আছে"
+  },
+  "severity": {
+    "LOW": "কম",
+    "MEDIUM": "মধ্যম",
+    "HIGH": "উচ্চ"
+  },
+  "case": {
+    "complaintDetails": "অভিযোগৰ বিৱৰণ",
+    "filedBy": "দাখিল কৰিলে",
+    "reputation": "সুনাম",
+    "coSigners": "সহ-স্বাক্ষৰকাৰী",
+    "upvotes": "আপভোট",
+    "filed": "দাখিল",
+    "evidence": "প্ৰমাণ",
+    "timeline": "সময়ৰেখা",
+    "similar": "একে ধৰণৰ সমাধান হোৱা গোচৰ",
+    "noneYet": "এতিয়ালৈকে একো নাই।",
+    "quality": "মান",
+    "readAloud": "ডাঙৰকৈ পঢ়क",
+    "stopReading": "পঢ়া বন্ধ কৰক"
+  },
+  "timeline": {
+    "CREATED": "অভিযোগ দাখিল",
+    "ACKNOWLEDGED": "স্বীকৃত",
+    "STATUS_CHANGED": "অৱস্থা সলনি",
+    "COMMENT_ADDED": "মন্তব্য যোগ",
+    "EVIDENCE_ADDED": "প্ৰমাণ যোগ",
+    "INFO_REQUESTED": "তথ্য বিচৰা হ’ল",
+    "INFO_PROVIDED": "তথ্য দিয়া হ’ল",
+    "RESOLVED": "সমাধান",
+    "REOPENED": "পুনৰ খোলা",
+    "ESCALATED": "ওপৰলৈ পঠোৱা",
+    "CLOSED": "বন্ধ",
+    "REASSIGNED": "পুনৰ নিযুক্ত"
   }
 }

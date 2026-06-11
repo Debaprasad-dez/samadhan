@@ -12,7 +12,8 @@
     "officers": "अधिकारी",
     "trends": "कल",
     "policy": "धोरण",
-    "ward": "वॉर्ड"
+    "ward": "वॉर्ड",
+    "settings": "सेटिंग्ज"
   },
   "common": {
     "signIn": "साइन इन करात",
@@ -32,7 +33,8 @@
     "map": "नकासो",
     "search": "सोदात",
     "upvote": "फाटबळ",
-    "saving": "जतनाय जातां…"
+    "saving": "जतनाय जातां…",
+    "open": "उगडात"
   },
   "time": {
     "morning": "सुप्रभात",
@@ -65,15 +67,15 @@
     "FILED": "दाखल",
     "IN_PROGRESS": "चालू",
     "OFFICER_ASSIGNED": "अधिकारी नेमलो",
-    "RESOLVED": "निवारण जालें",
+    "RESOLVED": "सोडयलें",
     "REJECTED": "न्हयकारलें",
     "PENDING": "प्रलंबीत",
     "CLOSED": "बंद",
     "onTrack": "योग्य वाटेर",
-    "OPEN": "Open",
-    "ACKNOWLEDGED": "Acknowledged",
-    "AWAITING_INFO": "Awaiting info",
-    "ESCALATED": "Escalated"
+    "OPEN": "उगडें",
+    "ACKNOWLEDGED": "मान्य केलें",
+    "AWAITING_INFO": "म्हायतीची वाट",
+    "ESCALATED": "वयर धाडलें"
   },
   "auth": {
     "welcome": "समाधानांत येवकार",
@@ -104,11 +106,13 @@
     "modeLight": "उज्वाड",
     "modeDark": "गडद",
     "modeAuto": "आपसूंक",
-    "saved": "सेटिंग्ज जतनाय जाली.",
+    "saved": "सेटिंग्ज जतन केली.",
     "save": "बदल जतनाय करात",
-    "applying": "तुमचे बदल लागू जातात…",
-    "applyError": "जतनाय जावंक ना. परत यत्न करात.",
-    "theme": "Theme"
+    "applying": "तुमचे बदल लागू करतात…",
+    "applyError": "जतन करूंक जाले ना. परत यत्न करात.",
+    "theme": "Theme",
+    "title": "सेटिंग्ज",
+    "languageSub": "तुमच्या डॅशबोर्डाची भास निवडात."
   },
   "leaveGuard": {
     "title": "तुमच्या कागाळीचो मसुदो जतनाय करात?",
@@ -150,11 +154,11 @@
     "retry": "Try again"
   },
   "officer": {
-    "inbox": "Inbox",
-    "inboxSub": "Prioritised queue",
-    "clusters": "Clusters",
-    "clustersSub": "Grouped by theme",
-    "metrics": "My metrics",
+    "inbox": "इनबॉक्स",
+    "inboxSub": "प्राधान्य वळेरी",
+    "clusters": "घटक",
+    "clustersSub": "AI-घटकीत प्रणालीगत मुद्दे · फाटले 14 दीस",
+    "metrics": "म्हजे आंकडे",
     "metricsSub": "Real-time performance",
     "open": "Open",
     "inProgress": "In progress",
@@ -163,15 +167,34 @@
     "acknowledged": "Acknowledged",
     "awaitingInfo": "Awaiting info",
     "resolvedMonth": "Resolved (this month)",
-    "avgResolution": "Avg resolution",
-    "slaMet": "SLA met",
-    "avgQuality": "Avg quality",
-    "filterSeverity": "Filter severity (LOW / MEDIUM / HIGH)",
-    "acknowledgeSelected": "Acknowledge selected",
-    "setStatus": "Set status",
-    "openCase": "Open case",
-    "allDepartments": "All departments",
-    "department": "department"
+    "avgResolution": "सरासरी सोडवण",
+    "slaMet": "SLA पूर्ण",
+    "avgQuality": "सरासरी गूणवत्ता",
+    "filterSeverity": "तीव्रता गाळात (LOW / MEDIUM / HIGH)",
+    "acknowledgeSelected": "वेंचिल्लें मान्य करात",
+    "setStatus": "स्थिती थारायात",
+    "openCase": "प्रकरण उगडात",
+    "allDepartments": "सगळे विभाग",
+    "department": "विभाग",
+    "casesCount": "प्रकरणां",
+    "selected": "वेंचिल्लें",
+    "loadError": "इनबॉक्स लोड जावंक ना.",
+    "inboxZero": "इनबॉक्स रिकामो",
+    "inboxZeroSub": "तुमच्या वळेरींत कसलेंच उगडें प्रकरण ना. एकदम स्वच्छ.",
+    "overdue": "उशीर जाल्लें",
+    "updating": "अपडेट जातात…",
+    "clustersUpdated": "अपडेट",
+    "recompute": "घटक परतून मेजात",
+    "clustersEmpty": "ह्या सप्तकांत कसलेच प्रणालीगत घटक मेळूंक ना",
+    "clustersEmptySub": "संबंदीत कागाळी वॉर्डांनी घटकीत जातकच हांगा दिसतलीं.",
+    "wardsLabel": "वॉर्ड",
+    "realtime": "रियल-टायम",
+    "queueStatus": "रांग स्थिती",
+    "performance": "कामगिरी",
+    "quality": "गूणवत्ता",
+    "awaitingAction": "कारवायेची वाट",
+    "currentlyWorking": "सद्या काम चालू",
+    "resolvedThisMonth": "ह्या म्हयन्यांत सोडयलें"
   },
   "admin": {
     "overview": "Overview",
@@ -219,6 +242,43 @@
     "targetLanguage": "Translate to",
     "translating": "Translating…",
     "translateError": "Couldn't translate. Try again.",
-    "viewing": "Viewing in {{lang}}"
+    "viewing": "Viewing in {{lang}}",
+    "action": "भाशांतर",
+    "original": "मूळ",
+    "viewingIn": "पळयतात"
+  },
+  "severity": {
+    "LOW": "उणें",
+    "MEDIUM": "मध्यम",
+    "HIGH": "ऊंच"
+  },
+  "case": {
+    "complaintDetails": "कागाळ तपशील",
+    "filedBy": "दाखल केलें",
+    "reputation": "नामना",
+    "coSigners": "सह-सही करपी",
+    "upvotes": "अपवोट",
+    "filed": "दाखल",
+    "evidence": "पुरावो",
+    "timeline": "काळरेखा",
+    "similar": "सारकें सोडयल्ल्या प्रकरणां",
+    "noneYet": "अजून कांय ना.",
+    "quality": "गूणवत्ता",
+    "readAloud": "व्हड्ल्यान वाचात",
+    "stopReading": "वाचप थांबयात"
+  },
+  "timeline": {
+    "CREATED": "कागाळ दाखल",
+    "ACKNOWLEDGED": "मान्य केलें",
+    "STATUS_CHANGED": "स्थिती बदलली",
+    "COMMENT_ADDED": "शेरो जोडलो",
+    "EVIDENCE_ADDED": "पुरावो जोडलो",
+    "INFO_REQUESTED": "म्हायती मागली",
+    "INFO_PROVIDED": "म्हायती दिली",
+    "RESOLVED": "सोडयलें",
+    "REOPENED": "परत उगडलें",
+    "ESCALATED": "वयर धाडलें",
+    "CLOSED": "बंद",
+    "REASSIGNED": "परत सोंपलें"
   }
 }

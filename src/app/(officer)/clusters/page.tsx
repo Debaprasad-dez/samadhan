@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/shared/empty-state";
 import { EmptyClusters } from "@/components/art/empty";
 import { formatRelative } from "@/lib/utils";
+import { useT } from "@/components/providers/locale-provider";
 
 interface Cluster {
   categoryId: string;
@@ -18,6 +19,7 @@ interface Cluster {
 }
 
 export default function ClustersPage() {
+  const t = useT();
   const [clusters, setClusters] = useState<Cluster[]>([]);
   const [computedAt, setComputedAt] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
@@ -47,11 +49,13 @@ export default function ClustersPage() {
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-3xl font-semibold">Clusters</h1>
+          <h1 className="font-display text-3xl font-semibold">
+            {t("officer.clusters")}
+          </h1>
           <p className="text-muted-foreground text-sm">
-            AI-grouped systemic issues · last 14 days
+            {t("officer.clustersSub")}
             {computedAt
-              ? ` · updated ${formatRelative(new Date(computedAt))}`
+              ? ` · ${t("officer.clustersUpdated")} ${formatRelative(new Date(computedAt))}`
               : ""}
           </p>
         </div>
@@ -62,7 +66,7 @@ export default function ClustersPage() {
           disabled={recomputing}
         >
           {recomputing ? <Loader2 className="animate-spin" /> : <RefreshCw />}
-          Recompute clusters
+          {t("officer.recompute")}
         </Button>
       </div>
 
@@ -75,8 +79,8 @@ export default function ClustersPage() {
       ) : clusters.length === 0 ? (
         <EmptyState
           illustration={<EmptyClusters />}
-          title="No systemic clusters detected this week"
-          description="When related complaints group up across wards, they'll surface here."
+          title={t("officer.clustersEmpty")}
+          description={t("officer.clustersEmptySub")}
         />
       ) : (
         <div className="grid gap-3 sm:grid-cols-2">
@@ -86,14 +90,14 @@ export default function ClustersPage() {
                 <div className="flex items-center justify-between">
                   <p className="font-medium">{c.title}</p>
                   <span className="bg-brand-soft text-brand rounded-full px-2 py-0.5 text-xs font-semibold">
-                    {c.count} cases
+                    {c.count} {t("officer.casesCount")}
                   </span>
                 </div>
                 <p className="text-muted-foreground mt-1 text-xs">
-                  {c.wards.length} ward(s): {c.wards.join(", ")}
+                  {c.wards.length} {t("officer.wardsLabel")}: {c.wards.join(", ")}
                 </p>
                 <p className="text-muted-foreground mt-1 truncate text-xs">
-                  e.g. {c.sample.number} — {c.sample.title}
+                  {c.sample.number} — {c.sample.title}
                 </p>
               </CardContent>
             </Card>

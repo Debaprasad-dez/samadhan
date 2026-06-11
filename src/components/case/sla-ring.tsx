@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { slaState } from "@/lib/sla";
 import { cn } from "@/lib/utils";
+import { useT } from "@/components/providers/locale-provider";
 
 export function SlaRing({
   createdAt,
@@ -15,6 +16,7 @@ export function SlaRing({
   size?: number;
   className?: string;
 }) {
+  const t = useT();
   // Compute against client clock after mount to avoid hydration mismatch.
   const [now, setNow] = useState<number | null>(null);
   useEffect(() => setNow(Date.now()), []);
@@ -73,7 +75,7 @@ export function SlaRing({
         />
       </svg>
       <span className="font-baloo absolute text-center text-sm font-semibold leading-tight">
-        {breached ? "Overdue" : `${Math.max(0, days)}d`}
+        {breached ? t("officer.overdue") : `${Math.max(0, days)}d`}
       </span>
     </div>
   );

@@ -445,6 +445,21 @@
   }
 }
 
+/* Login backdrop: infinite seamless right→left pan of the hero scene. The row
+   holds two copies (200% wide); translating by -50% loops with no seam. */
+.login-pan {
+  animation: login-pan 20s linear infinite;
+  will-change: transform;
+}
+@keyframes login-pan {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 /* Respect reduced-motion (§7.5, §11.1) — static states are designed, not blank. */
 @media (prefers-reduced-motion: reduce) {
   *,

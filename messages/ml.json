@@ -12,7 +12,8 @@
     "officers": "ഉദ്യോഗസ്ഥർ",
     "trends": "പ്രവണതകൾ",
     "policy": "നയം",
-    "ward": "വാർഡ്"
+    "ward": "വാർഡ്",
+    "settings": "ക്രമീകരണങ്ങൾ"
   },
   "common": {
     "signIn": "സൈൻ ഇൻ ചെയ്യുക",
@@ -32,7 +33,8 @@
     "map": "ഭൂപടം",
     "search": "തിരയുക",
     "upvote": "പിന്തുണ",
-    "saving": "സംരക്ഷിക്കുന്നു…"
+    "saving": "സംരക്ഷിക്കുന്നു…",
+    "open": "തുറക്കുക"
   },
   "time": {
     "morning": "സുപ്രഭാതം",
@@ -63,17 +65,17 @@
   },
   "status": {
     "FILED": "രേഖപ്പെടുത്തി",
-    "IN_PROGRESS": "പുരോഗമിക്കുന്നു",
+    "IN_PROGRESS": "പുരോഗതിയിൽ",
     "OFFICER_ASSIGNED": "ഉദ്യോഗസ്ഥനെ നിയോഗിച്ചു",
     "RESOLVED": "പരിഹരിച്ചു",
     "REJECTED": "നിരസിച്ചു",
     "PENDING": "തീർപ്പാക്കാത്തത്",
     "CLOSED": "അടച്ചു",
     "onTrack": "ശരിയായ പാതയിൽ",
-    "OPEN": "Open",
-    "ACKNOWLEDGED": "Acknowledged",
-    "AWAITING_INFO": "Awaiting info",
-    "ESCALATED": "Escalated"
+    "OPEN": "തുറന്നു",
+    "ACKNOWLEDGED": "അംഗീകരിച്ചു",
+    "AWAITING_INFO": "വിവരത്തിനായി കാത്തിരിക്കുന്നു",
+    "ESCALATED": "മുകളിലേക്ക് അയച്ചു"
   },
   "auth": {
     "welcome": "സമാധാനിലേക്ക് സ്വാഗതം",
@@ -108,7 +110,9 @@
     "save": "മാറ്റങ്ങൾ സംരക്ഷിക്കുക",
     "applying": "നിങ്ങളുടെ മാറ്റങ്ങൾ പ്രയോഗിക്കുന്നു…",
     "applyError": "സംരക്ഷിക്കാനായില്ല. വീണ്ടും ശ്രമിക്കുക.",
-    "theme": "Theme"
+    "theme": "Theme",
+    "title": "ക്രമീകരണങ്ങൾ",
+    "languageSub": "നിങ്ങളുടെ ഡാഷ്‌ബോർഡ് ഭാഷ തിരഞ്ഞെടുക്കുക."
   },
   "leaveGuard": {
     "title": "നിങ്ങളുടെ പരാതിയുടെ ഡ്രാഫ്റ്റ് സംരക്ഷിക്കണോ?",
@@ -150,11 +154,11 @@
     "retry": "Try again"
   },
   "officer": {
-    "inbox": "Inbox",
-    "inboxSub": "Prioritised queue",
-    "clusters": "Clusters",
-    "clustersSub": "Grouped by theme",
-    "metrics": "My metrics",
+    "inbox": "ഇൻബോക്സ്",
+    "inboxSub": "മുൻഗണനാ പട്ടിക",
+    "clusters": "ക്ലസ്റ്ററുകൾ",
+    "clustersSub": "AI-ഗ്രൂപ്പ് വ്യവസ്ഥാപരമായ പ്രശ്നങ്ങൾ · കഴിഞ്ഞ 14 ദിവസം",
+    "metrics": "എന്റെ കണക്കുകൾ",
     "metricsSub": "Real-time performance",
     "open": "Open",
     "inProgress": "In progress",
@@ -163,15 +167,34 @@
     "acknowledged": "Acknowledged",
     "awaitingInfo": "Awaiting info",
     "resolvedMonth": "Resolved (this month)",
-    "avgResolution": "Avg resolution",
-    "slaMet": "SLA met",
-    "avgQuality": "Avg quality",
-    "filterSeverity": "Filter severity (LOW / MEDIUM / HIGH)",
-    "acknowledgeSelected": "Acknowledge selected",
-    "setStatus": "Set status",
-    "openCase": "Open case",
-    "allDepartments": "All departments",
-    "department": "department"
+    "avgResolution": "ശരാശരി പരിഹാരം",
+    "slaMet": "SLA പൂർത്തിയായി",
+    "avgQuality": "ശരാശരി ഗുണനിലവാരം",
+    "filterSeverity": "തീവ്രത ഫിൽട്ടർ ചെയ്യുക (LOW / MEDIUM / HIGH)",
+    "acknowledgeSelected": "തിരഞ്ഞെടുത്തവ അംഗീകരിക്കുക",
+    "setStatus": "സ്റ്റാറ്റസ് സജ്ജമാക്കുക",
+    "openCase": "കേസ് തുറക്കുക",
+    "allDepartments": "എല്ലാ വകുപ്പുകളും",
+    "department": "വകുപ്പ്",
+    "casesCount": "കേസുകൾ",
+    "selected": "തിരഞ്ഞെടുത്തു",
+    "loadError": "ഇൻബോക്സ് ലോഡ് ചെയ്യാനായില്ല.",
+    "inboxZero": "ഇൻബോക്സ് ശൂന്യം",
+    "inboxZeroSub": "നിങ്ങളുടെ പട്ടികയിൽ തുറന്ന കേസുകളില്ല. മനോഹരമായി വ്യക്തം.",
+    "overdue": "വൈകി",
+    "updating": "അപ്ഡേറ്റ് ചെയ്യുന്നു…",
+    "clustersUpdated": "അപ്ഡേറ്റ്",
+    "recompute": "ക്ലസ്റ്ററുകൾ വീണ്ടും കണക്കാക്കുക",
+    "clustersEmpty": "ഈ ആഴ്ച വ്യവസ്ഥാപരമായ ക്ലസ്റ്ററുകളൊന്നും കണ്ടെത്തിയില്ല",
+    "clustersEmptySub": "ബന്ധപ്പെട്ട പരാതികൾ വാർഡുകളിൽ ഗ്രൂപ്പാകുമ്പോൾ ഇവിടെ കാണാം.",
+    "wardsLabel": "വാർഡ്",
+    "realtime": "റിയൽ-ടൈം",
+    "queueStatus": "ക്യൂ നില",
+    "performance": "പ്രകടനം",
+    "quality": "ഗുണനിലവാരം",
+    "awaitingAction": "നടപടിക്കായി കാത്തിരിക്കുന്നു",
+    "currentlyWorking": "നിലവിൽ പ്രവർത്തിക്കുന്നു",
+    "resolvedThisMonth": "ഈ മാസം പരിഹരിച്ചു"
   },
   "admin": {
     "overview": "Overview",
@@ -219,6 +242,43 @@
     "targetLanguage": "Translate to",
     "translating": "Translating…",
     "translateError": "Couldn't translate. Try again.",
-    "viewing": "Viewing in {{lang}}"
+    "viewing": "Viewing in {{lang}}",
+    "action": "വിവർത്തനം",
+    "original": "മൂലം",
+    "viewingIn": "കാണുന്നു"
+  },
+  "severity": {
+    "LOW": "കുറവ്",
+    "MEDIUM": "ഇടത്തരം",
+    "HIGH": "ഉയർന്നത്"
+  },
+  "case": {
+    "complaintDetails": "പരാതി വിശദാംശങ്ങൾ",
+    "filedBy": "സമർപ്പിച്ചത്",
+    "reputation": "പ്രശസ്തി",
+    "coSigners": "സഹ-ഒപ്പിട്ടവർ",
+    "upvotes": "അപ്‌വോട്ടുകൾ",
+    "filed": "സമർപ്പിച്ചു",
+    "evidence": "തെളിവ്",
+    "timeline": "സമയരേഖ",
+    "similar": "സമാന പരിഹൃത കേസുകൾ",
+    "noneYet": "ഇതുവരെ ഒന്നുമില്ല.",
+    "quality": "ഗുണനിലവാരം",
+    "readAloud": "ഉറക്കെ വായിക്കുക",
+    "stopReading": "വായന നിർത്തുക"
+  },
+  "timeline": {
+    "CREATED": "പരാതി സമർപ്പിച്ചു",
+    "ACKNOWLEDGED": "അംഗീകരിച്ചു",
+    "STATUS_CHANGED": "നില മാറി",
+    "COMMENT_ADDED": "അഭിപ്രായം ചേർത്തു",
+    "EVIDENCE_ADDED": "തെളിവ് ചേർത്തു",
+    "INFO_REQUESTED": "വിവരം ആവശ്യപ്പെട്ടു",
+    "INFO_PROVIDED": "വിവരം നൽകി",
+    "RESOLVED": "പരിഹരിച്ചു",
+    "REOPENED": "വീണ്ടും തുറന്നു",
+    "ESCALATED": "മുകളിലേക്ക് അയച്ചു",
+    "CLOSED": "അടച്ചു",
+    "REASSIGNED": "വീണ്ടും നൽകി"
   }
 }

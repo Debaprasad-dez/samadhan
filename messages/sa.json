@@ -12,7 +12,8 @@
     "officers": "अधिकारिणः",
     "trends": "प्रवृत्तयः",
     "policy": "नीतिः",
-    "ward": "वार्डः"
+    "ward": "वार्डः",
+    "settings": "सज्जीकरणम्"
   },
   "common": {
     "signIn": "प्रवेशं करोतु",
@@ -32,7 +33,8 @@
     "map": "मानचित्रम्",
     "search": "अन्विष्यतु",
     "upvote": "समर्थनम्",
-    "saving": "रक्ष्यते…"
+    "saving": "रक्ष्यते…",
+    "open": "उद्घाटयतु"
   },
   "time": {
     "morning": "सुप्रभातम्",
@@ -70,10 +72,10 @@
     "PENDING": "विचाराधीनम्",
     "CLOSED": "पिहितम्",
     "onTrack": "समीचीनमार्गे",
-    "OPEN": "Open",
-    "ACKNOWLEDGED": "Acknowledged",
-    "AWAITING_INFO": "Awaiting info",
-    "ESCALATED": "Escalated"
+    "OPEN": "उद्घाटितम्",
+    "ACKNOWLEDGED": "स्वीकृतम्",
+    "AWAITING_INFO": "सूचनाप्रतीक्षायाम्",
+    "ESCALATED": "उपरि प्रेषितम्"
   },
   "auth": {
     "welcome": "समाधाने स्वागतम्",
@@ -104,11 +106,13 @@
     "modeLight": "तेजः",
     "modeDark": "तमः",
     "modeAuto": "स्वयम्",
-    "saved": "व्यवस्थाः रक्षिताः।",
+    "saved": "सज्जीकरणं रक्षितम्।",
     "save": "परिवर्तनानि रक्षतु",
     "applying": "भवतः परिवर्तनानि प्रयुज्यन्ते…",
-    "applyError": "रक्षितुं न शक्यते। पुनः प्रयतताम्।",
-    "theme": "Theme"
+    "applyError": "रक्षितुं न शक्तम्। पुनः प्रयतताम्।",
+    "theme": "Theme",
+    "title": "सज्जीकरणम्",
+    "languageSub": "स्वकीयस्य फलकस्य भाषां चिनोतु।"
   },
   "leaveGuard": {
     "title": "भवतः अभियोगस्य प्रारूपं रक्षतु?",
@@ -150,11 +154,11 @@
     "retry": "Try again"
   },
   "officer": {
-    "inbox": "Inbox",
-    "inboxSub": "Prioritised queue",
-    "clusters": "Clusters",
-    "clustersSub": "Grouped by theme",
-    "metrics": "My metrics",
+    "inbox": "सन्देशपेटिका",
+    "inboxSub": "प्राथम्यसूची",
+    "clusters": "समूहाः",
+    "clustersSub": "AI-समूहीकृताः प्रणालीगताः समस्याः · गतानि 14 दिनानि",
+    "metrics": "मम सांख्यिकी",
     "metricsSub": "Real-time performance",
     "open": "Open",
     "inProgress": "In progress",
@@ -163,15 +167,34 @@
     "acknowledged": "Acknowledged",
     "awaitingInfo": "Awaiting info",
     "resolvedMonth": "Resolved (this month)",
-    "avgResolution": "Avg resolution",
-    "slaMet": "SLA met",
-    "avgQuality": "Avg quality",
-    "filterSeverity": "Filter severity (LOW / MEDIUM / HIGH)",
-    "acknowledgeSelected": "Acknowledge selected",
-    "setStatus": "Set status",
-    "openCase": "Open case",
-    "allDepartments": "All departments",
-    "department": "department"
+    "avgResolution": "माध्यसमाधानम्",
+    "slaMet": "SLA पूर्णम्",
+    "avgQuality": "माध्यगुणवत्ता",
+    "filterSeverity": "तीव्रतां छानयतु (LOW / MEDIUM / HIGH)",
+    "acknowledgeSelected": "चितानि स्वीकरोतु",
+    "setStatus": "स्थितिं स्थापयतु",
+    "openCase": "प्रकरणम् उद्घाटयतु",
+    "allDepartments": "सर्वे विभागाः",
+    "department": "विभागः",
+    "casesCount": "प्रकरणानि",
+    "selected": "चितम्",
+    "loadError": "सन्देशपेटिका आरोपयितुं न शक्ता।",
+    "inboxZero": "सन्देशपेटिका रिक्ता",
+    "inboxZeroSub": "भवतः सूच्यां किमपि उद्घाटितं प्रकरणं नास्ति। सम्यक् स्वच्छम्।",
+    "overdue": "विलम्बितम्",
+    "updating": "नवीक्रियते…",
+    "clustersUpdated": "नवीकृतम्",
+    "recompute": "समूहान् पुनर्गणयतु",
+    "clustersEmpty": "अस्मिन् सप्ताहे कोऽपि प्रणालीगतसमूहः न प्राप्तः",
+    "clustersEmptySub": "यदा सम्बद्धाः अभियोगाः वार्डेषु समूहिताः भविष्यन्ति, तदा अत्र दर्शयिष्यन्ते।",
+    "wardsLabel": "वार्ड",
+    "realtime": "तत्कालम्",
+    "queueStatus": "पङ्क्तिस्थितिः",
+    "performance": "कार्यक्षमता",
+    "quality": "गुणवत्ता",
+    "awaitingAction": "कार्यप्रतीक्षायाम्",
+    "currentlyWorking": "सम्प्रति कार्यरतम्",
+    "resolvedThisMonth": "अस्मिन् मासे समाहितम्"
   },
   "admin": {
     "overview": "Overview",
@@ -219,6 +242,43 @@
     "targetLanguage": "Translate to",
     "translating": "Translating…",
     "translateError": "Couldn't translate. Try again.",
-    "viewing": "Viewing in {{lang}}"
+    "viewing": "Viewing in {{lang}}",
+    "action": "अनुवादः",
+    "original": "मूलम्",
+    "viewingIn": "पश्यति"
+  },
+  "severity": {
+    "LOW": "न्यूनम्",
+    "MEDIUM": "मध्यमम्",
+    "HIGH": "उच्चम्"
+  },
+  "case": {
+    "complaintDetails": "अभियोगविवरणम्",
+    "filedBy": "दाखिलकर्ता",
+    "reputation": "कीर्तिः",
+    "coSigners": "सहहस्ताक्षरकर्तारः",
+    "upvotes": "समर्थनानि",
+    "filed": "दाखिलम्",
+    "evidence": "प्रमाणम्",
+    "timeline": "कालरेखा",
+    "similar": "सदृशसमाहितप्रकरणानि",
+    "noneYet": "अधुना किमपि नास्ति।",
+    "quality": "गुणवत्ता",
+    "readAloud": "उच्चैः पठतु",
+    "stopReading": "पठनं स्थगयतु"
+  },
+  "timeline": {
+    "CREATED": "अभियोगः दाखिलः",
+    "ACKNOWLEDGED": "स्वीकृतम्",
+    "STATUS_CHANGED": "स्थितिः परिवर्तिता",
+    "COMMENT_ADDED": "टिप्पणी योजिता",
+    "EVIDENCE_ADDED": "प्रमाणं योजितम्",
+    "INFO_REQUESTED": "सूचना याचिता",
+    "INFO_PROVIDED": "सूचना दत्ता",
+    "RESOLVED": "समाहितम्",
+    "REOPENED": "पुनः उद्घाटितम्",
+    "ESCALATED": "उपरि प्रेषितम्",
+    "CLOSED": "पिहितम्",
+    "REASSIGNED": "पुनः नियुक्तम्"
   }
 }

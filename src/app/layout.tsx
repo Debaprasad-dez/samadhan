@@ -2,10 +2,8 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { fontVariables } from "./fonts";
 import { getCurrentUser } from "@/lib/auth";
-import {
-  ThemeProvider,
-  themeNoFlashScript,
-} from "@/components/providers/theme-provider";
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import { themeNoFlashScript } from "@/lib/theme-noflash";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { SessionProvider } from "@/components/providers/session-provider";
 import { LocaleProvider } from "@/components/providers/locale-provider";
@@ -40,6 +38,14 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const user = await getCurrentUser();
+  const role = user?.role?.toLowerCase() ?? "citizen";
+  // Officer/admin (staff) dashboards are locked to one professional theme —
+  // a plain light/dark toggle, no cultural picker. Citizens keep the gallery.
+  const lockedTheme =
+    role === "officer" || role === "admin" ? "samadhan-pro" : undefined;
+  // Light/dark is a signed-in feature: logged-out pages (login, etc.) always
+  // render in light mode regardless of stored preference or OS setting.
+  const forcedMode: "light" | "dark" | undefined = user ? undefined : "light";
 
   return (
     <html lang="en" suppressHydrationWarning className={fontVariables}>
@@ -47,14 +53,21 @@ export default async function RootLayout({
         {/* No-flash: set data-theme/data-mode before first paint (design §2.2).
             suppressHydrationWarning: browser extensions inject their own <script>
             into <head> before React hydrates, shifting this node's index and
-            tripping a benign mismatch — same guard next-themes uses. */}
+            tripping a benign mismatch — same guard next-themes uses.
+            Role-scoped keys keep citizen/officer/admin themes independent. */}
         <script
           suppressHydrationWarning
-          dangerouslySetInnerHTML={{ __html: themeNoFlashScript }}
+          dangerouslySetInnerHTML={{
+            __html: themeNoFlashScript(role, lockedTheme, forcedMode),
+          }}
         />
       </head>
       <body className="min-h-dvh bg-background text-foreground font-sans antialiased">
-        <ThemeProvider>
+        <ThemeProvider
+          role={role}
+          lockedTheme={lockedTheme}
+          forcedMode={forcedMode}
+        >
           <QueryProvider>
             <SessionProvider user={user}>
               <LocaleProvider locale={user?.language ?? "en"}>

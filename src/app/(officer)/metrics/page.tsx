@@ -11,6 +11,7 @@ import {
 import { requireRole } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { humanizeCode, cn } from "@/lib/utils";
+import { getDict, translate } from "@/lib/i18n";
 import { Card, CardContent } from "@/components/ui/card";
 
 interface MetricCard {
@@ -18,12 +19,18 @@ interface MetricCard {
   value: string;
   icon: LucideIcon;
   color: "text-danger" | "text-warning" | "text-info" | "text-success";
-  bgColor: "bg-danger/10" | "bg-warning/10" | "bg-info/10" | "bg-success/10";
+  bgColor:
+    | "bg-danger-soft"
+    | "bg-warning-soft"
+    | "bg-info-soft"
+    | "bg-success-soft";
   subtitle?: string;
 }
 
 export default async function OfficerMetrics() {
   const user = await requireRole(["OFFICER"]);
+  const dict = getDict(user.language);
+  const t = (k: string) => translate(dict, k);
   const base = user.departmentCode
     ? { departmentCode: user.departmentCode }
     : {};
@@ -82,77 +89,79 @@ export default async function OfficerMetrics() {
 
   const queueMetrics: MetricCard[] = [
     {
-      label: "Open",
+      label: t("status.OPEN"),
       value: String(open),
       icon: AlertCircle,
       color: "text-danger",
-      bgColor: "bg-danger/10",
-      subtitle: "Awaiting action",
+      bgColor: "bg-danger-soft",
+      subtitle: t("officer.awaitingAction"),
     },
     {
-      label: "In progress",
+      label: t("status.IN_PROGRESS"),
       value: String(inProgress),
       icon: Clock,
       color: "text-warning",
-      bgColor: "bg-warning/10",
-      subtitle: "Currently working",
+      bgColor: "bg-warning-soft",
+      subtitle: t("officer.currentlyWorking"),
     },
   ];
 
   const performanceMetrics: MetricCard[] = [
     {
-      label: "Resolved this month",
+      label: t("officer.resolvedThisMonth"),
       value: String(resolvedMonth),
       icon: CheckCircle2,
       color: "text-success",
-      bgColor: "bg-success/10",
+      bgColor: "bg-success-soft",
     },
     {
-      label: "Avg resolution",
+      label: t("officer.avgResolution"),
       value: `${avgDays.toFixed(1)}d`,
       icon: TrendingUp,
       color: "text-info",
-      bgColor: "bg-info/10",
+      bgColor: "bg-info-soft",
     },
   ];
 
   const qualityMetrics: MetricCard[] = [
     {
-      label: "SLA met",
+      label: t("officer.slaMet"),
       value: `${slaMet.toFixed(0)}%`,
       icon: Target,
       color: "text-success",
-      bgColor: "bg-success/10",
+      bgColor: "bg-success-soft",
     },
     {
-      label: "Avg quality",
+      label: t("officer.avgQuality"),
       value: `${qAvg.toFixed(1)}/10`,
       icon: Star,
       color: "text-warning",
-      bgColor: "bg-warning/10",
+      bgColor: "bg-warning-soft",
     },
   ];
 
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="font-display text-3xl font-semibold">My metrics</h1>
+        <h1 className="font-display text-3xl font-semibold">
+          {t("officer.metrics")}
+        </h1>
         <p className="text-muted-foreground text-sm">
           {user.departmentCode
-            ? `${humanizeCode(user.departmentCode)} department`
-            : "All departments"}{" "}
-          · real-time
+            ? `${humanizeCode(user.departmentCode)} ${t("officer.department")}`
+            : t("officer.allDepartments")}{" "}
+          · {t("officer.realtime")}
         </p>
       </div>
 
       {/* Queue Status */}
-      <MetricsGroup title="Queue status" metrics={queueMetrics} />
+      <MetricsGroup title={t("officer.queueStatus")} metrics={queueMetrics} />
 
       {/* Performance */}
-      <MetricsGroup title="Performance" metrics={performanceMetrics} />
+      <MetricsGroup title={t("officer.performance")} metrics={performanceMetrics} />
 
       {/* Quality */}
-      <MetricsGroup title="Quality" metrics={qualityMetrics} />
+      <MetricsGroup title={t("officer.quality")} metrics={qualityMetrics} />
     </div>
   );
 }

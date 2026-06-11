@@ -12,7 +12,8 @@
     "officers": "अधिकारी",
     "trends": "रुझान",
     "policy": "नीति",
-    "ward": "वार्ड"
+    "ward": "वार्ड",
+    "settings": "सेटिंग्स"
   },
   "common": {
     "signIn": "साइन इन करें",
@@ -32,7 +33,8 @@
     "map": "मानचित्र",
     "search": "खोजें",
     "upvote": "समर्थन",
-    "saving": "सहेजा जा रहा है…"
+    "saving": "सहेजा जा रहा है…",
+    "open": "खोलें"
   },
   "time": {
     "morning": "सुप्रभात",
@@ -63,17 +65,17 @@
   },
   "status": {
     "FILED": "दर्ज",
-    "IN_PROGRESS": "प्रगति पर",
+    "IN_PROGRESS": "प्रगति में",
     "OFFICER_ASSIGNED": "अधिकारी नियुक्त",
-    "RESOLVED": "समाधान हुआ",
+    "RESOLVED": "समाधान",
     "REJECTED": "अस्वीकृत",
     "PENDING": "लंबित",
     "CLOSED": "बंद",
     "onTrack": "सही दिशा में",
-    "OPEN": "Open",
-    "ACKNOWLEDGED": "Acknowledged",
-    "AWAITING_INFO": "Awaiting info",
-    "ESCALATED": "Escalated"
+    "OPEN": "खुला",
+    "ACKNOWLEDGED": "स्वीकृत",
+    "AWAITING_INFO": "जानकारी प्रतीक्षित",
+    "ESCALATED": "आगे बढ़ाया"
   },
   "auth": {
     "welcome": "समाधान में आपका स्वागत है",
@@ -107,8 +109,10 @@
     "saved": "सेटिंग्स सहेजी गईं।",
     "save": "बदलाव सहेजें",
     "theme": "Theme",
-    "applying": "Applying your changes…",
-    "applyError": "Couldn’t save. Please try again."
+    "applying": "आपके बदलाव लागू किए जा रहे हैं…",
+    "applyError": "सहेजा नहीं जा सका। कृपया फिर से प्रयास करें।",
+    "title": "सेटिंग्स",
+    "languageSub": "अपने डैशबोर्ड की भाषा चुनें।"
   },
   "leaveGuard": {
     "title": "अपनी शिकायत का मसौदा सहेजें?",
@@ -150,11 +154,11 @@
     "retry": "Try again"
   },
   "officer": {
-    "inbox": "Inbox",
-    "inboxSub": "Prioritised queue",
-    "clusters": "Clusters",
-    "clustersSub": "Grouped by theme",
-    "metrics": "My metrics",
+    "inbox": "इनबॉक्स",
+    "inboxSub": "प्राथमिकता सूची",
+    "clusters": "समूह",
+    "clustersSub": "AI-समूहित प्रणालीगत मुद्दे · पिछले 14 दिन",
+    "metrics": "मेरे आँकड़े",
     "metricsSub": "Real-time performance",
     "open": "Open",
     "inProgress": "In progress",
@@ -163,15 +167,34 @@
     "acknowledged": "Acknowledged",
     "awaitingInfo": "Awaiting info",
     "resolvedMonth": "Resolved (this month)",
-    "avgResolution": "Avg resolution",
-    "slaMet": "SLA met",
-    "avgQuality": "Avg quality",
-    "filterSeverity": "Filter severity (LOW / MEDIUM / HIGH)",
-    "acknowledgeSelected": "Acknowledge selected",
-    "setStatus": "Set status",
-    "openCase": "Open case",
-    "allDepartments": "All departments",
-    "department": "department"
+    "avgResolution": "औसत समाधान",
+    "slaMet": "SLA पूर्ण",
+    "avgQuality": "औसत गुणवत्ता",
+    "filterSeverity": "गंभीरता छाँटें (LOW / MEDIUM / HIGH)",
+    "acknowledgeSelected": "चयनित स्वीकारें",
+    "setStatus": "स्थिति सेट करें",
+    "openCase": "मामला खोलें",
+    "allDepartments": "सभी विभाग",
+    "department": "विभाग",
+    "casesCount": "मामले",
+    "selected": "चयनित",
+    "loadError": "इनबॉक्स लोड नहीं हो सका।",
+    "inboxZero": "इनबॉक्स ख़ाली",
+    "inboxZeroSub": "आपकी सूची में कोई खुला मामला नहीं। बिलकुल साफ़।",
+    "overdue": "विलंबित",
+    "updating": "अपडेट हो रहा है…",
+    "clustersUpdated": "अपडेट",
+    "recompute": "समूह पुनः गणना करें",
+    "clustersEmpty": "इस सप्ताह कोई प्रणालीगत समूह नहीं मिला",
+    "clustersEmptySub": "जब संबंधित शिकायतें वार्डों में समूहित होंगी, वे यहाँ दिखेंगी।",
+    "wardsLabel": "वार्ड",
+    "realtime": "रियल-टाइम",
+    "queueStatus": "कतार स्थिति",
+    "performance": "प्रदर्शन",
+    "quality": "गुणवत्ता",
+    "awaitingAction": "कार्रवाई प्रतीक्षित",
+    "currentlyWorking": "वर्तमान में कार्यरत",
+    "resolvedThisMonth": "इस माह समाधान"
   },
   "admin": {
     "overview": "Overview",
@@ -219,6 +242,43 @@
     "targetLanguage": "Translate to",
     "translating": "Translating…",
     "translateError": "Couldn't translate. Try again.",
-    "viewing": "Viewing in {{lang}}"
+    "viewing": "Viewing in {{lang}}",
+    "action": "अनुवाद",
+    "original": "मूल",
+    "viewingIn": "देख रहे हैं"
+  },
+  "severity": {
+    "LOW": "कम",
+    "MEDIUM": "मध्यम",
+    "HIGH": "उच्च"
+  },
+  "case": {
+    "complaintDetails": "शिकायत विवरण",
+    "filedBy": "दर्ज किया",
+    "reputation": "प्रतिष्ठा",
+    "coSigners": "सह-हस्ताक्षरकर्ता",
+    "upvotes": "अपवोट",
+    "filed": "दर्ज",
+    "evidence": "साक्ष्य",
+    "timeline": "समयरेखा",
+    "similar": "समान हल किए मामले",
+    "noneYet": "अभी कोई नहीं।",
+    "quality": "गुणवत्ता",
+    "readAloud": "ज़ोर से पढ़ें",
+    "stopReading": "पढ़ना रोकें"
+  },
+  "timeline": {
+    "CREATED": "शिकायत दर्ज",
+    "ACKNOWLEDGED": "स्वीकृत",
+    "STATUS_CHANGED": "स्थिति बदली",
+    "COMMENT_ADDED": "टिप्पणी जोड़ी",
+    "EVIDENCE_ADDED": "साक्ष्य जोड़ा",
+    "INFO_REQUESTED": "जानकारी मांगी",
+    "INFO_PROVIDED": "जानकारी दी",
+    "RESOLVED": "समाधान",
+    "REOPENED": "फिर खोला",
+    "ESCALATED": "आगे बढ़ाया",
+    "CLOSED": "बंद",
+    "REASSIGNED": "पुनः सौंपा"
   }
 }

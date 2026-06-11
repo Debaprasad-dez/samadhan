@@ -12,7 +12,8 @@
     "officers": "अधिकारी",
     "trends": "रुझान",
     "policy": "नीति",
-    "ward": "वार्ड"
+    "ward": "वार्ड",
+    "settings": "सेटिंग्स"
   },
   "common": {
     "signIn": "साइन इन करो",
@@ -32,7 +33,8 @@
     "map": "नक्शा",
     "search": "खोजो",
     "upvote": "समर्थन",
-    "saving": "सहेजेआ जा करदा ऐ…"
+    "saving": "सहेजेआ जा करदा ऐ…",
+    "open": "खोलो"
   },
   "time": {
     "morning": "शुभ सवेर",
@@ -70,10 +72,10 @@
     "PENDING": "लंबित",
     "CLOSED": "बंद",
     "onTrack": "सही राह पर",
-    "OPEN": "Open",
-    "ACKNOWLEDGED": "Acknowledged",
-    "AWAITING_INFO": "Awaiting info",
-    "ESCALATED": "Escalated"
+    "OPEN": "खुल्लेआ",
+    "ACKNOWLEDGED": "मनेआ",
+    "AWAITING_INFO": "जानकारी दी उडीक",
+    "ESCALATED": "उप्पर भेजेआ"
   },
   "auth": {
     "welcome": "समाधान च जी आया नूं",
@@ -104,11 +106,13 @@
     "modeLight": "हल्का",
     "modeDark": "गहरा",
     "modeAuto": "अपने आप",
-    "saved": "सेटिंग सहेजी गेई।",
+    "saved": "सेटिंग्स सेव होई गेई।",
     "save": "बदलाव सहेजो",
-    "applying": "तुंदे बदलाव लागू होआ करदे न…",
-    "applyError": "सहेजेआ नेईं जाई सकेआ। फिरी कोशिश करो।",
-    "theme": "Theme"
+    "applying": "तुंदे बदलाव लागू कीते जा करदे न…",
+    "applyError": "सेव नेईं होई सकेआ। कृपया फिरी कोशिश करो।",
+    "theme": "Theme",
+    "title": "सेटिंग्स",
+    "languageSub": "अपने डैशबोर्ड दी भाशा चुनो।"
   },
   "leaveGuard": {
     "title": "अपनी शिकायत दा मसौदा सहेजो?",
@@ -150,11 +154,11 @@
     "retry": "Try again"
   },
   "officer": {
-    "inbox": "Inbox",
-    "inboxSub": "Prioritised queue",
-    "clusters": "Clusters",
-    "clustersSub": "Grouped by theme",
-    "metrics": "My metrics",
+    "inbox": "इनबॉक्स",
+    "inboxSub": "तरजीह सूची",
+    "clusters": "समूह",
+    "clustersSub": "AI-समूहीकृत प्रणालीगत मुद्दे · पछले 14 दिन",
+    "metrics": "मेरे आंकड़े",
     "metricsSub": "Real-time performance",
     "open": "Open",
     "inProgress": "In progress",
@@ -163,15 +167,34 @@
     "acknowledged": "Acknowledged",
     "awaitingInfo": "Awaiting info",
     "resolvedMonth": "Resolved (this month)",
-    "avgResolution": "Avg resolution",
-    "slaMet": "SLA met",
-    "avgQuality": "Avg quality",
-    "filterSeverity": "Filter severity (LOW / MEDIUM / HIGH)",
-    "acknowledgeSelected": "Acknowledge selected",
-    "setStatus": "Set status",
-    "openCase": "Open case",
-    "allDepartments": "All departments",
-    "department": "department"
+    "avgResolution": "औसत हल",
+    "slaMet": "SLA पूरा",
+    "avgQuality": "औसत गुणवत्ता",
+    "filterSeverity": "गंभीरता छांटो (LOW / MEDIUM / HIGH)",
+    "acknowledgeSelected": "चुने दा मनो",
+    "setStatus": "स्थिति सैट करो",
+    "openCase": "मामला खोलो",
+    "allDepartments": "सारे विभाग",
+    "department": "विभाग",
+    "casesCount": "मामले",
+    "selected": "चुने दा",
+    "loadError": "इनबॉक्स लोड नेईं होई सकेआ।",
+    "inboxZero": "इनबॉक्स खाली",
+    "inboxZeroSub": "तुंदी सूची च कोई खुल्लेआ मामला नेईं। बिल्कुल साफ।",
+    "overdue": "देरी",
+    "updating": "अपडेट होआ करदा…",
+    "clustersUpdated": "अपडेट",
+    "recompute": "समूह फिरी गिनो",
+    "clustersEmpty": "इस हफ्ते कोई प्रणालीगत समूह नेईं मिलेआ",
+    "clustersEmptySub": "जिसलै सरबंधत शकैतां वार्डें च समूहीकृत होङन, ओह इत्थें दिक्खी।",
+    "wardsLabel": "वार्ड",
+    "realtime": "रियल-टाइम",
+    "queueStatus": "कतार स्थिति",
+    "performance": "कारगुजारी",
+    "quality": "गुणवत्ता",
+    "awaitingAction": "कार्रवाई दी उडीक",
+    "currentlyWorking": "हून कम्म जारी",
+    "resolvedThisMonth": "इस म्हीने हल"
   },
   "admin": {
     "overview": "Overview",
@@ -219,6 +242,43 @@
     "targetLanguage": "Translate to",
     "translating": "Translating…",
     "translateError": "Couldn't translate. Try again.",
-    "viewing": "Viewing in {{lang}}"
+    "viewing": "Viewing in {{lang}}",
+    "action": "अनुवाद",
+    "original": "मूल",
+    "viewingIn": "दिक्खा करदे"
+  },
+  "severity": {
+    "LOW": "घट",
+    "MEDIUM": "दरमियाना",
+    "HIGH": "उच्च"
+  },
+  "case": {
+    "complaintDetails": "शकैत ब्यौरा",
+    "filedBy": "दर्ज कीता",
+    "reputation": "साख",
+    "coSigners": "सह-दस्तखती",
+    "upvotes": "अपवोट",
+    "filed": "दर्ज",
+    "evidence": "सबूत",
+    "timeline": "टाइमलाइन",
+    "similar": "मिलदे-जुलदे हल कीते मामले",
+    "noneYet": "हाली तकर कोई नेईं।",
+    "quality": "गुणवत्ता",
+    "readAloud": "उच्ची अवाज च पढ़ो",
+    "stopReading": "पढ़ना बंद करो"
+  },
+  "timeline": {
+    "CREATED": "शकैत दर्ज",
+    "ACKNOWLEDGED": "मनेआ",
+    "STATUS_CHANGED": "स्थिति बदली",
+    "COMMENT_ADDED": "टिप्पणी जोड़ी",
+    "EVIDENCE_ADDED": "सबूत जोड़ेआ",
+    "INFO_REQUESTED": "जानकारी मंगी",
+    "INFO_PROVIDED": "जानकारी दित्ती",
+    "RESOLVED": "हल",
+    "REOPENED": "फिरी खोलेआ",
+    "ESCALATED": "उप्पर भेजेआ",
+    "CLOSED": "बंद",
+    "REASSIGNED": "फिरी सौंपेआ"
   }
 }

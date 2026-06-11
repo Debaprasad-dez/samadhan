@@ -12,7 +12,8 @@
     "officers": "అధికారులు",
     "trends": "ధోరణులు",
     "policy": "విధానం",
-    "ward": "వార్డు"
+    "ward": "వార్డు",
+    "settings": "సెట్టింగ్‌లు"
   },
   "common": {
     "signIn": "సైన్ ఇన్ చేయండి",
@@ -32,7 +33,8 @@
     "map": "మ్యాప్",
     "search": "వెతకండి",
     "upvote": "మద్దతు",
-    "saving": "సేవ్ అవుతోంది…"
+    "saving": "సేవ్ అవుతోంది…",
+    "open": "తెరువు"
   },
   "time": {
     "morning": "శుభోదయం",
@@ -63,17 +65,17 @@
   },
   "status": {
     "FILED": "నమోదైంది",
-    "IN_PROGRESS": "ప్రగతిలో",
+    "IN_PROGRESS": "పురోగతిలో",
     "OFFICER_ASSIGNED": "అధికారి నియామకం",
-    "RESOLVED": "పరిష్కారమైంది",
+    "RESOLVED": "పరిష్కరించబడింది",
     "REJECTED": "తిరస్కరించబడింది",
     "PENDING": "పెండింగ్",
     "CLOSED": "మూసివేయబడింది",
     "onTrack": "సరైన దారిలో",
-    "OPEN": "Open",
-    "ACKNOWLEDGED": "Acknowledged",
-    "AWAITING_INFO": "Awaiting info",
-    "ESCALATED": "Escalated"
+    "OPEN": "తెరిచి",
+    "ACKNOWLEDGED": "గుర్తించబడింది",
+    "AWAITING_INFO": "సమాచారం కోసం వేచి",
+    "ESCALATED": "పైకి పంపబడింది"
   },
   "auth": {
     "welcome": "సమాధాన్‌కు స్వాగతం",
@@ -104,11 +106,13 @@
     "modeLight": "లేత",
     "modeDark": "ముదురు",
     "modeAuto": "ఆటో",
-    "saved": "సెట్టింగ్‌లు సేవ్ అయ్యాయి.",
+    "saved": "సెట్టింగ్‌లు సేవ్ చేయబడ్డాయి.",
     "save": "మార్పులను సేవ్ చేయండి",
     "theme": "Theme",
-    "applying": "Applying your changes…",
-    "applyError": "Couldn’t save. Please try again."
+    "applying": "మీ మార్పులు వర్తింపజేయబడుతున్నాయి…",
+    "applyError": "సేవ్ చేయడం సాధ్యపడలేదు. దయచేసి మళ్లీ ప్రయత్నించండి.",
+    "title": "సెట్టింగ్‌లు",
+    "languageSub": "మీ డాష్‌బోర్డ్ భాషను ఎంచుకోండి."
   },
   "leaveGuard": {
     "title": "మీ ఫిర్యాదు డ్రాఫ్ట్‌ను సేవ్ చేయాలా?",
@@ -150,11 +154,11 @@
     "retry": "Try again"
   },
   "officer": {
-    "inbox": "Inbox",
-    "inboxSub": "Prioritised queue",
-    "clusters": "Clusters",
-    "clustersSub": "Grouped by theme",
-    "metrics": "My metrics",
+    "inbox": "ఇన్‌బాక్స్",
+    "inboxSub": "ప్రాధాన్యత జాబితా",
+    "clusters": "సమూహాలు",
+    "clustersSub": "AI-సమూహ వ్యవస్థాగత సమస్యలు · గత 14 రోజులు",
+    "metrics": "నా గణాంకాలు",
     "metricsSub": "Real-time performance",
     "open": "Open",
     "inProgress": "In progress",
@@ -163,15 +167,34 @@
     "acknowledged": "Acknowledged",
     "awaitingInfo": "Awaiting info",
     "resolvedMonth": "Resolved (this month)",
-    "avgResolution": "Avg resolution",
-    "slaMet": "SLA met",
-    "avgQuality": "Avg quality",
-    "filterSeverity": "Filter severity (LOW / MEDIUM / HIGH)",
-    "acknowledgeSelected": "Acknowledge selected",
-    "setStatus": "Set status",
-    "openCase": "Open case",
-    "allDepartments": "All departments",
-    "department": "department"
+    "avgResolution": "సగటు పరిష్కారం",
+    "slaMet": "SLA పూర్తి",
+    "avgQuality": "సగటు నాణ్యత",
+    "filterSeverity": "తీవ్రతను వడపోయండి (LOW / MEDIUM / HIGH)",
+    "acknowledgeSelected": "ఎంచుకున్నవి గుర్తించండి",
+    "setStatus": "స్థితిని సెట్ చేయండి",
+    "openCase": "కేసు తెరువు",
+    "allDepartments": "అన్ని విభాగాలు",
+    "department": "విభాగం",
+    "casesCount": "కేసులు",
+    "selected": "ఎంచుకున్నవి",
+    "loadError": "ఇన్‌బాక్స్ లోడ్ కాలేదు.",
+    "inboxZero": "ఇన్‌బాక్స్ ఖాళీ",
+    "inboxZeroSub": "మీ జాబితాలో తెరిచిన కేసులు లేవు. చక్కగా స్పష్టం.",
+    "overdue": "ఆలస్యం",
+    "updating": "నవీకరిస్తోంది…",
+    "clustersUpdated": "నవీకరించబడింది",
+    "recompute": "సమూహాలను మళ్లీ లెక్కించండి",
+    "clustersEmpty": "ఈ వారం వ్యవస్థాగత సమూహాలు కనుగొనబడలేదు",
+    "clustersEmptySub": "సంబంధిత ఫిర్యాదులు వార్డులలో సమూహమైనప్పుడు ఇక్కడ కనిపిస్తాయి.",
+    "wardsLabel": "వార్డు",
+    "realtime": "రియల్-టైమ్",
+    "queueStatus": "క్యూ స్థితి",
+    "performance": "పనితీరు",
+    "quality": "నాణ్యత",
+    "awaitingAction": "చర్య కోసం వేచి",
+    "currentlyWorking": "ప్రస్తుతం పని చేస్తోంది",
+    "resolvedThisMonth": "ఈ నెల పరిష్కరించబడింది"
   },
   "admin": {
     "overview": "Overview",
@@ -219,6 +242,43 @@
     "targetLanguage": "Translate to",
     "translating": "Translating…",
     "translateError": "Couldn't translate. Try again.",
-    "viewing": "Viewing in {{lang}}"
+    "viewing": "Viewing in {{lang}}",
+    "action": "అనువాదం",
+    "original": "మూలం",
+    "viewingIn": "చూస్తున్నారు"
+  },
+  "severity": {
+    "LOW": "తక్కువ",
+    "MEDIUM": "మధ్యస్థం",
+    "HIGH": "అధికం"
+  },
+  "case": {
+    "complaintDetails": "ఫిర్యాదు వివరాలు",
+    "filedBy": "దాఖలు చేసినవారు",
+    "reputation": "ప్రతిష్ఠ",
+    "coSigners": "సహ-సంతకదారులు",
+    "upvotes": "అప్‌వోట్లు",
+    "filed": "దాఖలు",
+    "evidence": "ఆధారం",
+    "timeline": "కాలక్రమం",
+    "similar": "సారూప్య పరిష్కృత కేసులు",
+    "noneYet": "ఇంకా ఏదీ లేదు.",
+    "quality": "నాణ్యత",
+    "readAloud": "గట్టిగా చదవండి",
+    "stopReading": "చదవడం ఆపండి"
+  },
+  "timeline": {
+    "CREATED": "ఫిర్యాదు దాఖలు",
+    "ACKNOWLEDGED": "గుర్తించబడింది",
+    "STATUS_CHANGED": "స్థితి మారింది",
+    "COMMENT_ADDED": "వ్యాఖ్య జోడించబడింది",
+    "EVIDENCE_ADDED": "ఆధారం జోడించబడింది",
+    "INFO_REQUESTED": "సమాచారం అడిగారు",
+    "INFO_PROVIDED": "సమాచారం ఇచ్చారు",
+    "RESOLVED": "పరిష్కరించబడింది",
+    "REOPENED": "మళ్లీ తెరవబడింది",
+    "ESCALATED": "పైకి పంపబడింది",
+    "CLOSED": "మూసివేయబడింది",
+    "REASSIGNED": "మళ్లీ కేటాయించబడింది"
   }
 }

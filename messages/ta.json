@@ -12,7 +12,8 @@
     "officers": "அலுவலர்கள்",
     "trends": "போக்குகள்",
     "policy": "கொள்கை",
-    "ward": "வார்டு"
+    "ward": "வார்டு",
+    "settings": "அமைப்புகள்"
   },
   "common": {
     "signIn": "உள்நுழைக",
@@ -32,7 +33,8 @@
     "map": "வரைபடம்",
     "search": "தேடு",
     "upvote": "ஆதரவு",
-    "saving": "சேமிக்கிறது…"
+    "saving": "சேமிக்கிறது…",
+    "open": "திற"
   },
   "time": {
     "morning": "காலை வணக்கம்",
@@ -63,17 +65,17 @@
   },
   "status": {
     "FILED": "பதிவு",
-    "IN_PROGRESS": "செயலில்",
+    "IN_PROGRESS": "நடைபெறுகிறது",
     "OFFICER_ASSIGNED": "அலுவலர் நியமனம்",
     "RESOLVED": "தீர்க்கப்பட்டது",
     "REJECTED": "நிராகரிப்பு",
     "PENDING": "நிலுவையில்",
     "CLOSED": "மூடப்பட்டது",
     "onTrack": "சரியான பாதையில்",
-    "OPEN": "Open",
-    "ACKNOWLEDGED": "Acknowledged",
-    "AWAITING_INFO": "Awaiting info",
-    "ESCALATED": "Escalated"
+    "OPEN": "திறந்தது",
+    "ACKNOWLEDGED": "ஒப்புக்கொள்ளப்பட்டது",
+    "AWAITING_INFO": "தகவலுக்காக காத்திருக்கிறது",
+    "ESCALATED": "மேலிடம் அனுப்பப்பட்டது"
   },
   "auth": {
     "welcome": "சமாதானுக்கு வரவேற்கிறோம்",
@@ -107,8 +109,10 @@
     "saved": "அமைப்புகள் சேமிக்கப்பட்டன.",
     "save": "மாற்றங்களைச் சேமி",
     "theme": "Theme",
-    "applying": "Applying your changes…",
-    "applyError": "Couldn’t save. Please try again."
+    "applying": "உங்கள் மாற்றங்கள் செயல்படுத்தப்படுகின்றன…",
+    "applyError": "சேமிக்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.",
+    "title": "அமைப்புகள்",
+    "languageSub": "உங்கள் டாஷ்போர்டு மொழியைத் தேர்ந்தெடுக்கவும்."
   },
   "leaveGuard": {
     "title": "உங்கள் புகார் வரைவைச் சேமிக்கவா?",
@@ -150,11 +154,11 @@
     "retry": "Try again"
   },
   "officer": {
-    "inbox": "Inbox",
-    "inboxSub": "Prioritised queue",
-    "clusters": "Clusters",
-    "clustersSub": "Grouped by theme",
-    "metrics": "My metrics",
+    "inbox": "இன்பாக்ஸ்",
+    "inboxSub": "முன்னுரிமை வரிசை",
+    "clusters": "கொத்துகள்",
+    "clustersSub": "AI-தொகுக்கப்பட்ட அமைப்புசார் சிக்கல்கள் · கடந்த 14 நாட்கள்",
+    "metrics": "எனது அளவீடுகள்",
     "metricsSub": "Real-time performance",
     "open": "Open",
     "inProgress": "In progress",
@@ -163,15 +167,34 @@
     "acknowledged": "Acknowledged",
     "awaitingInfo": "Awaiting info",
     "resolvedMonth": "Resolved (this month)",
-    "avgResolution": "Avg resolution",
-    "slaMet": "SLA met",
-    "avgQuality": "Avg quality",
-    "filterSeverity": "Filter severity (LOW / MEDIUM / HIGH)",
-    "acknowledgeSelected": "Acknowledge selected",
-    "setStatus": "Set status",
-    "openCase": "Open case",
-    "allDepartments": "All departments",
-    "department": "department"
+    "avgResolution": "சராசரி தீர்வு",
+    "slaMet": "SLA பூர்த்தி",
+    "avgQuality": "சராசரி தரம்",
+    "filterSeverity": "தீவிரத்தை வடிகட்டு (LOW / MEDIUM / HIGH)",
+    "acknowledgeSelected": "தேர்ந்தெடுத்ததை ஒப்புக்கொள்",
+    "setStatus": "நிலையை அமை",
+    "openCase": "வழக்கைத் திற",
+    "allDepartments": "அனைத்து துறைகள்",
+    "department": "துறை",
+    "casesCount": "வழக்குகள்",
+    "selected": "தேர்ந்தெடுக்கப்பட்டது",
+    "loadError": "இன்பாக்ஸை ஏற்ற முடியவில்லை.",
+    "inboxZero": "இன்பாக்ஸ் காலி",
+    "inboxZeroSub": "உங்கள் வரிசையில் திறந்த வழக்குகள் இல்லை. அழகாக தெளிவு.",
+    "overdue": "தாமதம்",
+    "updating": "புதுப்பிக்கிறது…",
+    "clustersUpdated": "புதுப்பிக்கப்பட்டது",
+    "recompute": "கொத்துகளை மீண்டும் கணி",
+    "clustersEmpty": "இந்த வாரம் அமைப்புசார் கொத்துகள் எதுவும் இல்லை",
+    "clustersEmptySub": "தொடர்புடைய புகார்கள் வார்டுகளில் தொகுக்கப்படும்போது இங்கே தோன்றும்.",
+    "wardsLabel": "வார்டு",
+    "realtime": "நிகழ்நேரம்",
+    "queueStatus": "வரிசை நிலை",
+    "performance": "செயல்திறன்",
+    "quality": "தரம்",
+    "awaitingAction": "நடவடிக்கைக்காக காத்திருக்கிறது",
+    "currentlyWorking": "தற்போது வேலையில்",
+    "resolvedThisMonth": "இந்த மாதம் தீர்க்கப்பட்டது"
   },
   "admin": {
     "overview": "Overview",
@@ -219,6 +242,43 @@
     "targetLanguage": "Translate to",
     "translating": "Translating…",
     "translateError": "Couldn't translate. Try again.",
-    "viewing": "Viewing in {{lang}}"
+    "viewing": "Viewing in {{lang}}",
+    "action": "மொழிபெயர்",
+    "original": "மூலம்",
+    "viewingIn": "பார்க்கிறீர்கள்"
+  },
+  "severity": {
+    "LOW": "குறைவு",
+    "MEDIUM": "நடுத்தரம்",
+    "HIGH": "உயர்வு"
+  },
+  "case": {
+    "complaintDetails": "புகார் விவரங்கள்",
+    "filedBy": "தாக்கல் செய்தவர்",
+    "reputation": "நற்பெயர்",
+    "coSigners": "இணை-கையொப்பமிட்டோர்",
+    "upvotes": "ஆதரவு வாக்குகள்",
+    "filed": "தாக்கல்",
+    "evidence": "சான்று",
+    "timeline": "காலவரிசை",
+    "similar": "ஒத்த தீர்க்கப்பட்ட வழக்குகள்",
+    "noneYet": "இன்னும் எதுவும் இல்லை.",
+    "quality": "தரம்",
+    "readAloud": "உரக்கப் படிக்க",
+    "stopReading": "படிப்பதை நிறுத்து"
+  },
+  "timeline": {
+    "CREATED": "புகார் தாக்கல்",
+    "ACKNOWLEDGED": "ஒப்புக்கொள்ளப்பட்டது",
+    "STATUS_CHANGED": "நிலை மாற்றம்",
+    "COMMENT_ADDED": "கருத்து சேர்க்கப்பட்டது",
+    "EVIDENCE_ADDED": "சான்று சேர்க்கப்பட்டது",
+    "INFO_REQUESTED": "தகவல் கோரப்பட்டது",
+    "INFO_PROVIDED": "தகவல் வழங்கப்பட்டது",
+    "RESOLVED": "தீர்க்கப்பட்டது",
+    "REOPENED": "மீண்டும் திறக்கப்பட்டது",
+    "ESCALATED": "மேலிடம் அனுப்பப்பட்டது",
+    "CLOSED": "மூடப்பட்டது",
+    "REASSIGNED": "மீண்டும் ஒதுக்கப்பட்டது"
   }
 }

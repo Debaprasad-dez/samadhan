@@ -1,3 +1,5 @@
+"use client";
+
 import {
   FilePlus2,
   Eye,
@@ -14,6 +16,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { formatRelative, formatIST } from "@/lib/utils";
+import { useT } from "@/components/providers/locale-provider";
 import type { EventType } from "@/types";
 
 export interface TimelineEvent {
@@ -39,22 +42,8 @@ const ICON: Record<EventType, LucideIcon> = {
   REASSIGNED: Users,
 };
 
-const LABEL: Record<EventType, string> = {
-  CREATED: "Complaint filed",
-  ACKNOWLEDGED: "Acknowledged",
-  STATUS_CHANGED: "Status changed",
-  COMMENT_ADDED: "Comment added",
-  EVIDENCE_ADDED: "Evidence added",
-  INFO_REQUESTED: "Information requested",
-  INFO_PROVIDED: "Information provided",
-  RESOLVED: "Resolved",
-  REOPENED: "Reopened",
-  ESCALATED: "Escalated",
-  CLOSED: "Closed",
-  REASSIGNED: "Reassigned",
-};
-
 export function CaseTimeline({ events }: { events: TimelineEvent[] }) {
+  const t = useT();
   return (
     <ol className="relative">
       {events.map((e, i) => {
@@ -70,7 +59,9 @@ export function CaseTimeline({ events }: { events: TimelineEvent[] }) {
             </span>
             <div className="min-w-0 pt-1">
               <p className="text-sm font-medium">
-                {LABEL[e.type as EventType] ?? e.type}
+                {ICON[e.type as EventType]
+                  ? t(`timeline.${e.type}`)
+                  : e.type}
               </p>
               {e.message && (
                 <p className="text-muted-foreground text-sm">{e.message}</p>

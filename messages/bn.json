@@ -12,7 +12,8 @@
     "officers": "কর্মকর্তা",
     "trends": "প্রবণতা",
     "policy": "নীতি",
-    "ward": "ওয়ার্ড"
+    "ward": "ওয়ার্ড",
+    "settings": "সেটিংস"
   },
   "common": {
     "signIn": "সাইন ইন করুন",
@@ -32,7 +33,8 @@
     "map": "মানচিত্র",
     "search": "অনুসন্ধান",
     "upvote": "সমর্থন",
-    "saving": "সংরক্ষণ হচ্ছে…"
+    "saving": "সংরক্ষণ হচ্ছে…",
+    "open": "খুলুন"
   },
   "time": {
     "morning": "শুভ সকাল",
@@ -70,10 +72,10 @@
     "PENDING": "অপেক্ষমাণ",
     "CLOSED": "বন্ধ",
     "onTrack": "সঠিক পথে",
-    "OPEN": "Open",
-    "ACKNOWLEDGED": "Acknowledged",
-    "AWAITING_INFO": "Awaiting info",
-    "ESCALATED": "Escalated"
+    "OPEN": "খোলা",
+    "ACKNOWLEDGED": "স্বীকৃত",
+    "AWAITING_INFO": "তথ্যের অপেক্ষায়",
+    "ESCALATED": "ঊর্ধ্বমুখী"
   },
   "auth": {
     "welcome": "সমাধানে স্বাগতম",
@@ -107,8 +109,10 @@
     "saved": "সেটিংস সংরক্ষিত হয়েছে।",
     "save": "পরিবর্তন সংরক্ষণ করুন",
     "theme": "Theme",
-    "applying": "Applying your changes…",
-    "applyError": "Couldn’t save. Please try again."
+    "applying": "আপনার পরিবর্তন প্রয়োগ করা হচ্ছে…",
+    "applyError": "সংরক্ষণ করা যায়নি। আবার চেষ্টা করুন।",
+    "title": "সেটিংস",
+    "languageSub": "আপনার ড্যাশবোর্ডের ভাষা নির্বাচন করুন।"
   },
   "leaveGuard": {
     "title": "আপনার অভিযোগের খসড়া সংরক্ষণ করবেন?",
@@ -150,11 +154,11 @@
     "retry": "Try again"
   },
   "officer": {
-    "inbox": "Inbox",
-    "inboxSub": "Prioritised queue",
-    "clusters": "Clusters",
-    "clustersSub": "Grouped by theme",
-    "metrics": "My metrics",
+    "inbox": "ইনবক্স",
+    "inboxSub": "অগ্রাধিকার তালিকা",
+    "clusters": "গুচ্ছ",
+    "clustersSub": "AI-গোষ্ঠীবদ্ধ পদ্ধতিগত সমস্যা · গত ১৪ দিন",
+    "metrics": "আমার পরিসংখ্যান",
     "metricsSub": "Real-time performance",
     "open": "Open",
     "inProgress": "In progress",
@@ -163,15 +167,34 @@
     "acknowledged": "Acknowledged",
     "awaitingInfo": "Awaiting info",
     "resolvedMonth": "Resolved (this month)",
-    "avgResolution": "Avg resolution",
-    "slaMet": "SLA met",
-    "avgQuality": "Avg quality",
-    "filterSeverity": "Filter severity (LOW / MEDIUM / HIGH)",
-    "acknowledgeSelected": "Acknowledge selected",
-    "setStatus": "Set status",
-    "openCase": "Open case",
-    "allDepartments": "All departments",
-    "department": "department"
+    "avgResolution": "গড় সমাধান",
+    "slaMet": "SLA পূর্ণ",
+    "avgQuality": "গড় গুণমান",
+    "filterSeverity": "তীব্রতা ফিল্টার করুন (LOW / MEDIUM / HIGH)",
+    "acknowledgeSelected": "নির্বাচিত স্বীকার করুন",
+    "setStatus": "স্ট্যাটাস সেট করুন",
+    "openCase": "মামলা খুলুন",
+    "allDepartments": "সব বিভাগ",
+    "department": "বিভাগ",
+    "casesCount": "মামলা",
+    "selected": "নির্বাচিত",
+    "loadError": "ইনবক্স লোড করা যায়নি।",
+    "inboxZero": "ইনবক্স খালি",
+    "inboxZeroSub": "আপনার তালিকায় কোনো খোলা মামলা নেই। চমৎকার পরিষ্কার।",
+    "overdue": "বিলম্বিত",
+    "updating": "আপডেট হচ্ছে…",
+    "clustersUpdated": "আপডেট",
+    "recompute": "গুচ্ছ পুনঃগণনা করুন",
+    "clustersEmpty": "এই সপ্তাহে কোনো পদ্ধতিগত গুচ্ছ পাওয়া যায়নি",
+    "clustersEmptySub": "সম্পর্কিত অভিযোগ ওয়ার্ড জুড়ে গোষ্ঠীবদ্ধ হলে এখানে দেখা যাবে।",
+    "wardsLabel": "ওয়ার্ড",
+    "realtime": "রিয়েল-টাইম",
+    "queueStatus": "সারির অবস্থা",
+    "performance": "কর্মক্ষমতা",
+    "quality": "গুণমান",
+    "awaitingAction": "পদক্ষেপের অপেক্ষায়",
+    "currentlyWorking": "বর্তমানে কাজ চলছে",
+    "resolvedThisMonth": "এই মাসে সমাধান"
   },
   "admin": {
     "overview": "Overview",
@@ -219,6 +242,43 @@
     "targetLanguage": "Translate to",
     "translating": "Translating…",
     "translateError": "Couldn't translate. Try again.",
-    "viewing": "Viewing in {{lang}}"
+    "viewing": "Viewing in {{lang}}",
+    "action": "অনুবাদ",
+    "original": "মূল",
+    "viewingIn": "দেখছেন"
+  },
+  "severity": {
+    "LOW": "কম",
+    "MEDIUM": "মাঝারি",
+    "HIGH": "উচ্চ"
+  },
+  "case": {
+    "complaintDetails": "অভিযোগের বিবরণ",
+    "filedBy": "দাখিল করেছেন",
+    "reputation": "সুনাম",
+    "coSigners": "সহ-স্বাক্ষরকারী",
+    "upvotes": "আপভোট",
+    "filed": "দাখিল",
+    "evidence": "প্রমাণ",
+    "timeline": "সময়রেখা",
+    "similar": "অনুরূপ সমাধান হওয়া মামলা",
+    "noneYet": "এখনো কিছু নেই।",
+    "quality": "গুণমান",
+    "readAloud": "জোরে পড়ুন",
+    "stopReading": "পড়া বন্ধ করুন"
+  },
+  "timeline": {
+    "CREATED": "অভিযোগ দাখিল",
+    "ACKNOWLEDGED": "স্বীকৃত",
+    "STATUS_CHANGED": "স্ট্যাটাস পরিবর্তিত",
+    "COMMENT_ADDED": "মন্তব্য যোগ",
+    "EVIDENCE_ADDED": "প্রমাণ যোগ",
+    "INFO_REQUESTED": "তথ্য চাওয়া হয়েছে",
+    "INFO_PROVIDED": "তথ্য দেওয়া হয়েছে",
+    "RESOLVED": "সমাধান হয়েছে",
+    "REOPENED": "পুনরায় খোলা",
+    "ESCALATED": "ঊর্ধ্বমুখী",
+    "CLOSED": "বন্ধ",
+    "REASSIGNED": "পুনরায় বরাদ্দ"
   }
 }

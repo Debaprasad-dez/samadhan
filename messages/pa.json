@@ -12,7 +12,8 @@
     "officers": "ਅਧਿਕਾਰੀ",
     "trends": "ਰੁਝਾਨ",
     "policy": "ਨੀਤੀ",
-    "ward": "ਵਾਰਡ"
+    "ward": "ਵਾਰਡ",
+    "settings": "ਸੈਟਿੰਗਾਂ"
   },
   "common": {
     "signIn": "ਸਾਈਨ ਇਨ ਕਰੋ",
@@ -32,7 +33,8 @@
     "map": "ਨਕਸ਼ਾ",
     "search": "ਖੋਜੋ",
     "upvote": "ਸਮਰਥਨ",
-    "saving": "ਸੰਭਾਲਿਆ ਜਾ ਰਿਹਾ ਹੈ…"
+    "saving": "ਸੰਭਾਲਿਆ ਜਾ ਰਿਹਾ ਹੈ…",
+    "open": "ਖੋਲ੍ਹੋ"
   },
   "time": {
     "morning": "ਸ਼ੁਭ ਸਵੇਰ",
@@ -65,15 +67,15 @@
     "FILED": "ਦਰਜ",
     "IN_PROGRESS": "ਜਾਰੀ",
     "OFFICER_ASSIGNED": "ਅਧਿਕਾਰੀ ਨਿਯੁਕਤ",
-    "RESOLVED": "ਹੱਲ ਹੋ ਗਿਆ",
+    "RESOLVED": "ਹੱਲ ਹੋਇਆ",
     "REJECTED": "ਰੱਦ",
     "PENDING": "ਬਕਾਇਆ",
     "CLOSED": "ਬੰਦ",
     "onTrack": "ਸਹੀ ਰਾਹ 'ਤੇ",
-    "OPEN": "Open",
-    "ACKNOWLEDGED": "Acknowledged",
-    "AWAITING_INFO": "Awaiting info",
-    "ESCALATED": "Escalated"
+    "OPEN": "ਖੁੱਲ੍ਹਾ",
+    "ACKNOWLEDGED": "ਸਵੀਕਾਰਿਆ",
+    "AWAITING_INFO": "ਜਾਣਕਾਰੀ ਦੀ ਉਡੀਕ",
+    "ESCALATED": "ਉੱਪਰ ਭੇਜਿਆ"
   },
   "auth": {
     "welcome": "ਸਮਾਧਾਨ ਵਿੱਚ ਜੀ ਆਇਆਂ ਨੂੰ",
@@ -104,11 +106,13 @@
     "modeLight": "ਹਲਕਾ",
     "modeDark": "ਗੂੜ੍ਹਾ",
     "modeAuto": "ਆਟੋ",
-    "saved": "ਸੈਟਿੰਗਾਂ ਸੰਭਾਲੀਆਂ ਗਈਆਂ।",
+    "saved": "ਸੈਟਿੰਗਾਂ ਸੇਵ ਹੋ ਗਈਆਂ।",
     "save": "ਤਬਦੀਲੀਆਂ ਸੰਭਾਲੋ",
-    "applying": "ਤੁਹਾਡੀਆਂ ਤਬਦੀਲੀਆਂ ਲਾਗੂ ਹੋ ਰਹੀਆਂ ਹਨ…",
-    "applyError": "ਸੰਭਾਲਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ। ਮੁੜ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
-    "theme": "Theme"
+    "applying": "ਤੁਹਾਡੀਆਂ ਤਬਦੀਲੀਆਂ ਲਾਗੂ ਕੀਤੀਆਂ ਜਾ ਰਹੀਆਂ ਹਨ…",
+    "applyError": "ਸੇਵ ਨਹੀਂ ਹੋ ਸਕਿਆ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
+    "theme": "Theme",
+    "title": "ਸੈਟਿੰਗਾਂ",
+    "languageSub": "ਆਪਣੇ ਡੈਸ਼ਬੋਰਡ ਦੀ ਭਾਸ਼ਾ ਚੁਣੋ।"
   },
   "leaveGuard": {
     "title": "ਆਪਣੀ ਸ਼ਿਕਾਇਤ ਦਾ ਖਰੜਾ ਸੰਭਾਲੋ?",
@@ -150,11 +154,11 @@
     "retry": "Try again"
   },
   "officer": {
-    "inbox": "Inbox",
-    "inboxSub": "Prioritised queue",
-    "clusters": "Clusters",
-    "clustersSub": "Grouped by theme",
-    "metrics": "My metrics",
+    "inbox": "ਇਨਬਾਕਸ",
+    "inboxSub": "ਤਰਜੀਹ ਸੂਚੀ",
+    "clusters": "ਕਲੱਸਟਰ",
+    "clustersSub": "AI-ਸਮੂਹਬੱਧ ਪ੍ਰਣਾਲੀਗਤ ਮੁੱਦੇ · ਪਿਛਲੇ 14 ਦਿਨ",
+    "metrics": "ਮੇਰੇ ਅੰਕੜੇ",
     "metricsSub": "Real-time performance",
     "open": "Open",
     "inProgress": "In progress",
@@ -163,15 +167,34 @@
     "acknowledged": "Acknowledged",
     "awaitingInfo": "Awaiting info",
     "resolvedMonth": "Resolved (this month)",
-    "avgResolution": "Avg resolution",
-    "slaMet": "SLA met",
-    "avgQuality": "Avg quality",
-    "filterSeverity": "Filter severity (LOW / MEDIUM / HIGH)",
-    "acknowledgeSelected": "Acknowledge selected",
-    "setStatus": "Set status",
-    "openCase": "Open case",
-    "allDepartments": "All departments",
-    "department": "department"
+    "avgResolution": "ਔਸਤ ਹੱਲ",
+    "slaMet": "SLA ਪੂਰਾ",
+    "avgQuality": "ਔਸਤ ਗੁਣਵੱਤਾ",
+    "filterSeverity": "ਗੰਭੀਰਤਾ ਫਿਲਟਰ ਕਰੋ (LOW / MEDIUM / HIGH)",
+    "acknowledgeSelected": "ਚੁਣੇ ਸਵੀਕਾਰ ਕਰੋ",
+    "setStatus": "ਸਥਿਤੀ ਸੈੱਟ ਕਰੋ",
+    "openCase": "ਕੇਸ ਖੋਲ੍ਹੋ",
+    "allDepartments": "ਸਾਰੇ ਵਿਭਾਗ",
+    "department": "ਵਿਭਾਗ",
+    "casesCount": "ਕੇਸ",
+    "selected": "ਚੁਣੇ",
+    "loadError": "ਇਨਬਾਕਸ ਲੋਡ ਨਹੀਂ ਹੋ ਸਕਿਆ।",
+    "inboxZero": "ਇਨਬਾਕਸ ਖਾਲੀ",
+    "inboxZeroSub": "ਤੁਹਾਡੀ ਸੂਚੀ ਵਿੱਚ ਕੋਈ ਖੁੱਲ੍ਹਾ ਕੇਸ ਨਹੀਂ। ਬਿਲਕੁਲ ਸਾਫ਼।",
+    "overdue": "ਦੇਰੀ",
+    "updating": "ਅੱਪਡੇਟ ਹੋ ਰਿਹਾ…",
+    "clustersUpdated": "ਅੱਪਡੇਟ",
+    "recompute": "ਕਲੱਸਟਰ ਮੁੜ ਗਿਣੋ",
+    "clustersEmpty": "ਇਸ ਹਫ਼ਤੇ ਕੋਈ ਪ੍ਰਣਾਲੀਗਤ ਕਲੱਸਟਰ ਨਹੀਂ ਮਿਲਿਆ",
+    "clustersEmptySub": "ਜਦੋਂ ਸੰਬੰਧਿਤ ਸ਼ਿਕਾਇਤਾਂ ਵਾਰਡਾਂ ਵਿੱਚ ਸਮੂਹਬੱਧ ਹੋਣਗੀਆਂ, ਇੱਥੇ ਦਿਖਣਗੀਆਂ।",
+    "wardsLabel": "ਵਾਰਡ",
+    "realtime": "ਰੀਅਲ-ਟਾਈਮ",
+    "queueStatus": "ਕਤਾਰ ਸਥਿਤੀ",
+    "performance": "ਕਾਰਗੁਜ਼ਾਰੀ",
+    "quality": "ਗੁਣਵੱਤਾ",
+    "awaitingAction": "ਕਾਰਵਾਈ ਦੀ ਉਡੀਕ",
+    "currentlyWorking": "ਇਸ ਵੇਲੇ ਕੰਮ ਜਾਰੀ",
+    "resolvedThisMonth": "ਇਸ ਮਹੀਨੇ ਹੱਲ"
   },
   "admin": {
     "overview": "Overview",
@@ -219,6 +242,43 @@
     "targetLanguage": "Translate to",
     "translating": "Translating…",
     "translateError": "Couldn't translate. Try again.",
-    "viewing": "Viewing in {{lang}}"
+    "viewing": "Viewing in {{lang}}",
+    "action": "ਅਨੁਵਾਦ",
+    "original": "ਮੂਲ",
+    "viewingIn": "ਦੇਖ ਰਹੇ ਹੋ"
+  },
+  "severity": {
+    "LOW": "ਘੱਟ",
+    "MEDIUM": "ਦਰਮਿਆਨਾ",
+    "HIGH": "ਉੱਚ"
+  },
+  "case": {
+    "complaintDetails": "ਸ਼ਿਕਾਇਤ ਵੇਰਵੇ",
+    "filedBy": "ਦਰਜ ਕੀਤੀ",
+    "reputation": "ਸਾਖ",
+    "coSigners": "ਸਹਿ-ਦਸਤਖਤੀ",
+    "upvotes": "ਅਪਵੋਟ",
+    "filed": "ਦਰਜ",
+    "evidence": "ਸਬੂਤ",
+    "timeline": "ਟਾਈਮਲਾਈਨ",
+    "similar": "ਮਿਲਦੇ-ਜੁਲਦੇ ਹੱਲ ਕੀਤੇ ਕੇਸ",
+    "noneYet": "ਅਜੇ ਕੋਈ ਨਹੀਂ।",
+    "quality": "ਗੁਣਵੱਤਾ",
+    "readAloud": "ਉੱਚੀ ਆਵਾਜ਼ ਵਿੱਚ ਪੜ੍ਹੋ",
+    "stopReading": "ਪੜ੍ਹਨਾ ਬੰਦ ਕਰੋ"
+  },
+  "timeline": {
+    "CREATED": "ਸ਼ਿਕਾਇਤ ਦਰਜ",
+    "ACKNOWLEDGED": "ਸਵੀਕਾਰੀ",
+    "STATUS_CHANGED": "ਸਥਿਤੀ ਬਦਲੀ",
+    "COMMENT_ADDED": "ਟਿੱਪਣੀ ਜੋੜੀ",
+    "EVIDENCE_ADDED": "ਸਬੂਤ ਜੋੜਿਆ",
+    "INFO_REQUESTED": "ਜਾਣਕਾਰੀ ਮੰਗੀ",
+    "INFO_PROVIDED": "ਜਾਣਕਾਰੀ ਦਿੱਤੀ",
+    "RESOLVED": "ਹੱਲ",
+    "REOPENED": "ਮੁੜ ਖੋਲ੍ਹਿਆ",
+    "ESCALATED": "ਉੱਪਰ ਭੇਜਿਆ",
+    "CLOSED": "ਬੰਦ",
+    "REASSIGNED": "ਮੁੜ ਸੌਂਪਿਆ"
   }
 }

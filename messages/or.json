@@ -12,7 +12,8 @@
     "officers": "ଅଧିକାରୀ",
     "trends": "ଧାରା",
     "policy": "ନୀତି",
-    "ward": "ୱାର୍ଡ"
+    "ward": "ୱାର୍ଡ",
+    "settings": "ସେଟିଂସ୍"
   },
   "common": {
     "signIn": "ସାଇନ୍ ଇନ୍ କରନ୍ତୁ",
@@ -32,7 +33,8 @@
     "map": "ମାନଚିତ୍ର",
     "search": "ଖୋଜନ୍ତୁ",
     "upvote": "ସମର୍ଥନ",
-    "saving": "ସଞ୍ଚୟ ହେଉଛି…"
+    "saving": "ସଞ୍ଚୟ ହେଉଛି…",
+    "open": "ଖୋଲନ୍ତୁ"
   },
   "time": {
     "morning": "ଶୁଭ ସକାଳ",
@@ -70,10 +72,10 @@
     "PENDING": "ବିଚାରାଧୀନ",
     "CLOSED": "ବନ୍ଦ",
     "onTrack": "ଠିକ୍ ବାଟରେ",
-    "OPEN": "Open",
-    "ACKNOWLEDGED": "Acknowledged",
-    "AWAITING_INFO": "Awaiting info",
-    "ESCALATED": "Escalated"
+    "OPEN": "ଖୋଲା",
+    "ACKNOWLEDGED": "ସ୍ୱୀକୃତ",
+    "AWAITING_INFO": "ସୂଚନା ଅପେକ୍ଷାରେ",
+    "ESCALATED": "ଉପରକୁ ପଠାଗଲା"
   },
   "auth": {
     "welcome": "ସମାଧାନକୁ ସ୍ୱାଗତ",
@@ -104,11 +106,13 @@
     "modeLight": "ହାଲୁକା",
     "modeDark": "ଗାଢ଼",
     "modeAuto": "ସ୍ୱୟଂ",
-    "saved": "ସେଟିଂସ୍ ସଞ୍ଚୟ ହେଲା।",
+    "saved": "ସେଟିଂସ୍ ସେଭ୍ ହେଲା।",
     "save": "ପରିବର୍ତ୍ତନ ସଞ୍ଚୟ କରନ୍ତୁ",
-    "applying": "ଆପଣଙ୍କ ପରିବର୍ତ୍ତନ ଲାଗୁ ହେଉଛି…",
-    "applyError": "ସଞ୍ଚୟ ହୋଇପାରିଲା ନାହିଁ। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।",
-    "theme": "Theme"
+    "applying": "ଆପଣଙ୍କ ପରିବର୍ତ୍ତନ ଲାଗୁ କରାଯାଉଛି…",
+    "applyError": "ସେଭ୍ କରାଯାଇପାରିଲା ନାହିଁ। ଦୟାକରି ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।",
+    "theme": "Theme",
+    "title": "ସେଟିଂସ୍",
+    "languageSub": "ଆପଣଙ୍କ ଡ୍ୟାସବୋର୍ଡ ଭାଷା ବାଛନ୍ତୁ।"
   },
   "leaveGuard": {
     "title": "ଆପଣଙ୍କ ଅଭିଯୋଗର ଡ୍ରାଫ୍ଟ ସଞ୍ଚୟ କରିବେ?",
@@ -150,11 +154,11 @@
     "retry": "Try again"
   },
   "officer": {
-    "inbox": "Inbox",
-    "inboxSub": "Prioritised queue",
-    "clusters": "Clusters",
-    "clustersSub": "Grouped by theme",
-    "metrics": "My metrics",
+    "inbox": "ଇନବକ୍ସ",
+    "inboxSub": "ପ୍ରାଥମିକତା ତାଲିକା",
+    "clusters": "ଗୁଚ୍ଛ",
+    "clustersSub": "AI-ଗୋଷ୍ଠୀଭୁକ୍ତ ବ୍ୟବସ୍ଥାଗତ ସମସ୍ୟା · ଗତ 14 ଦିନ",
+    "metrics": "ମୋ ପରିସଂଖ୍ୟାନ",
     "metricsSub": "Real-time performance",
     "open": "Open",
     "inProgress": "In progress",
@@ -163,15 +167,34 @@
     "acknowledged": "Acknowledged",
     "awaitingInfo": "Awaiting info",
     "resolvedMonth": "Resolved (this month)",
-    "avgResolution": "Avg resolution",
-    "slaMet": "SLA met",
-    "avgQuality": "Avg quality",
-    "filterSeverity": "Filter severity (LOW / MEDIUM / HIGH)",
-    "acknowledgeSelected": "Acknowledge selected",
-    "setStatus": "Set status",
-    "openCase": "Open case",
-    "allDepartments": "All departments",
-    "department": "department"
+    "avgResolution": "ହାରାହାରି ସମାଧାନ",
+    "slaMet": "SLA ପୂର୍ଣ୍ଣ",
+    "avgQuality": "ହାରାହାରି ଗୁଣବତ୍ତା",
+    "filterSeverity": "ତୀବ୍ରତା ଫିଲ୍ଟର କରନ୍ତୁ (LOW / MEDIUM / HIGH)",
+    "acknowledgeSelected": "ବଚ୍ଛିତ ସ୍ୱୀକାର କରନ୍ତୁ",
+    "setStatus": "ସ୍ଥିତି ସେଟ କରନ୍ତୁ",
+    "openCase": "ମାମଲା ଖୋଲନ୍ତୁ",
+    "allDepartments": "ସମସ୍ତ ବିଭାଗ",
+    "department": "ବିଭାଗ",
+    "casesCount": "ମାମଲା",
+    "selected": "ବଚ୍ଛିତ",
+    "loadError": "ଇନବକ୍ସ ଲୋଡ୍ ହୋଇପାରିଲା ନାହିଁ।",
+    "inboxZero": "ଇନବକ୍ସ ଖାଲି",
+    "inboxZeroSub": "ଆପଣଙ୍କ ତାଲିକାରେ କୌଣସି ଖୋଲା ମାମଲା ନାହିଁ। ସୁନ୍ଦର ଭାବେ ସ୍ପଷ୍ଟ।",
+    "overdue": "ବିଳମ୍ବିତ",
+    "updating": "ଅପଡେଟ ହେଉଛି…",
+    "clustersUpdated": "ଅପଡେଟ",
+    "recompute": "ଗୁଚ୍ଛ ପୁନଃଗଣନା କରନ୍ତୁ",
+    "clustersEmpty": "ଏ ସପ୍ତାହ କୌଣସି ବ୍ୟବସ୍ଥାଗତ ଗୁଚ୍ଛ ମିଳିଲା ନାହିଁ",
+    "clustersEmptySub": "ସମ୍ବନ୍ଧିତ ଅଭିଯୋଗ ୱାର୍ଡରେ ଗୋଷ୍ଠୀଭୁକ୍ତ ହେଲେ ଏଠାରେ ଦେଖାଯିବ।",
+    "wardsLabel": "ୱାର୍ଡ",
+    "realtime": "ରିଅଲ-ଟାଇମ",
+    "queueStatus": "ଧାଡ଼ି ସ୍ଥିତି",
+    "performance": "କାର୍ଯ୍ୟଦକ୍ଷତା",
+    "quality": "ଗୁଣବତ୍ତା",
+    "awaitingAction": "କାର୍ଯ୍ୟ ଅପେକ୍ଷାରେ",
+    "currentlyWorking": "ବର୍ତ୍ତମାନ କାର୍ଯ୍ୟରତ",
+    "resolvedThisMonth": "ଏ ମାସ ସମାଧାନ"
   },
   "admin": {
     "overview": "Overview",
@@ -219,6 +242,43 @@
     "targetLanguage": "Translate to",
     "translating": "Translating…",
     "translateError": "Couldn't translate. Try again.",
-    "viewing": "Viewing in {{lang}}"
+    "viewing": "Viewing in {{lang}}",
+    "action": "ଅନୁବାଦ",
+    "original": "ମୂଳ",
+    "viewingIn": "ଦେଖୁଛନ୍ତି"
+  },
+  "severity": {
+    "LOW": "କମ୍",
+    "MEDIUM": "ମଧ୍ୟମ",
+    "HIGH": "ଅଧିକ"
+  },
+  "case": {
+    "complaintDetails": "ଅଭିଯୋଗ ବିବରଣୀ",
+    "filedBy": "ଦାଖଲ କଲେ",
+    "reputation": "ସୁନାମ",
+    "coSigners": "ସହ-ସ୍ୱାକ୍ଷରକାରୀ",
+    "upvotes": "ଅପଭୋଟ",
+    "filed": "ଦାଖଲ",
+    "evidence": "ପ୍ରମାଣ",
+    "timeline": "ସମୟରେଖା",
+    "similar": "ସମାନ ସମାଧାନ ହୋଇଥିବା ମାମଲା",
+    "noneYet": "ଏ ପର୍ଯ୍ୟନ୍ତ କିଛି ନାହିଁ।",
+    "quality": "ଗୁଣବତ୍ତା",
+    "readAloud": "ଜୋରରେ ପଢ଼ନ୍ତୁ",
+    "stopReading": "ପଢ଼ିବା ବନ୍ଦ କରନ୍ତୁ"
+  },
+  "timeline": {
+    "CREATED": "ଅଭିଯୋଗ ଦାଖଲ",
+    "ACKNOWLEDGED": "ସ୍ୱୀକୃତ",
+    "STATUS_CHANGED": "ସ୍ଥିତି ବଦଳିଲା",
+    "COMMENT_ADDED": "ମନ୍ତବ୍ୟ ଯୋଡ଼ାଗଲା",
+    "EVIDENCE_ADDED": "ପ୍ରମାଣ ଯୋଡ଼ାଗଲା",
+    "INFO_REQUESTED": "ସୂଚନା ମଗାଗଲା",
+    "INFO_PROVIDED": "ସୂଚନା ଦିଆଗଲା",
+    "RESOLVED": "ସମାଧାନ",
+    "REOPENED": "ପୁଣି ଖୋଲାଗଲା",
+    "ESCALATED": "ଉପରକୁ ପଠାଗଲା",
+    "CLOSED": "ବନ୍ଦ",
+    "REASSIGNED": "ପୁଣି ନ୍ୟସ୍ତ"
   }
 }

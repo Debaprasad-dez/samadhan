@@ -12,7 +12,8 @@
     "officers": "અધિકારીઓ",
     "trends": "વલણ",
     "policy": "નીતિ",
-    "ward": "વોર્ડ"
+    "ward": "વોર્ડ",
+    "settings": "સેટિંગ્સ"
   },
   "common": {
     "signIn": "સાઇન ઇન કરો",
@@ -32,7 +33,8 @@
     "map": "નકશો",
     "search": "શોધો",
     "upvote": "સમર્થન",
-    "saving": "સાચવાઈ રહ્યું છે…"
+    "saving": "સાચવાઈ રહ્યું છે…",
+    "open": "ખોલો"
   },
   "time": {
     "morning": "સુપ્રભાત",
@@ -65,15 +67,15 @@
     "FILED": "નોંધાઈ",
     "IN_PROGRESS": "પ્રગતિમાં",
     "OFFICER_ASSIGNED": "અધિકારી નિયુક્ત",
-    "RESOLVED": "ઉકેલાઈ",
+    "RESOLVED": "ઉકેલાયું",
     "REJECTED": "નકારાઈ",
     "PENDING": "બાકી",
     "CLOSED": "બંધ",
     "onTrack": "યોગ્ય માર્ગે",
-    "OPEN": "Open",
-    "ACKNOWLEDGED": "Acknowledged",
-    "AWAITING_INFO": "Awaiting info",
-    "ESCALATED": "Escalated"
+    "OPEN": "ખુલ્લું",
+    "ACKNOWLEDGED": "સ્વીકૃત",
+    "AWAITING_INFO": "માહિતીની રાહમાં",
+    "ESCALATED": "ઉપર મોકલ્યું"
   },
   "auth": {
     "welcome": "સમાધાનમાં આપનું સ્વાગત છે",
@@ -107,8 +109,10 @@
     "saved": "સેટિંગ્સ સાચવાઈ.",
     "save": "ફેરફારો સાચવો",
     "theme": "Theme",
-    "applying": "Applying your changes…",
-    "applyError": "Couldn’t save. Please try again."
+    "applying": "તમારા ફેરફારો લાગુ થઈ રહ્યા છે…",
+    "applyError": "સાચવી શકાયું નહીં. કૃપા કરીને ફરી પ્રયાસ કરો.",
+    "title": "સેટિંગ્સ",
+    "languageSub": "તમારા ડેશબોર્ડની ભાષા પસંદ કરો."
   },
   "leaveGuard": {
     "title": "તમારી ફરિયાદનો ડ્રાફ્ટ સાચવવો છે?",
@@ -150,11 +154,11 @@
     "retry": "Try again"
   },
   "officer": {
-    "inbox": "Inbox",
-    "inboxSub": "Prioritised queue",
-    "clusters": "Clusters",
-    "clustersSub": "Grouped by theme",
-    "metrics": "My metrics",
+    "inbox": "ઇનબોક્સ",
+    "inboxSub": "પ્રાથમિકતા યાદી",
+    "clusters": "ક્લસ્ટર",
+    "clustersSub": "AI-જૂથબદ્ધ પ્રણાલીગત મુદ્દા · છેલ્લા 14 દિવસ",
+    "metrics": "મારા આંકડા",
     "metricsSub": "Real-time performance",
     "open": "Open",
     "inProgress": "In progress",
@@ -163,15 +167,34 @@
     "acknowledged": "Acknowledged",
     "awaitingInfo": "Awaiting info",
     "resolvedMonth": "Resolved (this month)",
-    "avgResolution": "Avg resolution",
-    "slaMet": "SLA met",
-    "avgQuality": "Avg quality",
-    "filterSeverity": "Filter severity (LOW / MEDIUM / HIGH)",
-    "acknowledgeSelected": "Acknowledge selected",
-    "setStatus": "Set status",
-    "openCase": "Open case",
-    "allDepartments": "All departments",
-    "department": "department"
+    "avgResolution": "સરેરાશ ઉકેલ",
+    "slaMet": "SLA પૂર્ણ",
+    "avgQuality": "સરેરાશ ગુણવત્તા",
+    "filterSeverity": "ગંભીરતા ગાળો (LOW / MEDIUM / HIGH)",
+    "acknowledgeSelected": "પસંદ કરેલ સ્વીકારો",
+    "setStatus": "સ્થિતિ સેટ કરો",
+    "openCase": "કેસ ખોલો",
+    "allDepartments": "બધા વિભાગ",
+    "department": "વિભાગ",
+    "casesCount": "કેસ",
+    "selected": "પસંદ કરેલ",
+    "loadError": "ઇનબોક્સ લોડ થઈ શક્યું નહીં.",
+    "inboxZero": "ઇનબોક્સ ખાલી",
+    "inboxZeroSub": "તમારી યાદીમાં કોઈ ખુલ્લો કેસ નથી. એકદમ સ્પષ્ટ.",
+    "overdue": "વિલંબિત",
+    "updating": "અપડેટ થઈ રહ્યું છે…",
+    "clustersUpdated": "અપડેટ",
+    "recompute": "ક્લસ્ટર ફરી ગણો",
+    "clustersEmpty": "આ અઠવાડિયે કોઈ પ્રણાલીગત ક્લસ્ટર મળ્યું નથી",
+    "clustersEmptySub": "સંબંધિત ફરિયાદો વોર્ડમાં જૂથબદ્ધ થશે ત્યારે અહીં દેખાશે.",
+    "wardsLabel": "વોર્ડ",
+    "realtime": "રિયલ-ટાઇમ",
+    "queueStatus": "કતાર સ્થિતિ",
+    "performance": "કામગીરી",
+    "quality": "ગુણવત્તા",
+    "awaitingAction": "કાર્યવાહીની રાહમાં",
+    "currentlyWorking": "હાલમાં કાર્યરત",
+    "resolvedThisMonth": "આ મહિને ઉકેલાયું"
   },
   "admin": {
     "overview": "Overview",
@@ -219,6 +242,43 @@
     "targetLanguage": "Translate to",
     "translating": "Translating…",
     "translateError": "Couldn't translate. Try again.",
-    "viewing": "Viewing in {{lang}}"
+    "viewing": "Viewing in {{lang}}",
+    "action": "અનુવાદ",
+    "original": "મૂળ",
+    "viewingIn": "જોઈ રહ્યા છો"
+  },
+  "severity": {
+    "LOW": "ઓછું",
+    "MEDIUM": "મધ્યમ",
+    "HIGH": "ઊંચું"
+  },
+  "case": {
+    "complaintDetails": "ફરિયાદ વિગતો",
+    "filedBy": "દાખલ કર્યું",
+    "reputation": "પ્રતિષ્ઠા",
+    "coSigners": "સહ-સહીકર્તા",
+    "upvotes": "અપવોટ",
+    "filed": "દાખલ",
+    "evidence": "પુરાવા",
+    "timeline": "સમયરેખા",
+    "similar": "સમાન ઉકેલાયેલા કેસ",
+    "noneYet": "હજુ કોઈ નથી.",
+    "quality": "ગુણવત્તા",
+    "readAloud": "મોટેથી વાંચો",
+    "stopReading": "વાંચન બંધ કરો"
+  },
+  "timeline": {
+    "CREATED": "ફરિયાદ દાખલ",
+    "ACKNOWLEDGED": "સ્વીકૃત",
+    "STATUS_CHANGED": "સ્થિતિ બદલાઈ",
+    "COMMENT_ADDED": "ટિપ્પણી ઉમેરી",
+    "EVIDENCE_ADDED": "પુરાવો ઉમેર્યો",
+    "INFO_REQUESTED": "માહિતી માગી",
+    "INFO_PROVIDED": "માહિતી આપી",
+    "RESOLVED": "ઉકેલાયું",
+    "REOPENED": "ફરી ખોલ્યું",
+    "ESCALATED": "ઉપર મોકલ્યું",
+    "CLOSED": "બંધ",
+    "REASSIGNED": "ફરી સોંપ્યું"
   }
 }

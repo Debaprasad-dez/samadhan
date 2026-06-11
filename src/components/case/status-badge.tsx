@@ -1,17 +1,19 @@
+"use client";
+
 import { cn } from "@/lib/utils";
+import { useT } from "@/components/providers/locale-provider";
 import type { CaseStatus, Severity } from "@/types";
 
-const STATUS_META: Record<
-  CaseStatus,
-  { label: string; cls: string; dot?: boolean }
-> = {
-  OPEN: { label: "Open", cls: "bg-info-soft text-info" },
-  ACKNOWLEDGED: { label: "Acknowledged", cls: "bg-info-soft text-info" },
-  IN_PROGRESS: { label: "In progress", cls: "bg-info-soft text-info", dot: true },
-  AWAITING_INFO: { label: "Awaiting info", cls: "bg-warning-soft text-warning" },
-  RESOLVED: { label: "Resolved", cls: "bg-success-soft text-success" },
-  ESCALATED: { label: "Escalated", cls: "bg-danger-soft text-danger" },
-  CLOSED: { label: "Closed", cls: "bg-surface-muted text-muted-foreground" },
+// Class only — the label text comes from the i18n dictionary (status.*),
+// so the badge translates with the active language.
+const STATUS_META: Record<CaseStatus, { cls: string; dot?: boolean }> = {
+  OPEN: { cls: "bg-info-soft text-info" },
+  ACKNOWLEDGED: { cls: "bg-info-soft text-info" },
+  IN_PROGRESS: { cls: "bg-info-soft text-info", dot: true },
+  AWAITING_INFO: { cls: "bg-warning-soft text-warning" },
+  RESOLVED: { cls: "bg-success-soft text-success" },
+  ESCALATED: { cls: "bg-danger-soft text-danger" },
+  CLOSED: { cls: "bg-surface-muted text-muted-foreground" },
 };
 
 export function StatusBadge({
@@ -21,6 +23,7 @@ export function StatusBadge({
   status: CaseStatus;
   className?: string;
 }) {
+  const t = useT();
   const meta = STATUS_META[status] ?? STATUS_META.OPEN;
   return (
     <span
@@ -33,15 +36,15 @@ export function StatusBadge({
       {meta.dot && (
         <span className="bg-info h-1.5 w-1.5 animate-pulse-dot rounded-full" />
       )}
-      {meta.label}
+      {t(`status.${status}`)}
     </span>
   );
 }
 
-const SEVERITY_META: Record<Severity, { label: string; cls: string }> = {
-  LOW: { label: "Low", cls: "bg-surface-muted text-muted-foreground" },
-  MEDIUM: { label: "Medium", cls: "bg-warning-soft text-warning" },
-  HIGH: { label: "High", cls: "bg-danger-soft text-danger" },
+const SEVERITY_META: Record<Severity, { cls: string }> = {
+  LOW: { cls: "bg-surface-muted text-muted-foreground" },
+  MEDIUM: { cls: "bg-warning-soft text-warning" },
+  HIGH: { cls: "bg-danger-soft text-danger" },
 };
 
 export function SeverityChip({
@@ -51,6 +54,7 @@ export function SeverityChip({
   severity: Severity;
   className?: string;
 }) {
+  const t = useT();
   const meta = SEVERITY_META[severity] ?? SEVERITY_META.MEDIUM;
   return (
     <span
@@ -60,7 +64,7 @@ export function SeverityChip({
         className,
       )}
     >
-      {meta.label}
+      {t(`severity.${severity}`)}
     </span>
   );
 }

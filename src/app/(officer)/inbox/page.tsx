@@ -39,14 +39,16 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { cn, humanizeCode, formatRelative } from "@/lib/utils";
+import { useT } from "@/components/providers/locale-provider";
 import type { CaseStatus } from "@/types";
 
+// k = filter value sent to the API; labelKey = i18n key for the chip text.
 const STATUS_FILTERS = [
-  { k: "open", l: "Open" },
-  { k: "all", l: "All" },
-  { k: "ACKNOWLEDGED", l: "Acknowledged" },
-  { k: "IN_PROGRESS", l: "In progress" },
-  { k: "ESCALATED", l: "Escalated" },
+  { k: "open", labelKey: "status.OPEN" },
+  { k: "all", labelKey: "common.all" },
+  { k: "ACKNOWLEDGED", labelKey: "status.ACKNOWLEDGED" },
+  { k: "IN_PROGRESS", labelKey: "status.IN_PROGRESS" },
+  { k: "ESCALATED", labelKey: "status.ESCALATED" },
 ];
 
 // Statuses an officer can move a case to, from the card.
@@ -63,13 +65,14 @@ const SEVERITY: Record<
   string,
   { Icon: LucideIcon; color: string; bg: string }
 > = {
-  HIGH: { Icon: AlertTriangle, color: "text-danger", bg: "bg-danger/10" },
-  MEDIUM: { Icon: AlertCircle, color: "text-warning", bg: "bg-warning/10" },
-  LOW: { Icon: ArrowDownCircle, color: "text-info", bg: "bg-info/10" },
+  HIGH: { Icon: AlertTriangle, color: "text-danger", bg: "bg-danger-soft" },
+  MEDIUM: { Icon: AlertCircle, color: "text-warning", bg: "bg-warning-soft" },
+  LOW: { Icon: ArrowDownCircle, color: "text-info", bg: "bg-info-soft" },
 };
 
 export default function OfficerInbox() {
   const router = useRouter();
+  const t = useT();
   const [status, setStatus] = useState("open");
   const [severity, setSeverity] = useState("");
   const { data, isLoading, isError, refetch } = useInbox({ status, severity });
@@ -120,9 +123,11 @@ export default function OfficerInbox() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="font-display text-3xl font-semibold">Inbox</h1>
+        <h1 className="font-display text-3xl font-semibold">
+          {t("officer.inbox")}
+        </h1>
         <p className="text-muted-foreground text-sm">
-          Prioritised queue · {data?.total ?? 0} cases
+          {t("officer.inboxSub")} · {data?.total ?? 0} {t("officer.casesCount")}
         </p>
       </div>
 
@@ -131,7 +136,7 @@ export default function OfficerInbox() {
         <input
           value={severity}
           onChange={(e) => setSeverity(e.target.value.toUpperCase())}
-          placeholder="Filter severity (LOW / MEDIUM / HIGH)"
+          placeholder={t("officer.filterSeverity")}
           className="border-border-strong bg-surface h-9 w-full rounded-md border px-3 text-sm shadow-sm sm:w-72"
         />
         {STATUS_FILTERS.map((f) => (
@@ -145,16 +150,18 @@ export default function OfficerInbox() {
                 : "text-muted-foreground hover:bg-surface-muted",
             )}
           >
-            {f.l}
+            {t(f.labelKey)}
           </button>
         ))}
       </div>
 
       {selected.size > 0 && (
         <div className="bg-brand-soft flex items-center justify-between rounded-md p-2 text-sm">
-          <span>{selected.size} selected</span>
+          <span>
+            {selected.size} {t("officer.selected")}
+          </span>
           <Button size="sm" onClick={bulkAck} disabled={event.isPending}>
-            Acknowledge selected
+            {t("officer.acknowledgeSelected")}
           </Button>
         </div>
       )}
@@ -168,17 +175,17 @@ export default function OfficerInbox() {
       ) : isError ? (
         <Card>
           <CardContent className="flex flex-col items-center gap-3 p-8 text-center">
-            <p className="text-muted-foreground">Couldn&rsquo;t load the inbox.</p>
+            <p className="text-muted-foreground">{t("officer.loadError")}</p>
             <Button variant="outline" onClick={() => refetch()}>
-              Retry
+              {t("common.retry")}
             </Button>
           </CardContent>
         </Card>
       ) : cases.length === 0 ? (
         <EmptyState
           illustration={<EmptyInbox />}
-          title="Inbox zero"
-          description="No open cases in your queue. Beautifully clear."
+          title={t("officer.inboxZero")}
+          description={t("officer.inboxZeroSub")}
         />
       ) : (
         <div className="space-y-2.5">
@@ -240,7 +247,8 @@ export default function OfficerInbox() {
                           >
                             {overdue ? (
                               <>
-                                <AlertTriangle className="h-3.5 w-3.5" /> Overdue
+                                <AlertTriangle className="h-3.5 w-3.5" />{" "}
+                                {t("officer.overdue")}
                               </>
                             ) : (
                               <>
@@ -274,17 +282,19 @@ export default function OfficerInbox() {
                               onClick={() => router.push(`/case/${c.id}`)}
                             >
                               <ExternalLink className="h-4 w-4" />
-                              Open case
+                              {t("officer.openCase")}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuLabel>Set status</DropdownMenuLabel>
+                            <DropdownMenuLabel>
+                              {t("officer.setStatus")}
+                            </DropdownMenuLabel>
                             {STATUS_OPTIONS.map((s) => (
                               <DropdownMenuItem
                                 key={s}
                                 disabled={c.status === s}
-                                onClick={() => act(c, s, humanizeCode(s))}
+                                onClick={() => act(c, s, t(`status.${s}`))}
                               >
-                                {humanizeCode(s)}
+                                {t(`status.${s}`)}
                               </DropdownMenuItem>
                             ))}
                           </DropdownMenuContent>
@@ -296,18 +306,18 @@ export default function OfficerInbox() {
                     <div className="mt-3 flex items-center justify-end gap-2">
                       <Select
                         value={STATUS_OPTIONS.includes(c.status) ? c.status : ""}
-                        onValueChange={(v) => act(c, v as CaseStatus, humanizeCode(v))}
+                        onValueChange={(v) => act(c, v as CaseStatus, t(`status.${v}`))}
                       >
                         <SelectTrigger
                           className="h-9 w-[150px]"
-                          aria-label="Update status"
+                          aria-label={t("officer.setStatus")}
                         >
-                          <SelectValue placeholder="Set status" />
+                          <SelectValue placeholder={t("officer.setStatus")} />
                         </SelectTrigger>
                         <SelectContent>
                           {STATUS_OPTIONS.map((s) => (
                             <SelectItem key={s} value={s}>
-                              {humanizeCode(s)}
+                              {t(`status.${s}`)}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -315,9 +325,9 @@ export default function OfficerInbox() {
                       <Button
                         variant="secondary"
                         onClick={() => router.push(`/case/${c.id}`)}
-                        aria-label={`Open ${c.number}`}
+                        aria-label={`${t("common.open")} ${c.number}`}
                       >
-                        Open
+                        {t("common.open")}
                         <ChevronRight />
                       </Button>
                     </div>
@@ -331,7 +341,7 @@ export default function OfficerInbox() {
 
       {event.isPending && (
         <p className="text-muted-foreground inline-flex items-center gap-1 text-xs">
-          <Loader2 className="h-3 w-3 animate-spin" /> updating…
+          <Loader2 className="h-3 w-3 animate-spin" /> {t("officer.updating")}
         </p>
       )}
     </div>

@@ -12,7 +12,8 @@
     "officers": "Officers",
     "trends": "Trends",
     "policy": "Policy",
-    "ward": "Ward"
+    "ward": "Ward",
+    "settings": "Settings"
   },
   "common": {
     "signIn": "Sign in",
@@ -32,7 +33,8 @@
     "map": "Map",
     "search": "Search",
     "upvote": "Upvote",
-    "saving": "Saving…"
+    "saving": "Saving…",
+    "open": "Open"
   },
   "time": {
     "morning": "Good morning",
@@ -90,8 +92,10 @@
     "dayStreak": "-day streak"
   },
   "settings": {
+    "title": "Settings",
     "theme": "Theme",
     "language": "Language",
+    "languageSub": "Choose your dashboard language.",
     "aiAssist": "AI assistance",
     "aiFull": "Full",
     "aiReduced": "Reduced",
@@ -142,26 +146,42 @@
   "officer": {
     "inbox": "Inbox",
     "inboxSub": "Prioritised queue",
-    "clusters": "Clusters",
-    "clustersSub": "Grouped by theme",
-    "metrics": "My metrics",
-    "metricsSub": "Real-time performance",
-    "open": "Open",
-    "inProgress": "In progress",
-    "resolved": "Resolved",
-    "escalated": "Escalated",
-    "acknowledged": "Acknowledged",
-    "awaitingInfo": "Awaiting info",
-    "resolvedMonth": "Resolved (this month)",
-    "avgResolution": "Avg resolution",
-    "slaMet": "SLA met",
-    "avgQuality": "Avg quality",
+    "casesCount": "cases",
     "filterSeverity": "Filter severity (LOW / MEDIUM / HIGH)",
     "acknowledgeSelected": "Acknowledge selected",
+    "selected": "selected",
+    "loadError": "Couldn’t load the inbox.",
+    "inboxZero": "Inbox zero",
+    "inboxZeroSub": "No open cases in your queue. Beautifully clear.",
+    "overdue": "Overdue",
     "setStatus": "Set status",
     "openCase": "Open case",
+    "updating": "updating…",
+    "clusters": "Clusters",
+    "clustersSub": "AI-grouped systemic issues · last 14 days",
+    "clustersUpdated": "updated",
+    "recompute": "Recompute clusters",
+    "clustersEmpty": "No systemic clusters detected this week",
+    "clustersEmptySub": "When related complaints group up across wards, they’ll surface here.",
+    "wardsLabel": "ward(s)",
+    "metrics": "My metrics",
+    "realtime": "real-time",
     "allDepartments": "All departments",
-    "department": "department"
+    "department": "department",
+    "queueStatus": "Queue status",
+    "performance": "Performance",
+    "quality": "Quality",
+    "awaitingAction": "Awaiting action",
+    "currentlyWorking": "Currently working",
+    "resolvedThisMonth": "Resolved this month",
+    "avgResolution": "Avg resolution",
+    "slaMet": "SLA met",
+    "avgQuality": "Avg quality"
+  },
+  "severity": {
+    "LOW": "Low",
+    "MEDIUM": "Medium",
+    "HIGH": "High"
   },
   "admin": {
     "overview": "Overview",
@@ -209,6 +229,38 @@
     "targetLanguage": "Translate to",
     "translating": "Translating…",
     "translateError": "Couldn't translate. Try again.",
-    "viewing": "Viewing in {{lang}}"
+    "viewing": "Viewing in {{lang}}",
+    "action": "Translate",
+    "original": "original",
+    "viewingIn": "Viewing in"
+  },
+  "case": {
+    "complaintDetails": "Complaint details",
+    "filedBy": "Filed by",
+    "reputation": "Reputation",
+    "coSigners": "co-signers",
+    "upvotes": "upvotes",
+    "filed": "Filed",
+    "evidence": "Evidence",
+    "timeline": "Timeline",
+    "similar": "Similar resolved cases",
+    "noneYet": "None yet.",
+    "quality": "quality",
+    "readAloud": "Read aloud",
+    "stopReading": "Stop reading"
+  },
+  "timeline": {
+    "CREATED": "Complaint filed",
+    "ACKNOWLEDGED": "Acknowledged",
+    "STATUS_CHANGED": "Status changed",
+    "COMMENT_ADDED": "Comment added",
+    "EVIDENCE_ADDED": "Evidence added",
+    "INFO_REQUESTED": "Information requested",
+    "INFO_PROVIDED": "Information provided",
+    "RESOLVED": "Resolved",
+    "REOPENED": "Reopened",
+    "ESCALATED": "Escalated",
+    "CLOSED": "Closed",
+    "REASSIGNED": "Reassigned"
   }
 }

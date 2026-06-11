@@ -775,3 +775,154 @@
   --g-btn-ink: #08222c;
   --g-chip-ink: var(--g-ink-soft);
 }
+
+/* =============================================================================
+   samadhan-pro — PROFESSIONAL NEUTRAL theme for the OFFICER/ADMIN dashboards.
+   NOT a cultural theme: it never appears in the citizen theme gallery. It is
+   force-locked for staff roles (see ThemeProvider `lockedTheme`), so staff get a
+   calm, high-contrast civic dashboard with a plain light/dark toggle — no warm
+   gallery palette. Slate surfaces + a trustworthy civic blue brand.
+
+   Unlike the cultural themes above, the gallery `--g-*` tokens here are defined
+   PER MODE so the body background actually flips with light/dark (the cultural
+   themes' mode-agnostic --g-* is exactly what made staff dark mode unreadable).
+   ============================================================================= */
+[data-theme="samadhan-pro"][data-mode="light"] {
+  --bg: 210 25% 98%;
+  --surface: 0 0% 100%;
+  --surface-muted: 210 20% 95%;
+  --border: 214 18% 89%;
+  --border-strong: 214 14% 79%;
+  --text: 218 32% 13%;
+  --text-muted: 216 14% 40%;
+  --text-subtle: 216 10% 54%;
+  --brand: 216 72% 44%;
+  --brand-hover: 216 78% 37%;
+  --brand-soft: 214 76% 94%;
+  --accent: 188 70% 36%;
+  --accent-soft: 188 55% 92%;
+  --success: 145 55% 35%;
+  --warning: 35 92% 44%;
+  --danger: 4 72% 47%;
+  --info: 205 78% 42%;
+  --success-soft: 145 50% 90%;
+  --warning-soft: 38 80% 90%;
+  --danger-soft: 4 70% 93%;
+  --info-soft: 205 65% 92%;
+  --motif-1: 216 72% 50%;
+  --motif-2: 188 65% 40%;
+  --motif-3: 145 50% 40%;
+  --motif-gold: 38 80% 50%;
+
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--brand);
+  --primary-foreground: 0 0% 100%;
+  --secondary: var(--surface-muted);
+  --secondary-foreground: var(--text);
+  --muted: var(--surface-muted);
+  --muted-foreground: var(--text-muted);
+  --accent-muted: var(--surface-muted);
+  --accent-muted-foreground: var(--text);
+  --destructive: var(--danger);
+  --destructive-foreground: 0 0% 100%;
+  --input: var(--border-strong);
+  --ring: var(--brand);
+  --accent-blue: var(--accent);
+
+  --g-bg: #f7f9fc;
+  --g-paper: #eef2f8;
+  --g-ink: #141b2a;
+  --g-ink-soft: #4a5568;
+  --g-ink-faint: #7b8696;
+  --g-primary: #1f6fd4;
+  --g-primary-deep: #1857ab;
+  --g-accent: #1a9aa8;
+  --g-gold: #c98a1e;
+  --g-gold-lt: #e6b85a;
+  --g-glow: #4a90e2;
+  --g-line: #dde4ee;
+  --g-card: #ffffffee;
+  --g-ok: #2f8a52;
+  --g-warn: #c98a1e;
+  --g-stage1: #eef2f8;
+  --g-stage2: #e6ecf4;
+  --g-stage3: #dde5ef;
+  --g-btn-grad: linear-gradient(135deg, #2b7fe0 0%, #1f6fd4 45%, #1857ab 100%);
+  --g-btn-ink: #f4f9ff;
+  --g-chip-ink: var(--g-ink-soft);
+}
+
+[data-theme="samadhan-pro"][data-mode="dark"] {
+  --bg: 220 30% 9%;
+  --surface: 220 24% 13%;
+  --surface-muted: 219 18% 18%;
+  --border: 219 16% 25%;
+  --border-strong: 219 13% 36%;
+  --text: 210 30% 96%;
+  --text-muted: 215 16% 72%;
+  --text-subtle: 215 12% 56%;
+  --brand: 214 85% 66%;
+  --brand-hover: 214 90% 72%;
+  --brand-soft: 216 45% 22%;
+  --accent: 188 65% 56%;
+  --accent-soft: 188 40% 22%;
+  --success: 145 52% 52%;
+  --warning: 38 90% 60%;
+  --danger: 4 78% 64%;
+  --info: 205 80% 62%;
+  --success-soft: 145 38% 17%;
+  --warning-soft: 38 45% 19%;
+  --danger-soft: 4 48% 20%;
+  --info-soft: 205 48% 20%;
+  --motif-1: 214 85% 66%;
+  --motif-2: 188 65% 56%;
+  --motif-3: 145 52% 54%;
+  --motif-gold: 38 85% 62%;
+
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--brand);
+  --primary-foreground: var(--bg);
+  --secondary: var(--surface-muted);
+  --secondary-foreground: var(--text);
+  --muted: var(--surface-muted);
+  --muted-foreground: var(--text-muted);
+  --accent-muted: var(--surface-muted);
+  --accent-muted-foreground: var(--text);
+  --destructive: var(--danger);
+  --destructive-foreground: var(--bg);
+  --input: var(--border-strong);
+  --ring: var(--brand);
+  --accent-blue: var(--accent);
+
+  --g-bg: #0d1119;
+  --g-paper: #141a24;
+  --g-ink: #eef2f8;
+  --g-ink-soft: #aab4c4;
+  --g-ink-faint: #7a8494;
+  --g-primary: #4a90e2;
+  --g-primary-deep: #2b7fe0;
+  --g-accent: #3ab4c0;
+  --g-gold: #d4a94a;
+  --g-gold-lt: #e6c478;
+  --g-glow: #4a90e2;
+  --g-line: #232b38;
+  --g-card: #141a24f2;
+  --g-ok: #46b06a;
+  --g-warn: #d4a94a;
+  --g-stage1: #11161f;
+  --g-stage2: #0d1119;
+  --g-stage3: #0a0d14;
+  --g-btn-grad: linear-gradient(135deg, #5a9ce8 0%, #4a90e2 45%, #2b7fe0 100%);
+  --g-btn-ink: #0a0d14;
+  --g-chip-ink: var(--g-ink-soft);
+}

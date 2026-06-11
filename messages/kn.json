@@ -12,7 +12,8 @@
     "officers": "ಅಧಿಕಾರಿಗಳು",
     "trends": "ಪ್ರವೃತ್ತಿಗಳು",
     "policy": "ನೀತಿ",
-    "ward": "ವಾರ್ಡ್"
+    "ward": "ವಾರ್ಡ್",
+    "settings": "ಸೆಟ್ಟಿಂಗ್‌ಗಳು"
   },
   "common": {
     "signIn": "ಸೈನ್ ಇನ್ ಮಾಡಿ",
@@ -32,7 +33,8 @@
     "map": "ನಕ್ಷೆ",
     "search": "ಹುಡುಕಿ",
     "upvote": "ಬೆಂಬಲ",
-    "saving": "ಉಳಿಸಲಾಗುತ್ತಿದೆ…"
+    "saving": "ಉಳಿಸಲಾಗುತ್ತಿದೆ…",
+    "open": "ತೆರೆ"
   },
   "time": {
     "morning": "ಶುಭೋದಯ",
@@ -63,17 +65,17 @@
   },
   "status": {
     "FILED": "ದಾಖಲಾಗಿದೆ",
-    "IN_PROGRESS": "ಪ್ರಗತಿಯಲ್ಲಿ",
+    "IN_PROGRESS": "ಪ್ರಗತಿಯಲ್ಲಿದೆ",
     "OFFICER_ASSIGNED": "ಅಧಿಕಾರಿ ನಿಯೋಜಿತ",
-    "RESOLVED": "ಪರಿಹಾರವಾಗಿದೆ",
+    "RESOLVED": "ಪರಿಹರಿಸಲಾಗಿದೆ",
     "REJECTED": "ತಿರಸ್ಕೃತ",
     "PENDING": "ಬಾಕಿ",
     "CLOSED": "ಮುಚ್ಚಲಾಗಿದೆ",
     "onTrack": "ಸರಿಯಾದ ಹಾದಿಯಲ್ಲಿ",
-    "OPEN": "Open",
-    "ACKNOWLEDGED": "Acknowledged",
-    "AWAITING_INFO": "Awaiting info",
-    "ESCALATED": "Escalated"
+    "OPEN": "ತೆರೆದಿದೆ",
+    "ACKNOWLEDGED": "ಅಂಗೀಕರಿಸಲಾಗಿದೆ",
+    "AWAITING_INFO": "ಮಾಹಿತಿಗಾಗಿ ಕಾಯಲಾಗುತ್ತಿದೆ",
+    "ESCALATED": "ಮೇಲಕ್ಕೆ ಕಳುಹಿಸಲಾಗಿದೆ"
   },
   "auth": {
     "welcome": "ಸಮಾಧಾನ್‌ಗೆ ಸುಸ್ವಾಗತ",
@@ -104,11 +106,13 @@
     "modeLight": "ತಿಳಿ",
     "modeDark": "ಗಾಢ",
     "modeAuto": "ಸ್ವಯಂ",
-    "saved": "ಸೆಟ್ಟಿಂಗ್‌ಗಳು ಉಳಿಸಲಾಗಿದೆ.",
+    "saved": "ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಉಳಿಸಲಾಗಿದೆ.",
     "save": "ಬದಲಾವಣೆಗಳನ್ನು ಉಳಿಸಿ",
     "applying": "ನಿಮ್ಮ ಬದಲಾವಣೆಗಳನ್ನು ಅನ್ವಯಿಸಲಾಗುತ್ತಿದೆ…",
-    "applyError": "ಉಳಿಸಲಾಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
-    "theme": "Theme"
+    "applyError": "ಉಳಿಸಲಾಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+    "theme": "Theme",
+    "title": "ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
+    "languageSub": "ನಿಮ್ಮ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ."
   },
   "leaveGuard": {
     "title": "ನಿಮ್ಮ ದೂರಿನ ಕರಡು ಉಳಿಸಬೇಕೆ?",
@@ -150,11 +154,11 @@
     "retry": "Try again"
   },
   "officer": {
-    "inbox": "Inbox",
-    "inboxSub": "Prioritised queue",
-    "clusters": "Clusters",
-    "clustersSub": "Grouped by theme",
-    "metrics": "My metrics",
+    "inbox": "ಇನ್‌ಬಾಕ್ಸ್",
+    "inboxSub": "ಆದ್ಯತಾ ಪಟ್ಟಿ",
+    "clusters": "ಗುಚ್ಛಗಳು",
+    "clustersSub": "AI-ಗುಂಪು ವ್ಯವಸ್ಥಿತ ಸಮಸ್ಯೆಗಳು · ಕಳೆದ 14 ದಿನಗಳು",
+    "metrics": "ನನ್ನ ಅಂಕಿಅಂಶಗಳು",
     "metricsSub": "Real-time performance",
     "open": "Open",
     "inProgress": "In progress",
@@ -163,15 +167,34 @@
     "acknowledged": "Acknowledged",
     "awaitingInfo": "Awaiting info",
     "resolvedMonth": "Resolved (this month)",
-    "avgResolution": "Avg resolution",
-    "slaMet": "SLA met",
-    "avgQuality": "Avg quality",
-    "filterSeverity": "Filter severity (LOW / MEDIUM / HIGH)",
-    "acknowledgeSelected": "Acknowledge selected",
-    "setStatus": "Set status",
-    "openCase": "Open case",
-    "allDepartments": "All departments",
-    "department": "department"
+    "avgResolution": "ಸರಾಸರಿ ಪರಿಹಾರ",
+    "slaMet": "SLA ಪೂರ್ಣ",
+    "avgQuality": "ಸರಾಸರಿ ಗುಣಮಟ್ಟ",
+    "filterSeverity": "ತೀವ್ರತೆಯನ್ನು ಫಿಲ್ಟರ್ ಮಾಡಿ (LOW / MEDIUM / HIGH)",
+    "acknowledgeSelected": "ಆಯ್ದದನ್ನು ಅಂಗೀಕರಿಸಿ",
+    "setStatus": "ಸ್ಥಿತಿ ಹೊಂದಿಸಿ",
+    "openCase": "ಪ್ರಕರಣ ತೆರೆ",
+    "allDepartments": "ಎಲ್ಲಾ ಇಲಾಖೆಗಳು",
+    "department": "ಇಲಾಖೆ",
+    "casesCount": "ಪ್ರಕರಣಗಳು",
+    "selected": "ಆಯ್ಕೆಮಾಡಲಾಗಿದೆ",
+    "loadError": "ಇನ್‌ಬಾಕ್ಸ್ ಲೋಡ್ ಆಗಲಿಲ್ಲ.",
+    "inboxZero": "ಇನ್‌ಬಾಕ್ಸ್ ಖಾಲಿ",
+    "inboxZeroSub": "ನಿಮ್ಮ ಪಟ್ಟಿಯಲ್ಲಿ ತೆರೆದ ಪ್ರಕರಣಗಳಿಲ್ಲ. ಸುಂದರವಾಗಿ ಸ್ಪಷ್ಟ.",
+    "overdue": "ವಿಳಂಬ",
+    "updating": "ನವೀಕರಿಸಲಾಗುತ್ತಿದೆ…",
+    "clustersUpdated": "ನವೀಕರಿಸಲಾಗಿದೆ",
+    "recompute": "ಗುಚ್ಛಗಳನ್ನು ಮರು ಲೆಕ್ಕಹಾಕಿ",
+    "clustersEmpty": "ಈ ವಾರ ಯಾವುದೇ ವ್ಯವಸ್ಥಿತ ಗುಚ್ಛಗಳು ಪತ್ತೆಯಾಗಿಲ್ಲ",
+    "clustersEmptySub": "ಸಂಬಂಧಿತ ದೂರುಗಳು ವಾರ್ಡ್‌ಗಳಲ್ಲಿ ಗುಂಪಾದಾಗ ಇಲ್ಲಿ ಕಾಣಿಸುತ್ತವೆ.",
+    "wardsLabel": "ವಾರ್ಡ್",
+    "realtime": "ರಿಯಲ್-ಟೈಮ್",
+    "queueStatus": "ಸಾಲು ಸ್ಥಿತಿ",
+    "performance": "ಕಾರ್ಯಕ್ಷಮತೆ",
+    "quality": "ಗುಣಮಟ್ಟ",
+    "awaitingAction": "ಕ್ರಮಕ್ಕಾಗಿ ಕಾಯಲಾಗುತ್ತಿದೆ",
+    "currentlyWorking": "ಪ್ರಸ್ತುತ ಕೆಲಸದಲ್ಲಿ",
+    "resolvedThisMonth": "ಈ ತಿಂಗಳು ಪರಿಹರಿಸಲಾಗಿದೆ"
   },
   "admin": {
     "overview": "Overview",
@@ -219,6 +242,43 @@
     "targetLanguage": "Translate to",
     "translating": "Translating…",
     "translateError": "Couldn't translate. Try again.",
-    "viewing": "Viewing in {{lang}}"
+    "viewing": "Viewing in {{lang}}",
+    "action": "ಅನುವಾದ",
+    "original": "ಮೂಲ",
+    "viewingIn": "ನೋಡುತ್ತಿದ್ದೀರಿ"
+  },
+  "severity": {
+    "LOW": "ಕಡಿಮೆ",
+    "MEDIUM": "ಮಧ್ಯಮ",
+    "HIGH": "ಹೆಚ್ಚು"
+  },
+  "case": {
+    "complaintDetails": "ದೂರು ವಿವರಗಳು",
+    "filedBy": "ಸಲ್ಲಿಸಿದವರು",
+    "reputation": "ಖ್ಯಾತಿ",
+    "coSigners": "ಸಹ-ಸಹಿದಾರರು",
+    "upvotes": "ಅಪ‌ವೋಟ್‌ಗಳು",
+    "filed": "ಸಲ್ಲಿಕೆ",
+    "evidence": "ಸಾಕ್ಷ್ಯ",
+    "timeline": "ಕಾಲರೇಖೆ",
+    "similar": "ಹೋಲುವ ಪರಿಹೃತ ಪ್ರಕರಣಗಳು",
+    "noneYet": "ಇನ್ನೂ ಯಾವುದೂ ಇಲ್ಲ.",
+    "quality": "ಗುಣಮಟ್ಟ",
+    "readAloud": "ಜೋರಾಗಿ ಓದಿ",
+    "stopReading": "ಓದುವುದನ್ನು ನಿಲ್ಲಿಸಿ"
+  },
+  "timeline": {
+    "CREATED": "ದೂರು ಸಲ್ಲಿಕೆ",
+    "ACKNOWLEDGED": "ಅಂಗೀಕರಿಸಲಾಗಿದೆ",
+    "STATUS_CHANGED": "ಸ್ಥಿತಿ ಬದಲಾಗಿದೆ",
+    "COMMENT_ADDED": "ಕಾಮೆಂಟ್ ಸೇರಿಸಲಾಗಿದೆ",
+    "EVIDENCE_ADDED": "ಸಾಕ್ಷ್ಯ ಸೇರಿಸಲಾಗಿದೆ",
+    "INFO_REQUESTED": "ಮಾಹಿತಿ ಕೇಳಲಾಗಿದೆ",
+    "INFO_PROVIDED": "ಮಾಹಿತಿ ನೀಡಲಾಗಿದೆ",
+    "RESOLVED": "ಪರಿಹರಿಸಲಾಗಿದೆ",
+    "REOPENED": "ಮತ್ತೆ ತೆರೆಯಲಾಗಿದೆ",
+    "ESCALATED": "ಮೇಲಕ್ಕೆ ಕಳುಹಿಸಲಾಗಿದೆ",
+    "CLOSED": "ಮುಚ್ಚಲಾಗಿದೆ",
+    "REASSIGNED": "ಮರು ನಿಯೋಜಿಸಲಾಗಿದೆ"
   }
 }

@@ -4,6 +4,7 @@ import { requireRole } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { CATEGORIES, WARDS } from "@/lib/seed-data";
 import { humanizeCode, formatIST } from "@/lib/utils";
+import { getDict, translate } from "@/lib/i18n";
 import { StatusBadge, SeverityChip } from "@/components/case/status-badge";
 import { SlaRing } from "@/components/case/sla-ring";
 import { CaseTimeline } from "@/components/case/case-timeline";
@@ -22,6 +23,8 @@ export default async function OfficerCaseView({
 }) {
   const { id } = await params;
   const viewer = await requireRole(["OFFICER"]);
+  const dict = getDict(viewer.language);
+  const t = (k: string) => translate(dict, k);
 
   const c = await db.case.findUnique({
     where: { id },
@@ -75,7 +78,7 @@ export default async function OfficerCaseView({
         href="/inbox"
         className="text-muted-foreground hover:text-foreground text-sm"
       >
-        ← Inbox
+        ← {t("nav.inbox")}
       </Link>
 
       <div className="flex flex-wrap items-start justify-between gap-4">
@@ -91,7 +94,9 @@ export default async function OfficerCaseView({
               {ward} ({c.wardCode})
             </Badge>
             {c.escalated && (
-              <Badge className="bg-danger-soft text-danger">Escalated</Badge>
+              <Badge className="bg-danger-soft text-danger">
+                {t("status.ESCALATED")}
+              </Badge>
             )}
           </div>
         </div>
@@ -108,18 +113,30 @@ export default async function OfficerCaseView({
             <CardContent className="space-y-5 p-5">
               <ComplaintBody body={c.body} />
               <div className="text-muted-foreground flex flex-wrap gap-x-4 gap-y-1 border-t pt-3 text-xs">
-                <span>Filed by {c.filedBy.name}</span>
-                <span>Reputation {c.filedBy.reputation}</span>
-                <span>{c._count.cosigns} co-signers</span>
-                <span>{c._count.upvotes} upvotes</span>
-                <span>Filed {formatIST(c.createdAt)}</span>
+                <span>
+                  {t("case.filedBy")} {c.filedBy.name}
+                </span>
+                <span>
+                  {t("case.reputation")} {c.filedBy.reputation}
+                </span>
+                <span>
+                  {c._count.cosigns} {t("case.coSigners")}
+                </span>
+                <span>
+                  {c._count.upvotes} {t("case.upvotes")}
+                </span>
+                <span>
+                  {t("case.filed")} {formatIST(c.createdAt)}
+                </span>
               </div>
             </CardContent>
           </Card>
 
           {c.evidence.length > 0 && (
             <section className="space-y-3">
-              <h2 className="font-display text-lg font-semibold">Evidence</h2>
+              <h2 className="font-display text-lg font-semibold">
+                {t("case.evidence")}
+              </h2>
               <EvidenceGallery
                 items={c.evidence.map((e) => ({
                   url: e.url,
@@ -131,7 +148,9 @@ export default async function OfficerCaseView({
           )}
 
           <section className="space-y-3">
-            <h2 className="font-display text-lg font-semibold">Timeline</h2>
+            <h2 className="font-display text-lg font-semibold">
+              {t("case.timeline")}
+            </h2>
             <CaseTimeline
               events={c.events.map((e) => ({
                 id: e.id,
@@ -155,9 +174,11 @@ export default async function OfficerCaseView({
           <AiBrief caseId={c.id} />
           <Card>
             <CardContent className="space-y-2 p-4">
-              <p className="text-sm font-semibold">Similar resolved cases</p>
+              <p className="text-sm font-semibold">{t("case.similar")}</p>
               {similar.length === 0 ? (
-                <p className="text-muted-foreground text-sm">None yet.</p>
+                <p className="text-muted-foreground text-sm">
+                  {t("case.noneYet")}
+                </p>
               ) : (
                 similar.map((s) => (
                   <Link
@@ -169,7 +190,7 @@ export default async function OfficerCaseView({
                     <p className="text-muted-foreground font-mono text-xs">
                       {s.number}
                       {s.qualityScore !== null
-                        ? ` · quality ${s.qualityScore}/10`
+                        ? ` · ${t("case.quality")} ${s.qualityScore}/10`
                         : ""}
                     </p>
                   </Link>
