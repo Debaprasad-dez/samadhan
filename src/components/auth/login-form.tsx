@@ -15,6 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FullscreenLoader } from "@/components/shared/fullscreen-loader";
 
 interface LoginResponse {
   user?: { role: string; name: string };
@@ -37,9 +38,12 @@ export function LoginForm() {
   const [password, setPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const [navigating, setNavigating] = useState(false);
 
   function go(redirectTo: string | undefined) {
     const dest = returnTo ?? redirectTo ?? "/";
+    // Keep a full-screen loader up through the route transition.
+    setNavigating(true);
     router.push(dest);
     router.refresh();
   }
@@ -90,6 +94,8 @@ export function LoginForm() {
   }
 
   return (
+    <>
+    {navigating && <FullscreenLoader label="Signing you in…" />}
     <Card className="w-full max-w-md shadow-elev-2">
       <CardHeader>
         <CardTitle className="font-display text-2xl">
@@ -200,5 +206,6 @@ export function LoginForm() {
         </Tabs>
       </CardContent>
     </Card>
+    </>
   );
 }

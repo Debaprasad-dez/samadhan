@@ -132,6 +132,47 @@ async function main() {
     },
   });
 
+  // ---------- empty demo trio (live multi-user flow) ----------
+  // Fresh, interlinked accounts in ward KE. Deliberately NOT added to the
+  // citizens/officers pools below, so no seeded case references them — they
+  // start pristine and the demo is driven live. Aarav & Zara file/co-sign;
+  // Vivek (SANITATION) receives their complaints in his inbox.
+  await db.user.create({
+    data: {
+      role: "CITIZEN",
+      name: "Aarav Sharma",
+      phone: "+919999900010",
+      wardCode: "KE",
+      reputation: 0,
+      streakDays: 0,
+      showOnLeaderboard: true,
+      lastVisitAt: new Date(),
+    },
+  });
+  await db.user.create({
+    data: {
+      role: "CITIZEN",
+      name: "Zara Khan",
+      phone: "+919999900011",
+      wardCode: "KE",
+      reputation: 0,
+      streakDays: 0,
+      showOnLeaderboard: true,
+      lastVisitAt: new Date(),
+    },
+  });
+  await db.user.create({
+    data: {
+      role: "OFFICER",
+      name: "Vivek Nair",
+      email: "vivek@mcgm.gov.in",
+      passwordHash: bcrypt.hashSync(OFFICER_PWD, 12),
+      departmentCode: "SANITATION",
+      wardCode: "KE",
+      isDeptLead: false,
+    },
+  });
+
   // ---------- extra officers: one lead per department ----------
   const extraOfficers: Array<{
     name: string;

@@ -30,7 +30,15 @@ export const LoginInput = z.union([OtpLoginInput, PasswordLoginInput]);
 export type LoginInput = z.infer<typeof LoginInput>;
 
 export const RoleSwitchInput = z.object({
-  persona: z.enum(["citizen", "officer", "admin"]),
+  persona: z.enum([
+    "citizen",
+    "officer",
+    "admin",
+    // Empty, interlinked trio (same ward KE) for the live multi-user demo.
+    "aarav",
+    "zara",
+    "vivek",
+  ]),
 });
 export type RoleSwitchInput = z.infer<typeof RoleSwitchInput>;
 

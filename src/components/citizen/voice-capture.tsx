@@ -105,14 +105,17 @@ export function VoiceMicButton({ ariaLabel }: { ariaLabel: string }) {
     rec.interimResults = true;
     rec.lang = lang;
     rec.onresult = (e) => {
+      // `e.results` is cumulative for the whole session in continuous mode, so
+      // rebuild from index 0 and REPLACE state — never append. Appending re-fired
+      // finals is what caused "There There is There is a…" duplication.
       let fin = "";
       let itr = "";
-      for (let i = e.resultIndex; i < e.results.length; i++) {
+      for (let i = 0; i < e.results.length; i++) {
         const r = e.results[i];
         if (r.isFinal) fin += r[0].transcript;
         else itr += r[0].transcript;
       }
-      if (fin) setFinalText((p) => (p ? p + " " : "") + fin.trim());
+      setFinalText(fin.trim());
       setInterim(itr);
     };
     rec.onend = () => setListening(false);

@@ -416,6 +416,25 @@
   }
 }
 
+/* Indeterminate sliding bar for the full-screen loader (native-app feel). */
+.loader-indeterminate {
+  animation: loader-indeterminate 1.15s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  will-change: left;
+}
+@keyframes loader-indeterminate {
+  0% {
+    left: -40%;
+    width: 40%;
+  }
+  50% {
+    width: 55%;
+  }
+  100% {
+    left: 100%;
+    width: 40%;
+  }
+}
+
 /* Themed theme-switch wipe (design addendum §8.4). */
 .theme-wipe {
   width: 40vmax;
