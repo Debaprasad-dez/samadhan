@@ -7,7 +7,6 @@ import { cn, initials } from "@/lib/utils";
 import { useT } from "@/components/providers/locale-provider";
 import { Brand } from "@/components/shared/brand";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
-import { ThemeTransition } from "@/components/shared/theme-transition";
 import { AmbientLamp } from "@/components/shared/ambient-lamp";
 import { NotificationBell } from "@/components/shared/notification-bell";
 import type { SessionUser } from "@/types";
@@ -34,7 +33,6 @@ export function CitizenShell({
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <ThemeTransition />
       <header className="bg-background/80 border-border sticky top-0 z-10 flex h-14 items-center justify-between border-b px-4 backdrop-blur-md md:h-16 md:px-6">
         <Brand />
         <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">

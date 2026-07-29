@@ -1,16 +1,15 @@
 "use client";
 
-import { Sun, Moon, Laptop } from "lucide-react";
+import { Sun, Moon } from "lucide-react";
 import { useTheme, type Mode } from "@/components/providers/theme-provider";
 import { useT } from "@/components/providers/locale-provider";
 import { cn } from "@/lib/utils";
 
-// Segmented Light / Dark / System control with a sliding active indicator
-// (design addendum §8.2). Used in the header switcher and the Settings gallery.
+// Segmented Light / Dark control with a sliding active indicator. Two modes
+// only: light → Bharat Dawn, dark → Mughal Indigo.
 const OPTIONS: { value: Mode; key: string; Icon: typeof Sun }[] = [
   { value: "light", key: "settings.modeLight", Icon: Sun },
   { value: "dark", key: "settings.modeDark", Icon: Moon },
-  { value: "system", key: "settings.modeAuto", Icon: Laptop },
 ];
 
 export function ModeControl({ className }: { className?: string }) {

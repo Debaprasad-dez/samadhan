@@ -178,7 +178,7 @@ export default async function CitizenHome() {
               background: "var(--g-card)",
               backdropFilter: "blur(14px) saturate(1.2)",
               border: "1px solid var(--g-line)",
-              boxShadow: "0 1px 0 rgba(255,255,255,.4) inset,0 24px 50px -26px color-mix(in srgb,var(--g-primary-deep) 55%,transparent),0 8px 20px -14px rgba(20,12,6,.3)",
+              boxShadow: "0 1px 0 rgba(255,255,255,.06) inset,0 14px 34px -22px rgba(6,8,20,.6),0 4px 12px -8px rgba(6,8,20,.34)",
             }}>
 
             {/* watermark sun-ray */}
@@ -207,7 +207,7 @@ export default async function CitizenHome() {
                 style={{
                   background: "var(--g-btn-grad)",
                   color: "var(--g-btn-ink)",
-                  boxShadow: "0 12px 24px -10px color-mix(in srgb,var(--g-primary-deep) 70%,transparent),inset 0 1px 0 rgba(255,255,255,.32)",
+                  boxShadow: "0 8px 18px -12px rgba(6,8,20,.55),inset 0 1px 0 rgba(255,255,255,.22)",
                 }}>
                 <span className="flex h-[30px] w-[30px] flex-none items-center justify-center rounded-[10px]"
                   style={{ background: "rgba(255,255,255,.18)", boxShadow: "inset 0 1px 0 rgba(255,255,255,.3)" }}>

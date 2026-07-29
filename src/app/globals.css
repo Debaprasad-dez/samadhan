@@ -479,6 +479,41 @@
   }
 }
 
+/* Native-app page transition. Applied by each route group's template.tsx (which
+   re-mounts per navigation), so the enter animation replays on every page change
+   while the shell/nav stays put. fill-mode is `backwards` (not `both`) so no
+   residual transform is left at rest — that would break sticky descendants
+   (e.g. the officer inbox tabs). Reduced-motion is handled by the global rule. */
+.page-enter {
+  animation: page-enter 0.24s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Theme-switch circular reveal (View Transitions API, driven by ThemeToggle).
+   Kill the default cross-fade; the new theme snapshot sits on top and is clipped
+   by a circle that grows from the toggle button (animated in JS), wiping the new
+   palette over the old. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 0;
+}
+::view-transition-new(root) {
+  z-index: 1;
+}
+
 /* Respect reduced-motion (§7.5, §11.1) — static states are designed, not blank. */
 @media (prefers-reduced-motion: reduce) {
   *,

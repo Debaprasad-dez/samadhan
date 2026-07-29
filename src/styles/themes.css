@@ -374,28 +374,28 @@
   --bg: 226 38% 7%;
   --surface: 225 32% 11%;
   --surface-muted: 224 26% 15%;
-  --border: 222 22% 24%;
-  --border-strong: 222 18% 36%;
-  --text: 210 30% 93%;
-  --text-muted: 214 16% 68%;
+  --border: 224 20% 22%;
+  --border-strong: 223 17% 34%;
+  --text: 210 28% 92%;
+  --text-muted: 214 15% 67%;
   --text-subtle: 216 12% 52%;
-  --brand: 226 78% 68%;
-  --brand-hover: 226 82% 74%;
-  --brand-soft: 224 44% 18%;
+  --brand: 224 62% 64%;
+  --brand-hover: 224 66% 71%;
+  --brand-soft: 224 40% 17%;
   --accent: 165 60% 48%;
   --accent-soft: 168 35% 16%;
   --success: 158 52% 50%;
   --warning: 40 86% 58%;
   --danger: 352 70% 62%;
-  --info: 226 70% 66%;
+  --info: 224 62% 64%;
   --success-soft: 158 40% 16%;
   --warning-soft: 40 45% 18%;
   --danger-soft: 352 45% 18%;
-  --info-soft: 226 45% 18%;
-  --motif-1: 226 78% 66%;
+  --info-soft: 224 42% 18%;
+  --motif-1: 224 64% 62%;
   --motif-2: 165 58% 50%;
   --motif-3: 352 64% 62%;
-  --motif-gold: 43 82% 60%;
+  --motif-gold: 43 70% 58%;
 
   --background: var(--bg);
   --foreground: var(--text);
@@ -701,28 +701,29 @@
   --g-chip-ink: var(--g-ink-soft);
 }
 
-/* mughal-indigo ← Mughal Indigo (dark) */
+/* mughal-indigo ← Mughal Indigo (dark). Antique-brass gold on deep indigo —
+   muted (not neon) for a restrained, professional register. */
 [data-theme="mughal-indigo"] {
-  --g-bg: #10153a;
+  --g-bg: #0f1436;
   --g-paper: #1a2150;
-  --g-ink: #f3ecda;
-  --g-ink-soft: #c5c2d8;
-  --g-ink-faint: #8e8db0;
-  --g-primary: #c9a227;
-  --g-primary-deep: #a8851a;
-  --g-accent: #1f9e72;
-  --g-gold: #d4af37;
-  --g-gold-lt: #ebd584;
-  --g-glow: #d4af37;
-  --g-line: #2c3470;
-  --g-card: #1c2358f2;
-  --g-ok: #1f9e72;
-  --g-warn: #d4af37;
+  --g-ink: #eee7d6;
+  --g-ink-soft: #bcbad2;
+  --g-ink-faint: #8a89ab;
+  --g-primary: #bfa14e;
+  --g-primary-deep: #9c8236;
+  --g-accent: #2a9f7a;
+  --g-gold: #c4a55a;
+  --g-gold-lt: #d8c288;
+  --g-glow: #b0934a;
+  --g-line: #262d54;
+  --g-card: #1a2153f2;
+  --g-ok: #2a9f7a;
+  --g-warn: #c9a75a;
   --g-stage1: #0c1030;
   --g-stage2: #0a0d28;
   --g-stage3: #070920;
-  --g-btn-grad: linear-gradient(135deg, #d9b43a 0%, #c9a227 45%, #a8851a 100%);
-  --g-btn-ink: #1a1330;
+  --g-btn-grad: linear-gradient(135deg, #cdb063 0%, #bfa14e 46%, #9c8236 100%);
+  --g-btn-ink: #171126;
   --g-chip-ink: var(--g-ink-soft);
 }
 

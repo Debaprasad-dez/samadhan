@@ -89,9 +89,6 @@ export function modeStorageKey(role: string) {
   return `samadhan-mode-${role}`;
 }
 
-const isTheme = (v: string | null): v is ThemeName =>
-  !!v && (THEMES as readonly string[]).includes(v);
-
 function systemMode(): ResolvedMode {
   if (typeof window === "undefined") return "light";
   return window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -118,54 +115,60 @@ export function ThemeProvider({
   const THEME_KEY = themeStorageKey(role);
   const MODE_KEY = modeStorageKey(role);
 
-  const [theme, setThemeState] = useState<ThemeName>("bharat-dawn");
-  const [mode, setModeState] = useState<Mode>("system");
+  const [mode, setModeState] = useState<Mode>("light");
   const [resolvedMode, setResolvedMode] = useState<ResolvedMode>(
     forcedMode ?? "light",
   );
 
-  // The theme actually written to the DOM: the lock wins when present.
-  const effectiveTheme = lockedTheme ?? theme;
+  // Two visual palettes only: light → Bharat Dawn, dark → Mughal Indigo. The
+  // theme is DERIVED from the resolved mode, not user-picked. Staff keep their
+  // locked professional theme (samadhan-pro) across both modes.
+  const themeForMode = (rm: ResolvedMode): string =>
+    lockedTheme ?? (rm === "dark" ? "mughal-indigo" : "bharat-dawn");
+  // The theme actually written to the DOM (for context readers).
+  const effectiveTheme = themeForMode(resolvedMode);
   // The mode actually written to the DOM: the pin wins when present.
   const effectiveMode: Mode = forcedMode ?? mode;
 
-  // Hydrate from storage (the no-flash script already set the attributes pre-paint).
+  // Hydrate mode from storage (the no-flash script already set the attributes
+  // pre-paint). Theme is derived from mode, so only the mode is stored.
   useEffect(() => {
-    if (!lockedTheme) {
-      const t = localStorage.getItem(THEME_KEY);
-      if (isTheme(t)) setThemeState(t);
-    }
     if (!forcedMode) {
       const m = localStorage.getItem(MODE_KEY);
       if (m === "light" || m === "dark" || m === "system") setModeState(m);
     }
-  }, [THEME_KEY, MODE_KEY, lockedTheme, forcedMode]);
+  }, [MODE_KEY, forcedMode]);
 
-  const apply = useCallback((t: string, m: Mode) => {
-    const rm: ResolvedMode = m === "system" ? systemMode() : m;
-    const el = document.documentElement;
-    el.setAttribute("data-theme", t);
-    el.setAttribute("data-mode", rm);
-    setResolvedMode(rm);
-  }, []);
+  const apply = useCallback(
+    (m: Mode) => {
+      const rm: ResolvedMode = m === "system" ? systemMode() : m;
+      const t = lockedTheme ?? (rm === "dark" ? "mughal-indigo" : "bharat-dawn");
+      const el = document.documentElement;
+      el.setAttribute("data-theme", t);
+      el.setAttribute("data-mode", rm);
+      setResolvedMode(rm);
+    },
+    [lockedTheme],
+  );
 
   useEffect(() => {
-    apply(effectiveTheme, effectiveMode);
-  }, [effectiveTheme, effectiveMode, apply]);
+    apply(effectiveMode);
+  }, [effectiveMode, apply]);
 
   // Follow system changes while in "system" mode (skip when the mode is pinned).
   useEffect(() => {
     if (forcedMode || mode !== "system") return;
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const handler = () => apply(effectiveTheme, "system");
+    const handler = () => apply("system");
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
-  }, [mode, effectiveTheme, apply, forcedMode]);
+  }, [mode, apply, forcedMode]);
 
+  // Kept for the (now dormant) theme gallery API. Theme is derived from mode in
+  // the live app, so this only persists a preference and does not change the DOM.
   const setTheme = useCallback(
     (t: ThemeName) => {
-      if (lockedTheme) return; // staff theme is fixed — ignore picker changes
-      setThemeState(t);
+      if (lockedTheme) return;
       localStorage.setItem(THEME_KEY, t);
     },
     [lockedTheme, THEME_KEY],

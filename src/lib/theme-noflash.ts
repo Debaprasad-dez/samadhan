@@ -13,12 +13,14 @@ export function themeNoFlashScript(
   forcedMode?: "light" | "dark",
 ): string {
   const mk = `samadhan-mode-${role}`;
-  const themeExpr = lockedTheme
-    ? `'${lockedTheme}'`
-    : `localStorage.getItem('samadhan-theme-${role}')||'bharat-dawn'`;
   // forcedMode (logged-out pages) pins the mode and ignores storage / OS pref.
   const modeExpr = forcedMode
     ? `'${forcedMode}'`
-    : `(function(){var m=localStorage.getItem('${mk}')||'system';return m==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):m;})()`;
-  return `(function(){try{var t=${themeExpr};var rm=${modeExpr};var e=document.documentElement;e.setAttribute('data-theme',t);e.setAttribute('data-mode',rm);}catch(e){}})();`;
+    : `(function(){var m=localStorage.getItem('${mk}')||'light';return m==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):m;})()`;
+  // Theme is derived from the resolved mode: light → Bharat Dawn, dark → Mughal
+  // Indigo. Staff keep their locked professional theme across both modes.
+  const themeExpr = lockedTheme
+    ? `'${lockedTheme}'`
+    : `(rm==='dark'?'mughal-indigo':'bharat-dawn')`;
+  return `(function(){try{var rm=${modeExpr};var t=${themeExpr};var e=document.documentElement;e.setAttribute('data-theme',t);e.setAttribute('data-mode',rm);}catch(e){}})();`;
 }
