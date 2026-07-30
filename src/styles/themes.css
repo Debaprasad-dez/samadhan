@@ -525,15 +525,15 @@
   --text: 175 30% 13%;
   --text-muted: 172 14% 36%;
   --text-subtle: 168 11% 52%;
-  --brand: 162 58% 30%;
-  --brand-hover: 162 64% 24%;
-  --brand-soft: 160 45% 90%;
-  --accent: 14 70% 48%;
-  --accent-soft: 14 65% 92%;
-  --success: 150 55% 32%;
-  --warning: 38 88% 46%;
-  --danger: 4 72% 46%;
-  --info: 192 66% 38%;
+  --brand: 168 70% 25%;
+  --brand-hover: 168 74% 20%;
+  --brand-soft: 166 40% 90%;
+  --accent: 54 41% 34%;
+  --accent-soft: 54 40% 90%;
+  --success: 150 60% 26%;
+  --warning: 44 68% 34%;
+  --danger: 6 52% 40%;
+  --info: 205 50% 34%;
   --success-soft: 150 55% 90%;
   --warning-soft: 38 70% 90%;
   --danger-soft: 4 65% 93%;
@@ -752,27 +752,53 @@
   --g-chip-ink: #d4c090;
 }
 
-/* nilgiri-mist ← Pichwai Cyan (dark teal) */
-[data-theme="nilgiri-mist"] {
+/* nilgiri-mist ← Nilgiri Mist (cool · calm, design spec). Gallery --g-* is
+   defined PER MODE (like civic-steel) so every citizen surface reskins in both
+   light and dark — the old mode-agnostic dark-teal block broke light mode. */
+[data-theme="nilgiri-mist"][data-mode="light"] {
+  --g-bg: #eff2f0;
+  --g-paper: #e7edea;
+  --g-ink: #16211e;
+  --g-ink-soft: #5f706b;
+  --g-ink-faint: #93a29d;
+  --g-primary: #136f63;
+  --g-primary-deep: #0f5a50;
+  --g-accent: #2a7f80;
+  --g-gold: #7c7233;
+  --g-gold-lt: #a89a55;
+  --g-glow: #2aa090;
+  --g-line: #dce4e1;
+  --g-card: #fbfcfcf0;
+  --g-ok: #1a6b4a;
+  --g-warn: #93701a;
+  --g-stage1: #e7edea;
+  --g-stage2: #eff2f0;
+  --g-stage3: #e2e9e5;
+  --g-btn-grad: linear-gradient(135deg, #1a8576 0%, #136f63 45%, #0f5a50 100%);
+  --g-btn-ink: #f2f7f5;
+  --g-chip-ink: var(--g-ink-soft);
+}
+
+[data-theme="nilgiri-mist"][data-mode="dark"] {
   --g-bg: #083444;
   --g-paper: #0c3e50;
   --g-ink: #f5edd5;
   --g-ink-soft: #c5d8dc;
   --g-ink-faint: #88b0b8;
-  --g-primary: #d4a017;
-  --g-primary-deep: #b88410;
+  --g-primary: #4fb8a8;
+  --g-primary-deep: #2f9384;
   --g-accent: #6bbcbc;
   --g-gold: #d4af37;
   --g-gold-lt: #ebd584;
-  --g-glow: #d4a017;
+  --g-glow: #4fb8a8;
   --g-line: #144858;
   --g-card: #0c3e50f0;
   --g-ok: #6bbcbc;
-  --g-warn: #d4a017;
+  --g-warn: #d4af37;
   --g-stage1: #062c3c;
   --g-stage2: #052430;
   --g-stage3: #041c24;
-  --g-btn-grad: linear-gradient(135deg, #e0b828 0%, #d4a017 45%, #b88410 100%);
+  --g-btn-grad: linear-gradient(135deg, #5fc4b4 0%, #4fb8a8 45%, #2f9384 100%);
   --g-btn-ink: #08222c;
   --g-chip-ink: var(--g-ink-soft);
 }

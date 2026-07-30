@@ -7,17 +7,18 @@ import { cn } from "@/lib/utils";
 import bharatDawn from "@/assets/heroes/bharat-dawn.png";
 import nilgiriMist from "@/assets/heroes/nilgiri-mist.png";
 
-// Per-theme hero background images (src/assets/heroes/<theme>.png), served via
-// next/image (auto WebP/AVIF + resize). Light → Bharat Dawn (warm dawn scene);
-// dark → Mughal Indigo, which uses the deep-indigo Nilgiri night render. Dormant
-// cultural themes reuse the dawn image.
-const HERO_IMG: Record<string, StaticImageData> = {
+// Per-theme hero. The two cultural themes get a photographic scene; the flat
+// professional/cool themes (Civic Steel, Nilgiri Mist) get a clean themed
+// gradient built from their --g-* tokens (null below) so the home hero reskins
+// correctly instead of showing a mismatched warm photo.
+const HERO_IMG: Record<string, StaticImageData | null> = {
   "bharat-dawn": bharatDawn,
+  "mughal-indigo": nilgiriMist, // deep-indigo night render
+  "civic-steel": null,
+  "nilgiri-mist": null,
   "mithila-bloom": bharatDawn,
   "warli-earth": bharatDawn,
-  "mughal-indigo": nilgiriMist,
   "coromandel-pattachitra": bharatDawn,
-  "nilgiri-mist": nilgiriMist,
 };
 
 // px the image extends past the hero (= max parallax travel). The matching
@@ -54,7 +55,7 @@ export function SceneHero({ className }: { className?: string }) {
     return () => mo.disconnect();
   }, []);
 
-  const img = HERO_IMG[theme] ?? HERO_IMG["bharat-dawn"];
+  const img = theme in HERO_IMG ? HERO_IMG[theme] : bharatDawn;
 
   // Feather the image to transparent at the top and bottom edges so it blends
   // softly into the page background.
@@ -72,15 +73,42 @@ export function SceneHero({ className }: { className?: string }) {
         className="absolute"
         style={{ y, top: -BLEED, bottom: -BLEED, left: 0, right: 0 }}
       >
-        <Image
-          src={img}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          placeholder="blur"
-          className="object-cover object-[center_top]"
-        />
+        {img ? (
+          <Image
+            src={img}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            placeholder="blur"
+            className="object-cover object-[center_top]"
+          />
+        ) : (
+          // Themed gradient hero for flat themes — reskins via --g-* tokens.
+          <div
+            className="absolute inset-0"
+            aria-hidden
+            style={{
+              background:
+                "linear-gradient(140deg,var(--g-stage1),var(--g-stage2) 45%,var(--g-stage3))",
+            }}
+          >
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(80% 60% at 18% 4%,color-mix(in srgb,var(--g-primary) 24%,transparent),transparent 68%)",
+              }}
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(66% 58% at 92% 24%,color-mix(in srgb,var(--g-accent) 20%,transparent),transparent 70%)",
+              }}
+            />
+          </div>
+        )}
       </motion.div>
     </div>
   );
