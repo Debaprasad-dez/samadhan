@@ -48,6 +48,8 @@ export interface JourneyEvent {
   message?: string | null;
   createdAt: string;
   actor?: { name: string; role: string } | null;
+  /** Title override; when unset the event type's i18n label is used. */
+  label?: string;
   /** e.g. "21 min", "2d 5h" — how long this stage took. */
   durationLabel?: string;
   /** The single in-progress node (spec: exactly one). */
@@ -131,7 +133,7 @@ function Timeline({
             </span>
             <div className={cn("min-w-0 pt-1", e.future && "opacity-60")}>
               <p className="flex items-center gap-2 text-sm font-medium">
-                {ICON[e.type as EventType] ? t(`timeline.${e.type}`) : e.type}
+                {e.label ?? (ICON[e.type as EventType] ? t(`timeline.${e.type}`) : e.type)}
                 {e.durationLabel && (
                   <span className="bg-surface-muted text-muted-foreground rounded-full px-1.5 py-0.5 text-[10px] font-semibold tabular-nums">
                     {e.durationLabel}

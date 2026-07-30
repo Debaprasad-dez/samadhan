@@ -2,11 +2,12 @@ import { notFound } from "next/navigation";
 import { ThumbsUp, Users, Share2 } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { CATEGORIES, WARDS } from "@/lib/seed-data";
+import { CATEGORIES, WARDS, slaDaysForCategory } from "@/lib/seed-data";
 import { humanizeCode, formatIST } from "@/lib/utils";
 import { StatusBadge, SeverityChip } from "@/components/case/status-badge";
 import { SlaRing } from "@/components/case/sla-ring";
-import { CaseTimeline } from "@/components/case/case-timeline";
+import { SlaBar } from "@/components/primitives/sla-bar";
+import { JourneyRail, type JourneyEvent } from "@/components/primitives/journey-rail";
 import { EvidenceGallery } from "@/components/case/evidence-gallery";
 import { CaseEngagement } from "@/components/case/case-engagement";
 import { SlaPredictChip } from "@/components/case/sla-predict-chip";
@@ -73,6 +74,35 @@ export default async function CaseDetail({
   );
   const stalled = isOpen && daysSince >= 30 && isOwner;
 
+  // Build the JourneyRail timeline: stage-duration chips (gap from the previous
+  // event), a single live node (latest event while open), and a ghosted future
+  // rung for the SLA/escalation date.
+  const evs = c.events;
+  const journeyEvents: JourneyEvent[] = evs.map((e, i) => ({
+    id: e.id,
+    type: e.type,
+    message: e.message,
+    createdAt: e.createdAt.toISOString(),
+    actor: e.actor,
+    durationLabel:
+      i > 0
+        ? gapLabel(e.createdAt.getTime() - evs[i - 1].createdAt.getTime())
+        : undefined,
+    live: isOpen && i === evs.length - 1,
+  }));
+  if (isOpen) {
+    journeyEvents.push({
+      id: "future-sla",
+      type: "ESCALATED",
+      label: "Awaiting resolution",
+      message: `Auto-escalates to the ward lead if unresolved by ${formatIST(c.slaDueAt)}.`,
+      createdAt: c.slaDueAt.toISOString(),
+      future: true,
+    });
+  }
+  const elapsedHours = (Date.now() - c.createdAt.getTime()) / 3_600_000;
+  const slaLimitDays = slaDaysForCategory(c.categoryId);
+
   return (
     <div className="space-y-6">
       {isNew === "1" && <Celebration />}
@@ -136,15 +166,7 @@ export default async function CaseDetail({
 
           <section className="space-y-3">
             <h2 className="font-display text-lg font-semibold">Timeline</h2>
-            <CaseTimeline
-              events={c.events.map((e) => ({
-                id: e.id,
-                type: e.type,
-                message: e.message,
-                createdAt: e.createdAt.toISOString(),
-                actor: e.actor,
-              }))}
-            />
+            <JourneyRail variant="timeline" events={journeyEvents} />
           </section>
         </div>
 
@@ -158,6 +180,11 @@ export default async function CaseDetail({
                 value={formatIST(c.createdAt)}
               />
               <Meta label="SLA due" value={formatIST(c.slaDueAt)} />
+              {isOpen && (
+                <div className="pt-1">
+                  <SlaBar elapsedHours={elapsedHours} limitDays={slaLimitDays} />
+                </div>
+              )}
               <div className="flex items-center gap-4 pt-1">
                 <span className="text-muted-foreground inline-flex items-center gap-1.5">
                   <ThumbsUp className="h-4 w-4" />
@@ -214,6 +241,17 @@ export default async function CaseDetail({
       </div>
     </div>
   );
+}
+
+// Gap between two timeline events → a compact "21 min" / "2d 5h" chip.
+function gapLabel(ms: number): string {
+  const mins = Math.round(ms / 60_000);
+  if (mins < 60) return `${mins} min`;
+  const h = Math.round(mins / 60);
+  const d = Math.floor(h / 24);
+  const r = h % 24;
+  if (d > 0) return r > 0 ? `${d}d ${r}h` : `${d}d`;
+  return `${h}h`;
 }
 
 function Meta({ label, value }: { label: string; value: string }) {

@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { useInbox, useCaseEvent, type InboxItem } from "@/hooks/use-officer";
 import { StatusBadge, SeverityChip } from "@/components/case/status-badge";
+import { SlaBar } from "@/components/primitives/sla-bar";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
@@ -193,6 +194,12 @@ export default function OfficerInbox() {
             const overdue = new Date(c.slaDueAt).getTime() < Date.now();
             const sev = SEVERITY[c.severity] ?? SEVERITY.MEDIUM;
             const SevIcon = sev.Icon;
+            const created = new Date(c.createdAt).getTime();
+            const limitDays = Math.max(
+              1,
+              Math.round((new Date(c.slaDueAt).getTime() - created) / 86_400_000),
+            );
+            const elapsedHours = (Date.now() - created) / 3_600_000;
             return (
               <Card key={c.id} className="transition-shadow hover:shadow-elev-1">
                 <CardContent className="flex items-start gap-3 p-4 sm:gap-4">
@@ -300,6 +307,17 @@ export default function OfficerInbox() {
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </div>
+                    </div>
+
+                    {/* SLA progress — limit marker at 78%, no mount animation
+                        in the list (spec §4). */}
+                    <div className="mt-2.5">
+                      <SlaBar
+                        elapsedHours={elapsedHours}
+                        limitDays={limitDays}
+                        size="sm"
+                        animateOnMount={false}
+                      />
                     </div>
 
                     {/* bottom controls */}

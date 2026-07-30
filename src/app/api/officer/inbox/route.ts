@@ -70,9 +70,11 @@ export async function GET(req: Request) {
         ageDays * 0.1;
       return { ...c, rank: Number(rank.toFixed(2)) };
     })
+    // Invariant 4: the queue sorts by time remaining (soonest-due / most
+    // overdue first), never by date filed. Rank is the tiebreaker.
     .sort(
       (a, b) =>
-        b.rank - a.rank || a.createdAt.getTime() - b.createdAt.getTime(),
+        a.slaDueAt.getTime() - b.slaDueAt.getTime() || b.rank - a.rank,
     );
 
   const total = ranked.length;

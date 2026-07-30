@@ -303,7 +303,8 @@ export function VoiceMicButton({ ariaLabel }: { ariaLabel: string }) {
                 {transcript ? (
                   <>
                     <span>{finalText}</span>{" "}
-                    <span className="text-muted-foreground italic">{interim}</span>
+                    {/* interim (not-yet-final) text at 45% opacity (spec §3) */}
+                    <span className="italic opacity-45">{interim}</span>
                   </>
                 ) : (
                   <span className="text-muted-foreground">
