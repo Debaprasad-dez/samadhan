@@ -114,8 +114,9 @@ function Timeline({
             {!last && (
               <span
                 className={cn(
-                  "absolute bottom-0 left-[15px] top-8 w-px",
-                  e.future ? "border-border border-l border-dashed" : "bg-border",
+                  // logical inset so the rail flips to the right side in RTL (spec §5)
+                  "absolute bottom-0 start-[15px] top-8 w-px",
+                  e.future ? "border-border border-s border-dashed" : "bg-border",
                 )}
               />
             )}

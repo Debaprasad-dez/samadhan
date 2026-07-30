@@ -9,6 +9,7 @@ import { SessionProvider } from "@/components/providers/session-provider";
 import { LocaleProvider } from "@/components/providers/locale-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { PWARegister } from "@/components/shared/pwa-register";
+import { OfflineBanner } from "@/components/shared/offline-banner";
 
 export const metadata: Metadata = {
   title: "Samadhan — Civic Resolution Network",
@@ -47,8 +48,18 @@ export default async function RootLayout({
   // render in light mode regardless of stored preference or OS setting.
   const forcedMode: "light" | "dark" | undefined = user ? undefined : "light";
 
+  // RTL for Urdu (spec §5): set dir on <html> so text and logical properties
+  // mirror. Everything else defaults to ltr.
+  const lang = user?.language ?? "en";
+  const dir = lang === "ur" ? "rtl" : "ltr";
+
   return (
-    <html lang="en" suppressHydrationWarning className={fontVariables}>
+    <html
+      lang={lang}
+      dir={dir}
+      suppressHydrationWarning
+      className={fontVariables}
+    >
       <head>
         {/* No-flash: set data-theme/data-mode before first paint (design §2.2).
             suppressHydrationWarning: browser extensions inject their own <script>
@@ -71,6 +82,7 @@ export default async function RootLayout({
           <QueryProvider>
             <SessionProvider user={user}>
               <LocaleProvider locale={user?.language ?? "en"}>
+                <OfflineBanner />
                 {children}
                 <Toaster richColors position="top-right" />
                 <PWARegister />

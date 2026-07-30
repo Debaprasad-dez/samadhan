@@ -9,83 +9,17 @@ import { CardArtwork } from "@/components/art/card-artwork";
 import { VoiceMicButton } from "@/components/citizen/voice-capture";
 import { WardSelector } from "@/components/citizen/ward-selector";
 import { CategoryChips } from "@/components/citizen/category-chips";
+import { SlaBar } from "@/components/primitives/sla-bar";
+import { StatusBadge } from "@/components/case/status-badge";
+import { CATEGORIES } from "@/lib/seed-data";
 import { getT } from "@/lib/t";
 import { cn } from "@/lib/utils";
+import type { CaseStatus } from "@/types";
 
 // Floating marigold-and-leaf sprig (design handoff decorate()) — perches over the
 // CTA card's top-right corner; the .bloom class gives it a gentle sway.
 const SPRIG = `${leaf(64, 22)}${leaf(22, 40)}${marigold(36, 30, 12, false)}${marigold(62, 40, 9, false)}${marigold(50, 22, 7, true)}`;
 
-// Resolved/closed cases are "on track" (green); everything else is in-flight.
-const SETTLED = new Set(["RESOLVED", "CLOSED"]);
-
-function slaPercent(status: string): number {
-  switch (status) {
-    case "OPEN": return 10;
-    case "ACKNOWLEDGED": return 25;
-    case "AWAITING_INFO": return 45;
-    case "IN_PROGRESS": return 60;
-    case "ESCALATED": return 85;
-    case "RESOLVED":
-    case "CLOSED": return 100;
-    default: return 15;
-  }
-}
-
-function SlaRing({ percent, status }: { percent: number; status: string }) {
-  const r = 15;
-  const circ = 2 * Math.PI * r;
-  const offset = circ * (1 - Math.min(percent, 100) / 100);
-  const isWarn = !SETTLED.has(status);
-  const stroke = isWarn ? "var(--g-warn)" : "var(--g-ok)";
-  return (
-    <svg width="34" height="34" viewBox="0 0 36 36" aria-hidden>
-      <circle cx="18" cy="18" r={r} fill="none" stroke="var(--g-line)" strokeWidth="4" />
-      <circle
-        cx="18" cy="18" r={r}
-        fill="none" stroke={stroke} strokeWidth="4"
-        strokeLinecap="round"
-        strokeDasharray={circ}
-        strokeDashoffset={offset}
-        transform="rotate(-90 18 18)"
-      />
-      <text x="18" y="21.5" textAnchor="middle" fontSize="9.5" fontWeight="700"
-        fill={stroke} fontFamily="var(--font-mukta,system-ui)">
-        {percent}%
-      </text>
-    </svg>
-  );
-}
-
-// Category thumb gradients are semantic (per department), not per-theme.
-const THUMB_STYLE: Record<string, { bg: string; color: string }> = {
-  WATER:       { bg: "linear-gradient(150deg,#D9EEF0,#A9D4D8)", color: "#1F6E73" },
-  ELECTRICITY: { bg: "linear-gradient(150deg,#FBE7C4,#F1C57E)", color: "#A8650F" },
-  ROADS:       { bg: "linear-gradient(150deg,#E0E4F0,#B8C2DC)", color: "#3A4A88" },
-  SANITATION:  { bg: "linear-gradient(150deg,#D9F0E4,#A9D8BC)", color: "#1F6E4A" },
-  HEALTH:      { bg: "linear-gradient(150deg,#F0D9E4,#D8A9BC)", color: "#6E1F3A" },
-  EDUCATION:   { bg: "linear-gradient(150deg,#EAD9F0,#C8A9D8)", color: "#5A1F6E" },
-  POLICE:      { bg: "linear-gradient(150deg,#F0EDD9,#D8D0A9)", color: "#6E5A1F" },
-  PUBLIC_WORKS:{ bg: "linear-gradient(150deg,#F0DED9,#D8B4A9)", color: "#6E2F1F" },
-};
-const THUMB_ICON: Record<string, string> = {
-  WATER:       `<path d="M12 2c3.5 4.5 6 7.5 6 10.5a6 6 0 0 1-12 0C6 9.5 8.5 6.5 12 2Z" fill="currentColor"/>`,
-  ELECTRICITY: `<path d="M13 2 4 14h7l-1 9 9-12h-7l1-9Z" fill="currentColor"/>`,
-  ROADS:       `<path d="M6 21V8l6-4 6 4v13M6 12h12M9 12v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`,
-  SANITATION:  `<path d="M16 3l-7 7M5 21c0-4 2-6 4-8l3 3c-2 2-4 4-7 5ZM12 13l4-4 2 2-4 4Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/>`,
-};
-
-function CategoryThumb({ category }: { category: string }) {
-  const s = THUMB_STYLE[category] ?? THUMB_STYLE.PUBLIC_WORKS;
-  const icon = THUMB_ICON[category] ?? `<circle cx="12" cy="12" r="6" fill="currentColor"/>`;
-  return (
-    <div className="flex h-[46px] w-[46px] flex-none items-center justify-center overflow-hidden rounded-[13px]"
-      style={{ background: s.bg, color: s.color }}>
-      <svg viewBox="0 0 24 24" className="h-[23px] w-[23px]"
-        dangerouslySetInnerHTML={{ __html: icon }} />
-    </div>
-  );
-}
 
 export default async function CitizenHome() {
   const user = await requireRole(["CITIZEN"]);
@@ -93,10 +27,19 @@ export default async function CitizenHome() {
   const [caseCount, recent, hot] = await Promise.all([
     db.case.count({ where: { filedById: user.id } }),
     db.case.findMany({
-      where: { filedById: user.id },
-      orderBy: { createdAt: "desc" },
-      take: 2,
-      select: { id: true, number: true, title: true, status: true, categoryId: true },
+      // Active cases, sorted BY TIME LEFT (invariant 4) for the home list.
+      where: { filedById: user.id, status: { notIn: ["RESOLVED", "CLOSED"] } },
+      orderBy: { slaDueAt: "asc" },
+      take: 3,
+      select: {
+        id: true,
+        number: true,
+        title: true,
+        status: true,
+        categoryId: true,
+        createdAt: true,
+        slaDueAt: true,
+      },
     }),
     db.case.findMany({
       where: { filedById: { not: user.id } },
@@ -254,44 +197,46 @@ export default async function CitizenHome() {
               {t("home.noCases")}
             </div>
           ) : (
-            <div className="flex flex-col gap-2.5">
-              {recent.map((c) => {
-                const pct = slaPercent(c.status);
-                const isWarn = !SETTLED.has(c.status);
-                return (
-                  <Link key={c.id} href={`/cases/${c.id}`}
-                    className="relative flex items-center gap-3 overflow-hidden rounded-[18px] p-3 transition-shadow hover:shadow-md"
-                    style={{ background: "var(--g-card)", border: "1px solid var(--g-line)", boxShadow: "0 10px 22px -18px rgba(20,12,6,.45)" }}>
-                    <CategoryThumb category={c.categoryId ?? "PUBLIC_WORKS"} />
-                    <div className="min-w-0 flex-1">
-                      <p className="text-[10px] font-bold uppercase tracking-[.6px]" style={{ color: "var(--g-ink-faint)" }}>{c.number}</p>
-                      <p className="mt-0.5 mb-1.5 truncate text-[13.5px] font-semibold" style={{ color: "var(--g-ink)" }}>{c.title}</p>
-                      <div className="flex items-center gap-2">
-                        <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold"
-                          style={{
-                            background: isWarn ? "color-mix(in srgb,var(--g-warn) 18%,var(--g-card))" : "color-mix(in srgb,var(--g-ok) 16%,var(--g-card))",
-                            color: isWarn ? "color-mix(in srgb,var(--g-warn) 75%,var(--g-ink))" : "color-mix(in srgb,var(--g-ok) 78%,var(--g-ink))",
-                          }}>
-                          <span className="h-[5px] w-[5px] rounded-full" style={{ background: isWarn ? "var(--g-warn)" : "var(--g-ok)" }} />
-                          {t(`status.${c.status}`)}
-                        </span>
+            // Mockup "Your active cases" card — rows with the SLA bar + status pill,
+            // sorted by time left.
+            <div className="mk">
+              <div className="card">
+                <div className="ch">
+                  <b>{t("home.recentCases")}</b>
+                  <span className="m">BY TIME LEFT</span>
+                </div>
+                {recent.map((c) => {
+                  const created = c.createdAt.getTime();
+                  const limitDays = Math.max(
+                    1,
+                    Math.round((c.slaDueAt.getTime() - created) / 86_400_000),
+                  );
+                  const elapsedHours = (Date.now() - created) / 3_600_000;
+                  const catName =
+                    CATEGORIES.find((x) => x.id === c.categoryId)?.name ?? "—";
+                  return (
+                    <Link
+                      key={c.id}
+                      href={`/cases/${c.id}`}
+                      className="row"
+                      style={{ color: "inherit", textDecoration: "none" }}
+                    >
+                      <div className="mn">
+                        <div className="t1">{c.title}</div>
+                        <div className="t2 mono">
+                          {c.number} · {catName}
+                        </div>
+                        <div style={{ marginTop: 7 }}>
+                          <SlaBar elapsedHours={elapsedHours} limitDays={limitDays} />
+                        </div>
                       </div>
-                    </div>
-                    <SlaRing percent={pct} status={c.status} />
-                    {/* lotus watermark */}
-                    <div className="pointer-events-none absolute -right-3 -bottom-4 z-0 opacity-[0.09]" aria-hidden>
-                      <svg width="82" height="82" viewBox="0 0 82 82">
-                        {Array.from({ length: 8 }, (_, i) => (
-                          <path key={i}
-                            d={`M41 41 q ${37.7 * 0.2} -${37.7 * 0.55} 0 -${37.7} q -${37.7 * 0.2} ${37.7 * 0.55} 0 ${37.7}Z`}
-                            transform={`rotate(${i * 45} 41 41)`}
-                            fill="none" stroke="var(--g-accent)" strokeWidth="1.2" />
-                        ))}
-                      </svg>
-                    </div>
-                  </Link>
-                );
-              })}
+                      <div className="rt">
+                        <StatusBadge status={c.status as CaseStatus} />
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
           )}
         </section>
