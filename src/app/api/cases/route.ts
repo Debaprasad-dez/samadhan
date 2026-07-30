@@ -30,7 +30,9 @@ export async function GET(req: Request) {
   const [cases, total] = await Promise.all([
     db.case.findMany({
       where,
-      orderBy: { createdAt: "desc" },
+      // Invariant 4: sort by time remaining (soonest-due / most overdue first),
+      // never by date filed.
+      orderBy: { slaDueAt: "asc" },
       skip: (page - 1) * limit,
       take: limit,
       select: {

@@ -9,13 +9,17 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { WARDS, DEPARTMENTS } from "@/lib/seed-data";
 import { CASE_STATUSES } from "@/types";
 import { humanizeCode } from "@/lib/utils";
+import { useSession } from "@/components/providers/session-provider";
 
 export default function FeedPage() {
+  const user = useSession();
   const [items, setItems] = useState<FeedItem[]>([]);
   const [hot, setHot] = useState<FeedItem[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [ward, setWard] = useState("");
+  // Feed defaults to "Near you" — the signed-in citizen's ward (spec §3) — with
+  // the ward dropdown to broaden to all wards.
+  const [ward, setWard] = useState(user?.wardCode ?? "");
   const [dept, setDept] = useState("");
   const [status, setStatus] = useState("");
   const pageRef = useRef(1);
