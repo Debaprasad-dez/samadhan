@@ -1,26 +1,26 @@
-// Server-safe no-flash script generator (design §2.2). Kept OUT of the
-// "use client" theme-provider module so RootLayout (a Server Component) can call
-// it directly. Sets data-theme/data-mode before first paint.
+// Server-safe no-flash script generator. Kept OUT of the "use client"
+// theme-provider module so RootLayout (a Server Component) can call it directly.
+// Sets data-theme/data-mode on <html> before first paint (a blocking inline
+// <script>), so a stored theme/mode never flashes the default on load.
 //
 // Keys are role-scoped (samadhan-theme-<role> / samadhan-mode-<role>) so each
-// role's theme+mode are independent. When `lockedTheme` is given (staff roles),
-// the theme is hardcoded and the stored theme key is ignored — only the
-// light/dark mode is read from storage.
+// role's preferences are independent. `forcedMode` (logged-out pages) pins the
+// mode and also pins the theme to the role default (bright Bharat Dawn light).
 
 export function themeNoFlashScript(
   role = "citizen",
-  lockedTheme?: string,
+  defaultTheme = "bharat-dawn",
   forcedMode?: "light" | "dark",
 ): string {
+  const tk = `samadhan-theme-${role}`;
   const mk = `samadhan-mode-${role}`;
-  // forcedMode (logged-out pages) pins the mode and ignores storage / OS pref.
   const modeExpr = forcedMode
     ? `'${forcedMode}'`
     : `(function(){var m=localStorage.getItem('${mk}')||'light';return m==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):m;})()`;
-  // Theme is derived from the resolved mode: light → Bharat Dawn, dark → Mughal
-  // Indigo. Staff keep their locked professional theme across both modes.
-  const themeExpr = lockedTheme
-    ? `'${lockedTheme}'`
-    : `(rm==='dark'?'mughal-indigo':'bharat-dawn')`;
+  // Stored theme selection, or the role default. Logged-out pages force the
+  // default so login/role-switch always render in bright Bharat Dawn light.
+  const themeExpr = forcedMode
+    ? `'${defaultTheme}'`
+    : `(localStorage.getItem('${tk}')||'${defaultTheme}')`;
   return `(function(){try{var rm=${modeExpr};var t=${themeExpr};var e=document.documentElement;e.setAttribute('data-theme',t);e.setAttribute('data-mode',rm);}catch(e){}})();`;
 }

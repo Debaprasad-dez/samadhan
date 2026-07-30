@@ -13,9 +13,13 @@
   body {
     @apply text-foreground font-sans antialiased;
     color: var(--g-ink);
+    /* Invariant 3 (design spec §0): all figures are tabular — set here, never
+       overridden. */
+    font-variant-numeric: tabular-nums;
     font-feature-settings:
       "rlig" 1,
-      "calt" 1;
+      "calt" 1,
+      "tnum" 1;
     /* Gallery backdrop (design handoff §1): the per-theme paper/stage gradient
        mesh + a faint grain. All from --g-* tokens so the whole page reskins the
        instant data-theme changes, in either mode. Never flat. */

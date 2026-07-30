@@ -778,42 +778,41 @@
 }
 
 /* =============================================================================
-   samadhan-pro — PROFESSIONAL NEUTRAL theme for the OFFICER/ADMIN dashboards.
-   NOT a cultural theme: it never appears in the citizen theme gallery. It is
-   force-locked for staff roles (see ThemeProvider `lockedTheme`), so staff get a
-   calm, high-contrast civic dashboard with a plain light/dark toggle — no warm
-   gallery palette. Slate surfaces + a trustworthy civic blue brand.
+   civic-steel — Civic Steel: a neutral, high-contrast PROFESSIONAL theme (spec
+   §1.1). A user-selectable theme (the default for staff), it replaces the old
+   samadhan-pro. Cool slate surfaces + a trustworthy civic blue (#1F5FD0), dense
+   and calm — built for dashboards.
 
    Unlike the cultural themes above, the gallery `--g-*` tokens here are defined
    PER MODE so the body background actually flips with light/dark (the cultural
-   themes' mode-agnostic --g-* is exactly what made staff dark mode unreadable).
+   themes' mode-agnostic --g-* is exactly what made dark mode unreadable).
    ============================================================================= */
-[data-theme="samadhan-pro"][data-mode="light"] {
-  --bg: 210 25% 98%;
+[data-theme="civic-steel"][data-mode="light"] {
+  --bg: 218 16% 97%;
   --surface: 0 0% 100%;
-  --surface-muted: 210 20% 95%;
-  --border: 214 18% 89%;
-  --border-strong: 214 14% 79%;
-  --text: 218 32% 13%;
-  --text-muted: 216 14% 40%;
-  --text-subtle: 216 10% 54%;
-  --brand: 216 72% 44%;
-  --brand-hover: 216 78% 37%;
-  --brand-soft: 214 76% 94%;
+  --surface-muted: 216 20% 96%;
+  --border: 218 16% 91%;
+  --border-strong: 216 15% 85%;
+  --text: 216 28% 8%;
+  --text-muted: 218 12% 41%;
+  --text-subtle: 218 13% 62%;
+  --brand: 218 74% 47%;
+  --brand-hover: 218 74% 40%;
+  --brand-soft: 217 83% 96%;
   --accent: 188 70% 36%;
   --accent-soft: 188 55% 92%;
-  --success: 145 55% 35%;
-  --warning: 35 92% 44%;
-  --danger: 4 72% 47%;
-  --info: 205 78% 42%;
-  --success-soft: 145 50% 90%;
-  --warning-soft: 38 80% 90%;
-  --danger-soft: 4 70% 93%;
-  --info-soft: 205 65% 92%;
-  --motif-1: 216 72% 50%;
+  --success: 162 93% 22%;
+  --warning: 26 90% 37%;
+  --danger: 4 76% 40%;
+  --info: 219 80% 46%;
+  --success-soft: 152 60% 96%;
+  --warning-soft: 44 100% 96%;
+  --danger-soft: 6 83% 97%;
+  --info-soft: 214 100% 97%;
+  --motif-1: 218 74% 50%;
   --motif-2: 188 65% 40%;
-  --motif-3: 145 50% 40%;
-  --motif-gold: 38 80% 50%;
+  --motif-3: 162 60% 32%;
+  --motif-gold: 40 63% 40%;
 
   --background: var(--bg);
   --foreground: var(--text);
@@ -835,30 +834,30 @@
   --ring: var(--brand);
   --accent-blue: var(--accent);
 
-  --g-bg: #f7f9fc;
-  --g-paper: #eef2f8;
-  --g-ink: #141b2a;
-  --g-ink-soft: #4a5568;
-  --g-ink-faint: #7b8696;
-  --g-primary: #1f6fd4;
-  --g-primary-deep: #1857ab;
+  --g-bg: #f5f6f8;
+  --g-paper: #eef1f5;
+  --g-ink: #0d1117;
+  --g-ink-soft: #5d6675;
+  --g-ink-faint: #929baa;
+  --g-primary: #1f5fd0;
+  --g-primary-deep: #1a4fb0;
   --g-accent: #1a9aa8;
-  --g-gold: #c98a1e;
-  --g-gold-lt: #e6b85a;
+  --g-gold: #8a6a1f;
+  --g-gold-lt: #b89040;
   --g-glow: #4a90e2;
-  --g-line: #dde4ee;
+  --g-line: #e4e7ec;
   --g-card: #ffffffee;
-  --g-ok: #2f8a52;
-  --g-warn: #c98a1e;
-  --g-stage1: #eef2f8;
-  --g-stage2: #e6ecf4;
-  --g-stage3: #dde5ef;
-  --g-btn-grad: linear-gradient(135deg, #2b7fe0 0%, #1f6fd4 45%, #1857ab 100%);
+  --g-ok: #046c4e;
+  --g-warn: #b45309;
+  --g-stage1: #eef1f5;
+  --g-stage2: #e7ebf0;
+  --g-stage3: #dde2ea;
+  --g-btn-grad: linear-gradient(135deg, #2f6ee0 0%, #1f5fd0 45%, #1a4fb0 100%);
   --g-btn-ink: #f4f9ff;
   --g-chip-ink: var(--g-ink-soft);
 }
 
-[data-theme="samadhan-pro"][data-mode="dark"] {
+[data-theme="civic-steel"][data-mode="dark"] {
   --bg: 220 30% 9%;
   --surface: 220 24% 13%;
   --surface-muted: 219 18% 18%;

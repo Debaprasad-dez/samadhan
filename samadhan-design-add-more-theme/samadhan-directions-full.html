@@ -1,0 +1,1756 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Samadhan — Four directions, full IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Tiro+Devanagari+Sanskrit&family=Noto+Nastaliq+Urdu:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+/* ============ EXPLORER CHROME ============ */
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Inter',system-ui,sans-serif;background:#07080B;color:#E6EAF0;-webkit-font-smoothing:antialiased;
+     font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;padding:36px 22px 70px}
+.wrap{max-width:1460px;margin:0 auto}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;gap:26px;flex-wrap:wrap;margin-bottom:26px}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:#78829A}
+h1.pg{font-size:30px;font-weight:600;letter-spacing:-.03em;color:#fff;margin-top:9px}
+.hd p{font-size:13.5px;color:#8E99AD;max-width:520px;line-height:1.6;margin-top:9px}
+
+/* --- theme bar: always on top, opaque --- */
+.themebar{background:#101319;border:1px solid #1D222C;border-radius:13px;padding:12px;margin-bottom:18px;
+  display:flex;gap:14px;align-items:center;flex-wrap:wrap;isolation:isolate}
+.themebar .tl{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:#69748B;padding-left:4px;flex:0 0 auto}
+.tsw{display:flex;gap:8px;flex-wrap:wrap;flex:1}
+.tbtn{background:#161B23;border:1px solid #242B36;border-radius:10px;padding:9px 12px;
+      cursor:pointer;font:inherit;color:#D6DCE6;text-align:left;transition:background .16s,border-color .16s;min-width:136px}
+.tbtn:hover{background:#1D242E;border-color:#323B49}
+.tbtn[aria-pressed="true"]{background:#232C39;border-color:#5C6A80}
+.tbtn .cs{display:flex;gap:3px;margin-bottom:7px}
+.tbtn .cs i{width:13px;height:13px;border-radius:3px;display:block}
+.tbtn .nm{font-size:12.5px;font-weight:600}
+.tbtn .sb{font-size:10.5px;color:#828EA5;margin-top:2px}
+
+/* --- two columns, never collapses, never overlaps --- */
+.layout{display:grid;grid-template-columns:minmax(184px,214px) minmax(0,1fr);gap:20px;align-items:start;isolation:isolate}
+.rail{background:#101319;border:1px solid #1D222C;border-radius:13px;padding:11px 10px;
+  max-height:calc(100vh - 60px);overflow-y:auto;position:relative;z-index:1}
+.rl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:#69748B;padding:11px 7px 5px}
+.rail button{display:flex;width:100%;align-items:center;gap:8px;background:transparent;border:0;color:#AFBACD;font:inherit;font-size:12px;
+  padding:7px 8px;border-radius:7px;cursor:pointer;text-align:left;line-height:1.3}
+.rail button:hover{background:#1B212B;color:#fff}
+.rail button[aria-current="true"]{background:#28303C;color:#fff;font-weight:600}
+.rail button .rn{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;color:#69748B;flex:0 0 auto}
+
+.stagewrap{min-width:0;background:#0C0E13;border:1px solid #1A1F28;border-radius:13px;padding:20px;position:relative;z-index:0}
+.pgmeta{margin-bottom:4px;padding-bottom:16px;border-bottom:1px solid #1A1F28}
+.pgmeta .rt{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#7C87A0}
+.pgmeta h2{font-size:21px;font-weight:600;letter-spacing:-.025em;color:#fff;margin-top:5px}
+.pgmeta p{font-size:13px;color:#8E99AD;line-height:1.6;margin-top:7px}
+.pgmeta p b{color:#D9E0EB;font-weight:600}
+
+/* --- info tabs --- */
+.itabs{display:flex;gap:5px;margin:16px 0 0}
+.itab{background:#141920;border:1px solid #222932;color:#93A0B5;font:inherit;font-size:11.5px;font-weight:600;
+  padding:7px 13px;border-radius:8px;cursor:pointer}
+.itab[aria-selected="true"]{background:#2A3341;border-color:#3D4959;color:#fff}
+
+.deck{display:flex;justify-content:center;padding:20px 0 4px;overflow-x:auto}
+.phone{width:392px;height:800px;border-radius:44px;padding:10px;background:#1B1F27;flex:0 0 auto;
+  box-shadow:0 34px 80px -30px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.08)}
+.laptop{width:100%;max-width:1120px;border-radius:13px;overflow:hidden;box-shadow:0 40px 90px -34px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.08)}
+.lchrome{height:34px;background:#14171D;display:flex;align-items:center;gap:6px;padding:0 13px}
+.lchrome i{width:9px;height:9px;border-radius:50%;background:#2B313B;display:block}
+.lchrome .u{margin-left:11px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#767F92;background:rgba(255,255,255,.05);padding:3px 10px;border-radius:5px}
+
+/* ============ THEME TOKEN CONTRACT ============ */
+.app{background:var(--bg);color:var(--ink);height:100%;display:flex;flex-direction:column;overflow:hidden;
+     font-family:var(--f-ui);border-radius:inherit}
+.phone .app{border-radius:35px;height:100%}
+
+[data-theme="dawn"]{
+  --bg:#FBF6EC;--surface:#FFFFFF;--surface-2:#F6EFE2;--ink:#2A211A;--muted:#7A6A5C;--faint:#A69684;
+  --line:#EADFCC;--line-2:#DCCDB2;--track:#EFE6D5;
+  --brand:#B4541A;--brand-soft:#FBEDE1;--brand-line:#EFCFB4;--gold:#A9862F;
+  --ok:#2C6A45;--ok-bg:#EAF3ED;--ok-line:#BBD9C6;
+  --warn:#A8690A;--warn-bg:#FBF1DE;--warn-line:#E9CE9C;
+  --dang:#A32E22;--dang-bg:#FBEDEB;--dang-line:#E8C0B8;
+  --info:#2C5578;--info-bg:#EAF1F7;--info-line:#BDD3E4;
+  --r:14px;--r-lg:20px;--r-sm:9px;
+  --sh:0 1px 2px rgba(42,33,26,.05),0 6px 18px -8px rgba(42,33,26,.13);
+  --f-ui:'Inter',sans-serif;--f-dis:'Fraunces',serif;--dis-w:500;--dis-ls:-.012em;
+}
+[data-theme="mughal"]{
+  --bg:#0D1226;--surface:#141B33;--surface-2:#1B2340;--ink:#E7EAF5;--muted:#98A2C0;--faint:#6E799B;
+  --line:#232C4B;--line-2:#313C63;--track:#1E2542;
+  --brand:#C9A24A;--brand-soft:#241F17;--brand-line:#463A22;--gold:#C9A24A;
+  --ok:#4BC08D;--ok-bg:#122B23;--ok-line:#22503E;
+  --warn:#E0AE4E;--warn-bg:#2A2115;--warn-line:#544022;
+  --dang:#F0736A;--dang-bg:#2C1817;--dang-line:#55282A;
+  --info:#6FA8E8;--info-bg:#14213A;--info-line:#274063;
+  --r:14px;--r-lg:20px;--r-sm:9px;
+  --sh:0 1px 2px rgba(0,0,0,.4),0 8px 26px -10px rgba(0,0,0,.6);
+  --f-ui:'Inter',sans-serif;--f-dis:'Fraunces',serif;--dis-w:400;--dis-ls:-.008em;
+}
+[data-theme="steel"]{
+  --bg:#F5F6F8;--surface:#FFFFFF;--surface-2:#F9FAFB;--ink:#0D1117;--muted:#5D6675;--faint:#929BAA;
+  --line:#E4E7EC;--line-2:#D2D7DF;--track:#EDEFF3;
+  --brand:#1F5FD0;--brand-soft:#EDF3FE;--brand-line:#C3D8F9;--gold:#8A6A1F;
+  --ok:#046C4E;--ok-bg:#ECFDF5;--ok-line:#A6EACB;
+  --warn:#B45309;--warn-bg:#FFFAEB;--warn-line:#FCDF9B;
+  --dang:#B42318;--dang-bg:#FEF3F2;--dang-line:#FDCDC7;
+  --info:#175CD3;--info-bg:#EFF6FF;--info-line:#BFDBFE;
+  --r:8px;--r-lg:11px;--r-sm:6px;
+  --sh:0 1px 2px rgba(13,17,23,.06),0 4px 12px -6px rgba(13,17,23,.10);
+  --f-ui:'Inter',sans-serif;--f-dis:'Inter',sans-serif;--dis-w:600;--dis-ls:-.032em;
+}
+[data-theme="nilgiri"]{
+  --bg:#EFF2F0;--surface:#FBFCFC;--surface-2:#E7EDEA;--ink:#16211E;--muted:#5F706B;--faint:#93A29D;
+  --line:#DCE4E1;--line-2:#C6D2CE;--track:#E3EAE7;
+  --brand:#136F63;--brand-soft:#E5F1EE;--brand-line:#B3D6CE;--gold:#7C7233;
+  --ok:#1A6B4A;--ok-bg:#E8F3ED;--ok-line:#B4D8C6;
+  --warn:#93701A;--warn-bg:#F5F0DF;--warn-line:#DBCD98;
+  --dang:#9B3A32;--dang-bg:#F6EAE8;--dang-line:#DDBAB5;
+  --info:#2A5F80;--info-bg:#E8F0F5;--info-line:#B6CEDE;
+  --r:16px;--r-lg:24px;--r-sm:10px;
+  --sh:0 1px 2px rgba(22,33,30,.05),0 10px 26px -12px rgba(22,33,30,.16);
+  --f-ui:'Inter',sans-serif;--f-dis:'Fraunces',serif;--dis-w:400;--dis-ls:-.01em;
+}
+
+/* ============ APP COMPONENTS ============ */
+.app *{font-variant-numeric:tabular-nums}
+.dis{font-family:var(--f-dis);font-weight:var(--dis-w);letter-spacing:var(--dis-ls)}
+.mono{font-family:'JetBrains Mono',monospace}
+
+/* shells */
+.hdr{flex:0 0 auto;background:var(--surface);border-bottom:1px solid var(--line);padding:0 16px}
+.hdr .sb{height:38px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;font-weight:600}
+.hdr .tr{display:flex;justify-content:space-between;align-items:center;padding:2px 0 12px;gap:12px}
+.hdr .tt{font-size:17px}
+.hdr .st{font-size:11px;color:var(--muted);margin-top:2px}
+.hdr .ic{width:32px;height:32px;border-radius:var(--r-sm);border:1px solid var(--line);display:grid;place-items:center;flex:0 0 auto;position:relative}
+.hdr .ic svg{width:16px;height:16px;color:var(--muted)}
+.hdr .ic b{position:absolute;top:-4px;right:-4px;background:var(--dang);color:#fff;font-size:9px;width:15px;height:15px;border-radius:50%;display:grid;place-items:center;font-weight:700}
+.body{flex:1;overflow:hidden;padding:13px 16px}
+.tabbar{flex:0 0 auto;background:var(--surface);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:7px 0 22px;align-items:end}
+.tb{text-align:center;color:var(--faint)}
+.tb svg{width:20px;height:20px}
+.tb b{display:block;font-size:9px;font-weight:600;margin-top:2px}
+.tb.on{color:var(--brand)}
+.tb.fab{position:relative}
+.tb.fab .btn{width:46px;height:46px;border-radius:15px;background:var(--brand);color:var(--surface);display:grid;place-items:center;margin:-14px auto 0;box-shadow:var(--sh)}
+.tb.fab .btn svg{width:22px;height:22px}
+
+.staff{display:grid;grid-template-columns:206px 1fr;height:660px;overflow:hidden}
+.sside{background:var(--surface);border-right:1px solid var(--line);padding:14px 11px;overflow:hidden}
+.sside .bd{padding:2px 8px 13px;border-bottom:1px solid var(--line);margin-bottom:10px}
+.sside .bd .b1{font-size:15px}
+.sside .bd .b2{font-size:10.5px;color:var(--muted);margin-top:2px}
+.snl{font-size:9.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);padding:11px 8px 5px}
+.sside a{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:var(--r-sm);font-size:12.5px;color:var(--muted);text-decoration:none;font-weight:500}
+.sside a svg{width:15px;height:15px}
+.sside a.on{background:var(--brand-soft);color:var(--brand);font-weight:600;border:1px solid var(--brand-line)}
+.sside a .c{margin-left:auto;font-size:10.5px;font-weight:600}
+.smain{padding:18px 20px;overflow:hidden}
+.smain>.top{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:15px;flex-wrap:wrap}
+.smain h2{font-size:20px}
+.smain .sub{font-size:12.5px;color:var(--muted);margin-top:4px}
+
+/* primitives */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:11px}
+.card.flat{box-shadow:none}
+.ch{padding:10px 13px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.ch b{font-size:12.5px;font-weight:600}
+.ch .m{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--faint);letter-spacing:.06em}
+.cb{padding:13px}
+.k{font-size:9.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.v{font-size:29px;letter-spacing:-.035em;line-height:1.03;margin-top:5px;font-weight:600}
+.v small{font-size:15px;color:var(--muted);font-weight:500;letter-spacing:0}
+.dd{font-size:11px;color:var(--muted);margin-top:6px}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:600;padding:3px 8px;border-radius:var(--r-sm);border:1px solid;white-space:nowrap}
+.pill svg{width:10px;height:10px}
+.pill.ok{color:var(--ok);background:var(--ok-bg);border-color:var(--ok-line)}
+.pill.wn{color:var(--warn);background:var(--warn-bg);border-color:var(--warn-line)}
+.pill.dg{color:var(--dang);background:var(--dang-bg);border-color:var(--dang-line)}
+.pill.if{color:var(--info);background:var(--info-bg);border-color:var(--info-line)}
+.pill.nu{color:var(--muted);background:var(--track);border-color:var(--line-2)}
+.pill.br{color:var(--brand);background:var(--brand-soft);border-color:var(--brand-line)}
+
+.trk{position:relative;height:6px;border-radius:4px;background:var(--track)}
+.trk i{position:absolute;left:0;top:0;bottom:0;border-radius:4px;display:block}
+.trk u{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.7;border-radius:1px}
+.tcap{display:flex;justify-content:space-between;margin-top:5px;font-size:10px;color:var(--muted)}
+.tcap b{color:var(--ink);font-weight:600}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:12.5px;font-weight:600;padding:10px 14px;border-radius:var(--r-sm);border:1px solid transparent}
+.btn.p{background:var(--brand);color:var(--surface)}
+.btn.s{background:var(--surface);border-color:var(--line-2);color:var(--ink)}
+.btn.g{background:var(--track);color:var(--ink)}
+.btn.w{width:100%}
+.btn svg{width:15px;height:15px}
+
+.row{display:flex;gap:11px;padding:11px 13px;border-bottom:1px solid var(--line);align-items:flex-start}
+.row:last-child{border-bottom:0}
+.row .mn{flex:1;min-width:0}
+.row .t1{font-size:12.5px;font-weight:600;letter-spacing:-.005em}
+.row .t2{font-size:10.5px;color:var(--muted);margin-top:3px}
+.row .rt{flex:0 0 auto;text-align:right}
+.av{width:30px;height:30px;border-radius:var(--r-sm);background:var(--brand-soft);border:1px solid var(--brand-line);color:var(--brand);
+    display:grid;place-items:center;font-size:11px;font-weight:700;flex:0 0 auto}
+.av svg{width:17px;height:17px}
+
+table{width:100%;border-collapse:collapse}
+th{font-size:9.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);text-align:left;
+   padding:8px 12px;background:var(--surface-2);border-bottom:1px solid var(--line-2);white-space:nowrap}
+th.r{text-align:right}
+td{padding:9px 12px;border-bottom:1px solid var(--line);font-size:12px;vertical-align:middle}
+td.r{text-align:right}
+tr:last-child td{border-bottom:0}
+.t1s{font-weight:600;font-size:12px}
+.t2s{font-size:10.5px;color:var(--muted);margin-top:2px}
+.idm{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--faint);margin-top:2px}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:11px;font-weight:500;padding:5px 10px;border-radius:var(--r-sm);border:1px solid var(--line-2);color:var(--muted);background:var(--surface)}
+.chip.on{background:var(--ink);border-color:var(--ink);color:var(--bg);font-weight:600}
+
+/* journey tracker — the signature */
+.jrn{position:relative;padding-left:30px}
+.jrn::before{content:"";position:absolute;left:9px;top:8px;bottom:20px;width:2px;background:var(--line-2)}
+.jrn .fill{position:absolute;left:9px;top:8px;width:2px;background:var(--ok)}
+.jn{position:relative;padding-bottom:15px}
+.jn .d{position:absolute;left:-30px;top:0;width:20px;height:20px;border-radius:50%;background:var(--surface);
+       border:2px solid var(--line-2);display:grid;place-items:center}
+.jn .d svg{width:10px;height:10px}
+.jn.done .d{background:var(--ok);border-color:var(--ok);color:var(--surface)}
+.jn.live .d{background:var(--warn);border-color:var(--warn);color:var(--surface);box-shadow:0 0 0 5px var(--warn-bg)}
+.jn.next .d{border-style:dashed;border-color:var(--dang);color:var(--dang)}
+.jn .w{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--faint)}
+.jn .w em{font-style:normal;background:var(--track);color:var(--ink);padding:1px 5px;border-radius:4px;margin-left:6px}
+.jn .h{font-size:12.5px;font-weight:600;margin-top:3px}
+.jn .p{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.45}
+.jn.pend{opacity:.5}
+.who{margin-top:8px;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:8px 9px;display:flex;align-items:center;gap:9px}
+
+.hero{position:relative;border-radius:var(--r-lg);overflow:hidden;margin-bottom:12px;border:1px solid var(--line)}
+.hero svg{display:block;width:100%;height:auto}
+.hero .ov{position:absolute;left:0;right:0;bottom:0;padding:14px}
+.hero .ov .ht{font-size:19px;color:#fff;text-shadow:0 1px 12px rgba(0,0,0,.5)}
+.hero .ov .hs{font-size:11.5px;color:rgba(255,255,255,.85);margin-top:3px}
+
+.wave{display:flex;align-items:center;gap:3px;height:30px}
+.wave i{width:3px;border-radius:2px;background:var(--brand);display:block}
+.orb{width:64px;height:64px;border-radius:50%;background:var(--brand);display:grid;place-items:center;margin:0 auto;
+     box-shadow:0 0 0 9px var(--brand-soft),0 0 0 18px var(--track)}
+.orb svg{width:26px;height:26px;color:var(--surface)}
+
+.badge{aspect-ratio:1;border-radius:var(--r);border:1px solid var(--line);background:var(--surface-2);display:grid;place-items:center;text-align:center;padding:8px}
+.badge svg{width:20px;height:20px;color:var(--gold)}
+.badge b{display:block;font-size:9px;font-weight:600;margin-top:5px;line-height:1.25}
+.badge.off{opacity:.34}
+
+.stepper{display:flex;align-items:center;gap:0;margin-bottom:14px}
+.stepper .s{flex:1;text-align:center;position:relative}
+.stepper .s i{width:22px;height:22px;border-radius:50%;background:var(--track);color:var(--muted);display:grid;place-items:center;
+   margin:0 auto;font-size:10.5px;font-weight:700;font-style:normal;border:1px solid var(--line-2)}
+.stepper .s.done i{background:var(--ok);color:var(--surface);border-color:var(--ok)}
+.stepper .s.on i{background:var(--brand);color:var(--surface);border-color:var(--brand)}
+.stepper .s b{display:block;font-size:9.5px;font-weight:600;margin-top:5px;color:var(--muted)}
+.stepper .s.on b{color:var(--ink)}
+.stepper .s::after{content:"";position:absolute;top:11px;left:50%;width:100%;height:1.5px;background:var(--line-2);z-index:-1}
+.stepper .s:last-child::after{display:none}
+.stepper{position:relative;z-index:1}
+
+.inp{background:var(--surface-2);border:1px solid var(--line-2);border-radius:var(--r-sm);padding:11px 12px;font-size:12.5px;color:var(--ink)}
+.inp.ph{color:var(--faint)}
+.aihint{background:var(--info-bg);border:1px solid var(--info-line);border-radius:var(--r-sm);padding:9px 11px;font-size:11px;color:var(--info);line-height:1.5;margin-top:9px}
+.aihint b{font-weight:700}
+
+.heat{display:grid;gap:3px}
+.heat i{aspect-ratio:1;border-radius:2px;display:block}
+.legend{display:flex;align-items:center;gap:9px;margin-top:9px;font-size:10px;color:var(--muted)}
+.legend .sc{display:flex;gap:2px}
+.legend .sc i{width:16px;height:9px;border-radius:2px;display:block}
+
+.spark{display:block;width:100%;height:38px}
+.bars{display:flex;align-items:flex-end;gap:4px;height:74px}
+.bars i{flex:1;border-radius:3px 3px 0 0;display:block;background:var(--brand);min-height:2px}
+.blab{display:flex;gap:4px;margin-top:5px}
+.blab span{flex:1;text-align:center;font-size:8.5px;color:var(--faint)}
+
+.note{margin-top:10px;padding:15px 16px;background:#12161C;border:1px solid #1F252F;border-radius:11px;
+      font-size:12.5px;color:#96A1B5;line-height:1.65}
+.note b{color:#DCE3EE;font-weight:600}
+.note ul{margin:8px 0 0 16px;display:grid;gap:6px}
+.note code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#1B222C;color:#B9C6DA;padding:1.5px 5px;border-radius:4px}
+.mspec{display:grid;gap:10px;margin-top:10px}
+.mrow{display:grid;grid-template-columns:150px 1fr;gap:12px;padding:10px 12px;background:#161B23;border:1px solid #232A35;border-radius:9px}
+.mrow .mk{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#7E8CA3;line-height:1.5}
+.mrow .mv{font-size:12.5px;color:#AEBACE;line-height:1.6}
+.mrow .mv b{color:#E4EAF3}
+.mrow .mv em{font-style:normal;font-family:'JetBrains Mono',monospace;font-size:11px;color:#8FB4E8}
+pre{background:#0E1218;border:1px solid #1E252F;border-radius:9px;padding:13px;overflow-x:auto;margin-top:10px}
+pre code{background:none;padding:0;font-size:11px;line-height:1.65;color:#B5C2D6;display:block}
+/* board shell — multiple small surfaces on one themed canvas */
+.board{background:var(--bg);color:var(--ink);font-family:var(--f-ui);padding:20px;display:grid;gap:14px;
+  border-radius:13px;height:auto;overflow:visible}
+.board *{font-variant-numeric:tabular-nums}
+/* any icon not already sized by a component rule */
+.icobox{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
+.icobox svg{width:100%;height:100%;display:block}
+.board.g2{grid-template-columns:1fr 1fr}
+.board.g3{grid-template-columns:repeat(3,1fr)}
+.mini{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden}
+.mini .mh{padding:9px 12px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.mini .mh b{font-size:11.5px;font-weight:600;color:var(--ink)}
+.mini .mh span{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);letter-spacing:.08em;
+  text-align:right;line-height:1.4;flex:0 0 auto;max-width:52%}
+.mini .mb{padding:16px 14px}
+.empt{text-align:center;padding:6px 4px}
+.empt .art{margin:0 auto 13px;width:104px}
+.empt .t{font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.4}
+.empt .s{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.55}
+.empt .acts{display:flex;gap:7px;margin-top:14px}
+.empt .acts .btn{flex:1;padding:9px 10px;font-size:12px;white-space:nowrap}
+.mini .btn{white-space:nowrap}
+/* banner inside a mini */
+.bnr{display:flex;gap:9px;align-items:flex-start;padding:10px 12px;border-bottom:1px solid}
+.bnr .bt{font-size:11.5px;line-height:1.45;flex:1}
+
+/* skeletons */
+.sk{background:var(--track);border-radius:5px;position:relative;overflow:hidden}
+.sk::after{content:"";position:absolute;inset:0;transform:translateX(-100%);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);animation:shim 1.4s infinite}
+@keyframes shim{100%{transform:translateX(100%)}}
+.skrow{display:flex;gap:10px;padding:12px 13px;border-bottom:1px solid var(--line)}
+
+/* voice orb */
+/* Ripples are absolutely positioned, so the stage must reserve their envelope
+   explicitly or following content slides under them.
+   envelope = (orb + 2*outerInset) * maxScale  →  sm: (64+56)*1.14 ≈ 137, lg: (92+56)*1.14 ≈ 169 */
+.orbstage{position:relative;display:grid;place-items:center;margin:0 auto}
+.orbstage.sm{height:142px}
+.orbstage.lg{height:176px}
+.orbwrap{text-align:center;padding:4px 0}
+.orb2{width:92px;height:92px;border-radius:50%;background:var(--brand);display:grid;place-items:center;margin:0 auto;position:relative}
+.orb2 svg{width:34px;height:34px;color:var(--surface)}
+.orb2::before,.orb2::after{content:"";position:absolute;inset:-14px;border-radius:50%;border:1.5px solid var(--brand);opacity:.28;animation:rip 2.6s ease-out infinite}
+.orb2::after{inset:-28px;animation-delay:1.3s}
+@keyframes rip{0%{transform:scale(.86);opacity:.4}100%{transform:scale(1.14);opacity:0}}
+.wv{display:flex;align-items:center;justify-content:center;gap:3px;height:38px;margin-top:16px}
+.wv i{width:3.5px;border-radius:2px;background:var(--brand);display:block;animation:wvb 1s ease-in-out infinite}
+@keyframes wvb{0%,100%{transform:scaleY(.32)}50%{transform:scaleY(1)}}
+.tx{font-size:13px;line-height:1.6;text-align:left}
+.tx u{text-decoration:none;color:var(--faint)}
+
+/* citizen desktop shell */
+.dtop{background:var(--surface);border-bottom:1px solid var(--line);padding:0 22px;display:flex;align-items:center;gap:22px;height:56px;flex:0 0 auto}
+.dtop .lg{font-size:17px}
+.dtop nav{display:flex;gap:3px;margin-left:8px}
+.dtop nav a{font-size:12.5px;font-weight:500;color:var(--muted);text-decoration:none;padding:7px 11px;border-radius:var(--r-sm)}
+.dtop nav a.on{background:var(--brand-soft);color:var(--brand);font-weight:600}
+.dbody{flex:1;overflow:hidden;padding:18px 22px;display:grid;grid-template-columns:1.5fr 1fr;gap:14px;align-content:start}
+
+/* RTL */
+[dir="rtl"] .jrn{padding-left:0;padding-right:30px}
+[dir="rtl"] .jrn::before,[dir="rtl"] .jrn .fill{left:auto;right:9px}
+[dir="rtl"] .jn .d{left:auto;right:-30px}
+[dir="rtl"] .row .rt,[dir="rtl"] .tcap{text-align:left}
+[dir="rtl"] .urdu{font-family:'Noto Nastaliq Urdu',serif;line-height:2.1}
+.ltrnum{direction:ltr;unicode-bidi:embed;display:inline-block}
+
+/* ============ AMBIENT MOTION ============
+   Slow and deliberately low-frame-rate. Stepped easing rather than smooth
+   interpolation, so it reads as a living illustration rather than a video
+   loop, and costs almost nothing to composite. */
+@keyframes amSun{0%{transform:translateY(7px) scale(.985)}100%{transform:translateY(-5px) scale(1.015)}}
+@keyframes amRays{to{transform:rotate(360deg)}}
+@keyframes amFlame{0%,100%{transform:scaleY(.86) scaleX(1.04);opacity:.8}50%{transform:scaleY(1.16) scaleX(.95);opacity:1}}
+@keyframes amShimmer{0%,100%{opacity:.18;transform:translateX(0)}50%{opacity:.72;transform:translateX(5px)}}
+@keyframes amTwinkle{0%,100%{opacity:.16}50%{opacity:.95}}
+@keyframes amGlint{0%,100%{opacity:.25}50%{opacity:1}}
+@keyframes amBreathe{0%,100%{opacity:.14}50%{opacity:.28}}
+@keyframes amMoon{0%{transform:translate(0,0)}100%{transform:translate(-13px,7px)}}
+@keyframes amDrift{0%{transform:translateX(0)}100%{transform:translateX(-46px)}}
+@keyframes amSway{0%,100%{transform:rotate(-1.4deg)}50%{transform:rotate(1.4deg)}}
+@keyframes amPing{0%{transform:scale(.62);opacity:.6}100%{transform:scale(1.7);opacity:0}}
+@keyframes amFlow{to{stroke-dashoffset:-64}}
+@keyframes amBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes amCell{0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes amGrow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes amSlide{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes amCrew{0%{transform:translate(0,0)}55%{transform:translate(0,-72px)}100%{transform:translate(42px,-72px)}}
+@keyframes amPan{0%{transform:scale(1.06) translateX(0)}100%{transform:scale(1.06) translateX(-3%)}}
+
+/* every animated SVG node needs its own box for transform-origin */
+.an-sun,.an-rays,.an-flame,.an-glint,.an-moon,.an-sway,.an-ping,.an-crew,.an-bob
+  {transform-box:fill-box;transform-origin:center}
+
+.an-sun{animation:amSun 16s steps(16,end) infinite alternate}
+.an-rays{animation:amRays 300s steps(75,end) infinite}
+.an-flame{transform-origin:bottom;animation:amFlame 1.9s steps(4,end) infinite}
+.an-shimmer{animation:amShimmer 5.5s steps(6,end) infinite}
+.an-twinkle{animation:amTwinkle 6s steps(3,end) infinite}
+.an-glint{animation:amGlint 5s steps(3,end) infinite}
+.an-breathe{animation:amBreathe 22s steps(12,end) infinite alternate}
+.an-moon{animation:amMoon 120s steps(40,end) infinite alternate}
+.an-drift{animation:amDrift 70s steps(24,end) infinite alternate}
+.an-sway{transform-origin:bottom;animation:amSway 9s steps(10,end) infinite alternate}
+.an-ping{animation:amPing 3.4s steps(9,end) infinite}
+.an-flow{stroke-dasharray:8 6;animation:amFlow 5s steps(12,end) infinite}
+.an-bob{animation:amBob 4s steps(6,end) infinite alternate}
+.an-crew{animation:amCrew 11s steps(22,end) infinite}
+
+/* system graphics — entrance, not idle loops */
+.trk i{transform-origin:left;animation:amSlide .85s var(--ease-out,cubic-bezier(.22,1,.36,1)) both}
+.bars i{transform-origin:bottom;animation:amGrow .6s var(--ease-out,cubic-bezier(.22,1,.36,1)) both}
+.bars i:nth-child(1){animation-delay:.00s}.bars i:nth-child(2){animation-delay:.04s}
+.bars i:nth-child(3){animation-delay:.08s}.bars i:nth-child(4){animation-delay:.12s}
+.bars i:nth-child(5){animation-delay:.16s}.bars i:nth-child(6){animation-delay:.20s}
+.bars i:nth-child(7){animation-delay:.24s}.bars i:nth-child(8){animation-delay:.28s}
+.bars i:nth-child(9){animation-delay:.32s}.bars i:nth-child(10){animation-delay:.36s}
+.bars i:nth-child(11){animation-delay:.40s}.bars i:nth-child(12){animation-delay:.44s}
+.bars i:nth-child(13){animation-delay:.48s}.bars i:nth-child(14){animation-delay:.52s}
+.jn.live .d{animation:amBob 2.6s steps(5,end) infinite alternate}
+.heat i.hot{animation:amCell 7s steps(5,end) infinite}
+.loginbg{animation:amPan 60s steps(30,end) infinite alternate}
+
+/* ===== ambient illustration motion — slow, stepped, lo-fi =====
+   steps() is deliberate: it gives limited-animation cadence (8–14 fps)
+   rather than smooth interpolation, so it reads as drawn, not rendered.
+   Data marks are excluded on purpose — see .an- usage notes.          */
+.an-sun,.an-rays,.an-moon,.an-flame,.an-glow,.an-rip,.an-tw,.an-jali,
+.an-mist,.an-sway,.an-ping,.an-blink,.an-march,.an-crew,.an-float{
+  transform-box:view-box;will-change:transform,opacity}
+
+@keyframes anSun{0%{transform:translateY(7px) scale(.982)}100%{transform:translateY(-7px) scale(1.018)}}
+.an-sun{animation:anSun 34s steps(15) infinite alternate}
+
+@keyframes anRays{to{transform:rotate(360deg)}}
+.an-rays{animation:anRays 300s steps(150) infinite}
+
+@keyframes anFlame{0%,100%{transform:scaleY(.9);opacity:.82}50%{transform:scaleY(1.16);opacity:1}}
+.an-flame{animation:anFlame 1.6s steps(3) infinite alternate}
+@keyframes anGlow{0%,100%{opacity:.12}50%{opacity:.3}}
+.an-glow{animation:anGlow 2.4s steps(4) infinite alternate}
+
+@keyframes anRip{0%{transform:translateX(-9px);opacity:.15}100%{transform:translateX(9px);opacity:.55}}
+.an-rip{animation:anRip 9s steps(7) infinite alternate}
+
+@keyframes anTw{0%,100%{opacity:.18}50%{opacity:1}}
+.an-tw{animation:anTw 5s steps(2) infinite alternate}
+
+@keyframes anJali{0%,100%{opacity:.14}50%{opacity:.27}}
+.an-jali{animation:anJali 26s steps(10) infinite alternate}
+
+@keyframes anMoon{0%{transform:translate(0,0)}100%{transform:translate(-9px,5px)}}
+.an-moon{animation:anMoon 90s steps(20) infinite alternate}
+
+@keyframes anMist{0%{transform:translateX(-26px)}100%{transform:translateX(26px)}}
+.an-mist{animation:anMist 70s steps(18) infinite alternate}
+
+@keyframes anSway{0%{transform:rotate(-1.4deg)}100%{transform:rotate(1.4deg)}}
+.an-sway{animation:anSway 13s steps(6) infinite alternate}
+
+@keyframes anFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.an-float{animation:anFloat 16s steps(8) infinite}
+
+@keyframes anPing{0%{transform:scale(.62);opacity:.8}100%{transform:scale(1.55);opacity:0}}
+.an-ping{animation:anPing 3.4s steps(9) infinite}
+
+@keyframes anBlink{0%,100%{opacity:1}50%{opacity:.32}}
+.an-blink{animation:anBlink 2.2s steps(2) infinite alternate}
+
+@keyframes anMarch{to{stroke-dashoffset:-48}}
+.an-march{animation:anMarch 6s steps(12) infinite}
+
+@keyframes anCrew{0%{transform:translateX(0)}100%{transform:translateX(31px)}}
+.an-crew{animation:anCrew 22s steps(10) infinite alternate}
+
+/* ===== ambient illustration motion =====
+   Slow, low-fi, decorative only. Stepped easing on anything that flickers so it
+   reads as hand-drawn frames rather than smooth interpolation.
+   Data visualisations are deliberately excluded — movement there must mean news. */
+.an-sun{animation:a-sun 84s ease-in-out infinite alternate}
+@keyframes a-sun{0%{transform:translateY(16px)}100%{transform:translateY(-9px)}}
+.an-rays{transform-box:view-box;transform-origin:470px 132px;animation:a-spin 300s linear infinite}
+@keyframes a-spin{to{transform:rotate(360deg)}}
+.an-rip{animation:a-shim 7s steps(3,end) infinite}
+@keyframes a-shim{0%,100%{opacity:.16}33%{opacity:.55}66%{opacity:.28}}
+.an-flame{animation:a-flame 1.9s steps(2,end) infinite}
+@keyframes a-flame{0%,100%{transform:scale(1,1)}50%{transform:scale(1.16,.8)}}
+.an-glow{animation:a-glow 3.4s steps(2,end) infinite}
+@keyframes a-glow{0%,100%{opacity:.14}50%{opacity:.36}}
+.an-tw{animation:a-star 6s steps(2,end) infinite}
+@keyframes a-star{0%,100%{opacity:.2}50%{opacity:.95}}
+.an-jali{animation:a-jali 34s ease-in-out infinite alternate}
+@keyframes a-jali{0%{opacity:.12}100%{opacity:.28}}
+.an-moon{animation:a-moon 120s ease-in-out infinite alternate}
+@keyframes a-moon{0%{transform:translate(0,0)}100%{transform:translate(-18px,11px)}}
+.an-finial{animation:a-glow 5s steps(2,end) infinite}
+.an-mist{animation:a-mist 90s linear infinite alternate}
+@keyframes a-mist{0%{transform:translateX(-46px)}100%{transform:translateX(46px)}}
+.an-mist2{animation:a-mist 132s linear infinite alternate-reverse}
+.an-sway{transform-box:fill-box;transform-origin:center bottom;animation:a-sway 16s ease-in-out infinite alternate}
+@keyframes a-sway{0%{transform:rotate(-1.4deg)}100%{transform:rotate(1.4deg)}}
+.an-flow{animation:a-flow 4.5s linear infinite}
+@keyframes a-flow{to{stroke-dashoffset:-28}}
+.an-ping{transform-box:fill-box;transform-origin:center;animation:a-ping 4s ease-out infinite}
+@keyframes a-ping{0%{transform:scale(.55);opacity:.75}100%{transform:scale(1.65);opacity:0}}
+.an-win{animation:a-win 8s steps(2,end) infinite}
+@keyframes a-win{0%,100%{opacity:.3}50%{opacity:.92}}
+.an-heat{animation:a-heat 11s steps(4,end) infinite}
+@keyframes a-heat{0%,100%{opacity:1}50%{opacity:.66}}
+.an-crew{animation:a-crew 24s ease-in-out infinite alternate}
+@keyframes a-crew{0%{transform:translate(0,0)}100%{transform:translate(43px,0)}}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<svg style="display:none">
+<symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-9.5Z"/></symbol>
+<symbol id="i-feed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M7 9h6M7 13h10M7 16h7"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6.5h11M9 12h11M9 17.5h11M4.5 6.5h.01M4.5 12h.01M4.5 17.5h.01"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.8 20.2a7.4 7.4 0 0 1 14.4 0"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10a6 6 0 1 1 12 0c0 4 1.5 5.5 1.5 5.5h-15S6 14 6 10Z"/><path d="M10 19a2 2 0 0 0 4 0"/></symbol>
+<symbol id="i-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 6.5"/></symbol>
+<symbol id="i-clk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+<symbol id="i-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+<symbol id="i-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9.3" y="3" width="5.4" height="10.4" rx="2.7"/><path d="M5.6 11a6.4 6.4 0 0 0 12.8 0M12 17.4V21"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s6.5-5.6 6.5-10.5a6.5 6.5 0 1 0-13 0C5.5 15.4 12 21 12 21Z"/><circle cx="12" cy="10.5" r="2.4"/></symbol>
+<symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16M7.5 20v-6M12 20V6M16.5 20v-9"/></symbol>
+<symbol id="i-inbox" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 13.5h4l1.5 3h6l1.5-3h4M3.5 13.5 6 5h12l2.5 8.5v5a1 1 0 0 1-1 1h-15a1 1 0 0 1-1-1v-5Z"/></symbol>
+<symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 8.5 4.5L12 12 3.5 7.5 12 3Z"/><path d="m3.5 12 8.5 4.5L20.5 12M3.5 16.5 12 21l8.5-4.5"/></symbol>
+<symbol id="i-cog" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 3v2.4M12 18.6V21M21 12h-2.4M5.4 12H3M18.4 5.6l-1.7 1.7M7.3 16.7l-1.7 1.7M18.4 18.4l-1.7-1.7M7.3 7.3 5.6 5.6"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 20 6v6c0 5-3.4 8-8 9-4.6-1-8-4-8-9V6l8-3Z"/></symbol>
+<symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3.5h7L18 8v12a1 1 0 0 1-1 1H6.5a1 1 0 0 1-1-1v-15a1 1 0 0 1 1-1Z"/><path d="M13.5 3.5V8H18M9 13h6M9 16.5h4"/></symbol>
+<symbol id="i-flame" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s5 4.5 5 9.5a5 5 0 0 1-10 0c0-2 1-3.5 1-3.5s.5 2 2 2c0-3.5 2-6 2-8Z"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3.5 2.7 5.6 6.1.85-4.4 4.3 1.05 6.1L12 17.5l-5.45 2.85 1.05-6.1-4.4-4.3 6.1-.85L12 3.5Z"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8.5" r="3.4"/><path d="M2.8 20a6.4 6.4 0 0 1 12.4 0M16.5 5.6a3.4 3.4 0 0 1 0 6.6M17.5 20a6.5 6.5 0 0 0-2-4.4"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.2 2.4 3.4 5.4 3.4 8.5S14.2 18.1 12 20.5c-2.2-2.4-3.4-5.4-3.4-8.5S9.8 5.9 12 3.5Z"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4.6M12 16h.01"/></symbol>
+</svg>
+
+<div class="wrap">
+  <div class="hd">
+    <div>
+      <div class="eyebrow">Samadhan · 4 themes × 29 surfaces · citizen / officer / admin</div>
+      <h1 class="pg">One token contract. Four civic characters.</h1>
+      <p>Every theme is one <code>[data-theme]</code> block of CSS custom properties. All four ship to the end user as a live picker — pick one here and walk the whole IA.</p>
+    </div>
+  </div>
+
+  <div class="themebar">
+    <span class="tl">Theme</span>
+    <div class="tsw" id="tsw"></div>
+  </div>
+
+  <div class="layout">
+    <nav class="rail" id="rail"></nav>
+    <div class="stagewrap">
+      <div class="pgmeta" id="meta"></div>
+      <div class="deck" id="deck"></div>
+      <div class="itabs" id="itabs">
+        <button class="itab" data-i="ux" aria-selected="true">UX decisions</button>
+        <button class="itab" data-i="motion" aria-selected="false">Motion &amp; journey</button>
+        <button class="itab" data-i="build" aria-selected="false">Build notes</button>
+      </div>
+      <div class="note" id="note"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const R=(s=>()=>((s=Math.imul(s^s>>>15,1|s))>>>0)/4294967296)(1947);
+
+/* ================= THEMES ================= */
+const THEMES={
+ dawn:{name:"Bharat Dawn",sub:"Ghat sunrise · warm",cs:["#FBF6EC","#B4541A","#A9862F","#2A211A"],
+   hero:heroDawn,
+   note:"<b>Bharat Dawn — refined.</b> Your existing light theme, de-kitsched. Marigold is demoted to a single action colour and temple-gold survives only as hairline rules and reputation emblems, never as a fill. Fraunces at 500 for display, Inter for everything functional. Warmth comes from the paper substrate, not from gilding the controls."},
+ mughal:{name:"Mughal Indigo",sub:"Jali night · brass",cs:["#0D1226","#C9A24A","#6FA8E8","#E7EAF5"],
+   hero:heroMughal,
+   note:"<b>Mughal Indigo.</b> The heritage reads as geometry, not ornament: an eight-point <i>jali</i> tessellation generated from a rosette rule, used as structural texture behind the hero and nowhere else. Antique brass is the only warm note and appears at roughly 4% of surface area. Night-shift legible without going to pure black."},
+ steel:{name:"Civic Steel",sub:"Neutral · dense",cs:["#F5F6F8","#1F5FD0","#0D1117","#B45309"],
+   hero:heroSteel,
+   note:"<b>Civic Steel.</b> Your <code>samadhan-pro</code> palette taken all the way across every surface, including citizen-facing. 8px radii, tighter type, higher density. This is the direction to pick if the app will be judged mainly on the officer and admin consoles, where people sit for eight hours."},
+ nilgiri:{name:"Nilgiri Mist",sub:"Cool · calm",cs:["#EFF2F0","#136F63","#7C7233","#16211E"],
+   hero:heroNilgiri,
+   note:"<b>Nilgiri Mist.</b> The dormant palette, activated. Cool low-chroma greens and slate, 16–24px radii, generous air. It's the only one of the four that reads as calm rather than urgent — worth testing precisely because a grievance app is a stressful context and the competing directions all raise the temperature."}
+};
+
+/* ================= HERO ILLUSTRATIONS ================= */
+function heroDawn(){
+  const W=700,H=290;let o=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  o+=`<defs><linearGradient id="dsky" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#F4B357"/><stop offset=".45" stop-color="#E88B4B"/><stop offset="1" stop-color="#C4623A"/></linearGradient></defs>`;
+  o+=`<rect width="${W}" height="${H}" fill="url(#dsky)"/>`;
+  o+=`<g class="an-sun" style="transform-origin:470px 132px"><circle cx="470" cy="132" r="52" fill="#FFE7B0" fill-opacity=".92"/></g>`;
+  o+=`<g class="an-rays" style="transform-origin:470px 132px">`;
+  o+=`<g class="an-rays">`;
+  for(let i=0;i<26;i++){const a=i*(Math.PI*2/26);o+=`<line x1="470" y1="132" x2="${(470+Math.cos(a)*300).toFixed(1)}" y2="${(132+Math.sin(a)*300).toFixed(1)}" stroke="#FFE7B0" stroke-opacity=".10" stroke-width="9"/>`;}
+  o+=`</g>`;
+  o+=`</g>`;
+  // far temple skyline
+  const sil=(y,col,op)=>{
+    let d=`M0 ${H} L0 ${y+40} `;
+    const tw=[[36,26],[92,44],[150,18],[196,52],[262,30],[318,60],[392,24],[440,46],[512,20],[566,50],[634,28],[680,42]];
+    tw.forEach(([x,h])=>{d+=`L${x-16} ${y+40-h*.4} L${x-16} ${y+40-h} L${x} ${y+40-h-13} L${x+16} ${y+40-h} L${x+16} ${y+40-h*.4} `;});
+    d+=`L${W} ${y+40} L${W} ${H} Z`;
+    return `<path d="${d}" fill="${col}" fill-opacity="${op}"/>`;};
+  o+=sil(112,"#8A3E22",.5);
+  o+=sil(146,"#5E2716",.72);
+  // ghat steps
+  for(let s=0;s<7;s++){o+=`<rect x="${-20+s*8}" y="${208+s*12}" width="${W+40}" height="12" fill="#43200F" fill-opacity="${(.42+s*.07).toFixed(2)}"/>`;}
+  // water + reflection
+  o+=`<rect x="0" y="272" width="${W}" height="18" fill="#7A3A20" fill-opacity=".6"/>`;
+  for(let i=0;i<34;i++){const x=R()*W,y=273+R()*15,w=8+R()*30;
+    o+=`<rect class="an-rip" style="animation-delay:-${(R()*9).toFixed(2)}s;animation-duration:${(7+R()*6).toFixed(1)}s" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="1.6" rx=".8" fill="#FFD9A0" fill-opacity="${(.15+R()*.4).toFixed(2)}"/>`;}
+  // diyas
+  [[120,246],[300,258],[540,250],[640,262]].forEach(([x,y],k)=>{
+    o+=`<ellipse cx="${x}" cy="${y}" rx="9" ry="3.4" fill="#2E1508" fill-opacity=".8"/>`;
+    o+=`<path class="an-flame" style="transform-origin:${x}px ${y-3}px;animation-delay:-${(k*.43).toFixed(2)}s" d="M${x} ${y-11} q4 5 0 8 q-4-3 0-8" fill="#FFCF7A"/>`;
+    o+=`<circle class="an-glow" style="animation-delay:-${(k*.61).toFixed(2)}s" cx="${x}" cy="${y-7}" r="10" fill="#FFCF7A" fill-opacity=".18"/>`;});
+  return o+`</svg>`;
+}
+function heroMughal(){
+  const W=700,H=290,g="#C9A24A";let o=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  o+=`<defs><linearGradient id="msky" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#101736"/><stop offset="1" stop-color="#070B1B"/></linearGradient>
+    <clipPath id="arch"><path d="M110 260 L110 120 Q110 46 202 46 Q294 46 294 120 L294 260 Z"/></clipPath></defs>`;
+  o+=`<rect width="${W}" height="${H}" fill="url(#msky)"/>`;
+  for(let i=0;i<90;i++){o+=`<circle class="an-tw" style="animation-delay:-${(R()*5).toFixed(2)}s;animation-duration:${(3.5+R()*5).toFixed(1)}s" cx="${(R()*W).toFixed(1)}" cy="${(R()*200).toFixed(1)}" r="${(R()*1.1+.3).toFixed(2)}" fill="#DCE3FF" fill-opacity="${(.2+R()*.6).toFixed(2)}"/>`;}
+  o+=`<g class="an-moon"><circle cx="556" cy="86" r="34" fill="#E9EDFB" fill-opacity=".9"/><circle cx="544" cy="78" r="30" fill="#0C1128"/></g>`;
+  // jali lattice — 8-point rosette tessellation
+  let jal="";const u=34;
+  for(let r=0;r<9;r++)for(let c=0;c<22;c++){
+    const cx=c*u+(r%2?u/2:0), cy=r*u*.86+18, s=u*.46;
+    let p="";for(let k=0;k<8;k++){const a=k*Math.PI/4, rad=k%2?s*.52:s;
+      p+=`${(cx+Math.cos(a)*rad).toFixed(1)},${(cy+Math.sin(a)*rad).toFixed(1)} `;}
+    jal+=`<polygon points="${p}" fill="none" stroke="${g}" stroke-width="1"/>`;
+    jal+=`<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${(s*.2).toFixed(1)}" fill="${g}" fill-opacity=".5"/>`;}
+  o+=`<g class="an-jali" opacity=".2">${jal}</g>`;
+  // arch with denser jali inside
+  o+=`<g clip-path="url(#arch)"><rect x="100" y="30" width="210" height="240" fill="#0A0F24"/><g opacity=".55">${jal}</g></g>`;
+  o+=`<path d="M110 260 L110 120 Q110 46 202 46 Q294 46 294 120 L294 260" fill="none" stroke="${g}" stroke-width="2.4"/>`;
+  o+=`<path d="M122 260 L122 124 Q122 58 202 58 Q282 58 282 124 L282 260" fill="none" stroke="${g}" stroke-width="1" stroke-opacity=".55"/>`;
+  // chhatri domes
+  [[430,180],[520,190],[610,176]].forEach(([x,y])=>{
+    o+=`<path d="M${x-30} ${y} q30 -42 60 0 Z" fill="#151C3A" stroke="${g}" stroke-width="1.2" stroke-opacity=".7"/>`;
+    o+=`<line x1="${x}" y1="${y-38}" x2="${x}" y2="${y-50}" stroke="${g}" stroke-width="1.6"/>`;
+    o+=`<circle class="an-finial" style="animation-delay:-${(x%7)*0.6}s" cx="${x}" cy="${y-52}" r="3" fill="${g}" fill-opacity=".9"/>`;
+    o+=`<rect x="${x-34}" y="${y}" width="68" height="80" fill="#111834" stroke="${g}" stroke-width="1" stroke-opacity=".45"/>`;});
+  o+=`<rect x="0" y="258" width="${W}" height="32" fill="#0A0E20"/>`;
+  o+=`<line x1="0" y1="258" x2="${W}" y2="258" stroke="${g}" stroke-width="1" stroke-opacity=".5"/>`;
+  return o+`</svg>`;
+}
+function heroSteel(){
+  const W=700,H=290,u=15,ox=352,oy=76,b="#1F5FD0";
+  const P=(x,y,z)=>[ox+(x-y)*.866*u, oy+(x+y)*.5*u - z*u];
+  const pt=a=>a.map(p=>p.map(n=>n.toFixed(1)).join(",")).join(" ");
+  let o=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  o+=`<rect width="${W}" height="${H}" fill="#EEF1F6"/>`;
+  for(let i=0;i<=14;i++){const a=P(i,0,0),z=P(i,12,0);o+=`<line x1="${a[0].toFixed(1)}" y1="${a[1].toFixed(1)}" x2="${z[0].toFixed(1)}" y2="${z[1].toFixed(1)}" stroke="${b}" stroke-opacity=".13"/>`;}
+  for(let j=0;j<=12;j++){const a=P(0,j,0),z=P(14,j,0);o+=`<line x1="${a[0].toFixed(1)}" y1="${a[1].toFixed(1)}" x2="${z[0].toFixed(1)}" y2="${z[1].toFixed(1)}" stroke="${b}" stroke-opacity=".13"/>`;}
+  const B=[[1.4,1.4,3,2.6,2.4],[5.4,.8,3,2.2,3.6],[9.8,1.4,2.6,3,1.8],[1,7.4,2.8,3,3],[9,5.6,3.4,2.4,4.4],[5,8,2.6,2.6,2.2],[10.6,8.4,2.2,2.2,3.2]];
+  B.sort((a,z)=>(a[0]+a[1])-(z[0]+z[1])).forEach(([x,y,w,d,h])=>{
+    o+=`<polygon points="${pt([P(x,y+d,0),P(x,y+d,h),P(x+w,y+d,h),P(x+w,y+d,0)])}" fill="#D5DDEA" stroke="${b}" stroke-opacity=".4"/>`;
+    o+=`<polygon points="${pt([P(x+w,y,0),P(x+w,y,h),P(x+w,y+d,h),P(x+w,y+d,0)])}" fill="#C4CFE0" stroke="${b}" stroke-opacity=".4"/>`;
+    o+=`<polygon points="${pt([P(x,y,h),P(x+w,y,h),P(x+w,y+d,h),P(x,y+d,h)])}" fill="#E8EDF5" stroke="${b}" stroke-opacity=".55"/>`;});
+  const rib=(p,c,w,op)=>`<polyline points="${p.map(q=>{const s=P(q[0],q[1],.05);return s[0].toFixed(1)+","+s[1].toFixed(1);}).join(" ")}" fill="none" stroke="${c}" stroke-width="${w}" stroke-opacity="${op}" stroke-linecap="round"/>`;
+  o+=rib([[0,6],[14,6]],"#A9B6CA",11,1);
+  o+=rib([[7,0],[7,12]],"#A9B6CA",11,1);
+  o+=rib([[.5,6],[7,6],[7,11.5]],b,2.2,.9).replace('fill="none"','fill="none" class="an-flow" stroke-dasharray="7 7"');
+  [[7,6,b,"OPEN 14"],[2.6,6,"#B45309","SLA 3"],[11,6,"#B42318","ESC 2"]].forEach(([x,y,c,t])=>{
+    const g=P(x,y,.1),tp=P(x,y,2.1);
+    o+=`<line x1="${g[0].toFixed(1)}" y1="${g[1].toFixed(1)}" x2="${tp[0].toFixed(1)}" y2="${tp[1].toFixed(1)}" stroke="${c}" stroke-width="1.2"/>`;
+    o+=`<ellipse cx="${g[0].toFixed(1)}" cy="${g[1].toFixed(1)}" rx="10" ry="5.6" fill="none" stroke="${c}" stroke-width="1.2" stroke-opacity=".5"/>`;
+    o+=`<ellipse class="an-ping" style="animation-delay:-${(x*.7).toFixed(2)}s" cx="${g[0].toFixed(1)}" cy="${g[1].toFixed(1)}" rx="16" ry="9" fill="none" stroke="${c}" stroke-width="1.4"/>`;
+    o+=`<circle cx="${tp[0].toFixed(1)}" cy="${tp[1].toFixed(1)}" r="3.4" fill="${c}"/>`;
+    o+=`<rect x="${(tp[0]-25).toFixed(1)}" y="${(tp[1]-22).toFixed(1)}" width="50" height="14" rx="3" fill="${c}"/>`;
+    o+=`<text x="${tp[0].toFixed(1)}" y="${(tp[1]-12).toFixed(1)}" font-family="JetBrains Mono, monospace" font-size="8" fill="#fff" text-anchor="middle">${t}</text>`;});
+  return o+`</svg>`;
+}
+function heroNilgiri(){
+  const W=700,H=290;let o=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  o+=`<defs><linearGradient id="nsk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DCE7E3"/><stop offset="1" stop-color="#F1F5F3"/></linearGradient></defs>`;
+  o+=`<rect width="${W}" height="${H}" fill="url(#nsk)"/>`;
+  o+=`<circle cx="182" cy="84" r="30" fill="#F6F2E2" fill-opacity=".9"/>`;
+  const ridge=(base,amp,col,op,seed)=>{
+    let d=`M0 ${H} L0 ${base}`;
+    for(let x=0;x<=W;x+=20){const y=base - Math.sin((x+seed)/120)*amp - Math.sin((x+seed)/47)*amp*.4;d+=` L${x} ${y.toFixed(1)}`;}
+    return `<path d="${d} L${W} ${H} Z" fill="${col}" fill-opacity="${op}"/>`;};
+  o+=ridge(150,26,"#136F63",.16,0);
+  o+=ridge(178,22,"#136F63",.24,220);
+  o+=ridge(206,18,"#136F63",.36,480);
+  // mist bands
+  [[142,16,"an-mist",0],[176,12,"an-mist2",-18],[204,10,"an-mist",-44]].forEach(([y,h,cls,d])=>
+    o+=`<rect class="${cls}" style="animation-delay:${d}s" x="-60" y="${y}" width="${W+120}" height="${h}" fill="#FFFFFF" fill-opacity=".42"/>`);
+  // tea terrace contours
+  o+=ridge(238,12,"#0F5B51",.5,760);
+  for(let i=0;i<9;i++){let d=`M0 ${244+i*6}`;
+    for(let x=0;x<=W;x+=24){const y=244+i*6 - Math.sin((x+760)/140)*(10-i)*.7;d+=` L${x} ${y.toFixed(1)}`;}
+    o+=`<path d="${d}" fill="none" stroke="#EFF4F2" stroke-opacity=".3" stroke-width="1.2"/>`;}
+  // scattered tea bushes
+  for(let i=0;i<120;i++){const x=R()*W,y=246+R()*42;
+    o+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(2+R()*2.4).toFixed(1)}" fill="#0B4A42" fill-opacity="${(.1+R()*.22).toFixed(2)}"/>`;}
+  // eucalyptus
+  [[598,236,52],[634,244,40],[560,242,44]].forEach(([x,y,h],i)=>{
+    o+=`<g class="an-sway" style="animation-delay:-${(i*5.3).toFixed(1)}s;transform-origin:${x}px ${y}px">`;
+    o+=`<line x1="${x}" y1="${y}" x2="${x}" y2="${y-h}" stroke="#123F39" stroke-opacity=".55" stroke-width="2"/>`;
+    for(let k=0;k<5;k++)o+=`<ellipse cx="${x}" cy="${y-h+8+k*7}" rx="${13-k*1.6}" ry="5" fill="#134F46" fill-opacity=".4"/>`;
+    o+=`</g>`;});
+  return o+`</svg>`;
+}
+
+
+/* ---------- streak emblem: day-ring + duotone flame ----------
+   Not an icon. The ring is 30 tapered day-segments; filled ones are the streak,
+   so the graphic carries the datum instead of decorating it. */
+function streakEmblem(days=18,target=30,size=64){
+  const C=36,R1=27.5,R2=32.5;
+  let seg="";
+  for(let i=0;i<target;i++){
+    const a=(i/target)*Math.PI*2 - Math.PI/2;
+    const x1=C+Math.cos(a)*R1, y1=C+Math.sin(a)*R1;
+    const x2=C+Math.cos(a)*R2, y2=C+Math.sin(a)*R2;
+    const on=i<days;
+    seg+=`<line x1="${x1.toFixed(2)}" y1="${y1.toFixed(2)}" x2="${x2.toFixed(2)}" y2="${y2.toFixed(2)}"
+      stroke="${on?'var(--warn)':'var(--line-strong)'}" stroke-width="${on?2.6:1.8}"
+      stroke-linecap="round" opacity="${on?1:.5}"/>`;
+  }
+  return `<svg viewBox="0 0 72 72" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+   <circle cx="36" cy="36" r="23" fill="var(--warn-bg)"/>
+   ${seg}
+   <g transform="translate(36 36) scale(.62) translate(-20 -21.5)">
+    <path d="M20 2 C26 11 33 17 33 26 C33 34.3 27.2 41 20 41 C12.8 41 7 34.3 7 26
+             C7 21.5 9.2 17.6 12 14.5 C12.4 19.5 14.2 22.4 16.4 23.6
+             C15.6 16.4 16.8 8.4 20 2 Z"
+          fill="var(--warn-bg)" stroke="var(--warn)" stroke-width="2.1" stroke-linejoin="round"/>
+    <path d="M20 17.5 C23.3 22.2 26.3 25.7 26.3 30.2 C26.3 34.5 23.4 37.8 20 37.8
+             C16.6 37.8 13.7 34.5 13.7 30.2 C13.7 27.7 15 25.4 16.7 23.6
+             C16.9 26.5 17.9 28 19.1 28.6 C18.7 24.7 18.9 20.9 20 17.5 Z"
+          fill="var(--warn)"/>
+   </g></svg>`;
+}
+
+/* ================= SHARED PARTS ================= */
+const ic=n=>`<svg><use href="#i-${n}"/></svg>`;
+const sla=(pct,mark,state,l,r)=>`<div class="trk"><i style="width:${pct}%;background:var(--${state})"></i><u style="left:${mark}%"></u></div>
+  <div class="tcap"><span>${l}</span><span>${r}</span></div>`;
+const tabbar=on=>`<div class="tabbar">
+  ${[["home","Home"],["feed","Feed"],["","File"],["list","Cases"],["user","Profile"]].map(([i,n],k)=>
+   k===2?`<div class="tb fab"><div class="btn">${ic("plus")}</div></div>`
+        :`<div class="tb ${on===n?'on':''}">${ic(i)}<b>${n}</b></div>`).join("")}</div>`;
+const hdr=(t,s,bell)=>`<div class="hdr"><div class="sb"><span>9:41</span><span>▪ ▪ ▪</span></div>
+  <div class="tr"><div><div class="tt dis">${t}</div><div class="st">${s}</div></div>
+  ${bell?`<div class="ic">${ic("bell")}<b>3</b></div>`:""}</div></div>`;
+const sside=(role,on)=>{
+  const M={officer:[["Inbox","inbox","63"],["Clusters","layers","8"],["Metrics","chart",""],["Settings","cog",""]],
+           admin:[["Overview","chart",""],["Officers","users","41"],["Trends","layers",""],["Policy","doc",""]]}[role];
+  return `<aside class="sside"><div class="bd"><div class="b1 dis">Samadhan</div>
+    <div class="b2">${role==="officer"?"Sanitation · Ward K-East":"MCGM · District oversight"}</div></div>
+    <div class="snl">${role==="officer"?"Workbench":"Oversight"}</div>
+    ${M.map(([n,i,c])=>`<a href="#" class="${on===n?'on':''}">${ic(i)}${n}${c?`<span class="c">${c}</span>`:""}</a>`).join("")}
+    <div class="snl">Account</div>
+    <a href="#">${ic("user")}${role==="officer"?"Rajesh Kulkarni":"Anita Deshmukh"}</a></aside>`;
+};
+
+/* ================= PAGES ================= */
+const P={};
+
+/* ---------- CITIZEN ---------- */
+P.home={role:"citizen",route:"/",name:"Home",shell:"m",
+ desc:"Hero, then the one thing that matters: <b>what's happening to your cases right now.</b> The ward pulse below is social proof — you are not the only person reporting this.",
+ ux:["Hero is decorative but not load-bearing — the first real content sits above the fold on a 360px screen.","'Raise your voice' collapses to a single primary + mic; category chips pre-fill the wizard so the common path is two taps.","Ward pulse answers the unasked question — 'does reporting anything actually work here?' — with a number, not a promise."],
+ html:t=>`${hdr("नमस्ते, Priya","Ward K-East · Bandra",1)}
+ <div class="body">
+  <div class="hero">${THEMES[t].hero()}<div class="ov"><div class="ht dis">Raise your voice</div>
+    <div class="hs">4 of your 6 reports were resolved this year</div></div></div>
+  <div class="card"><div class="cb">
+    <div style="display:flex;gap:9px"><div class="btn p" style="flex:1">${ic("plus")}File a complaint</div>
+    <div class="btn s" style="width:44px;padding:10px 0">${ic("mic")}</div></div>
+    <div class="chips" style="margin-top:10px">
+      ${["Water","Roads","Garbage","Power","Drains"].map(c=>`<span class="chip">${c}</span>`).join("")}</div>
+  </div></div>
+  <div class="card"><div class="ch"><b>Your active cases</b><span class="m">BY TIME LEFT</span></div>
+   <div class="row"><div class="mn"><div class="t1">Sewage overflow, 27th Rd</div><div class="t2 mono">SMD-00847 · Water</div>
+     <div style="margin-top:7px">${sla(55,78,"warn","<b>3d 20h</b> elapsed","Limit 7d · <b>3d 04h left</b>")}</div></div>
+    <div class="rt"><span class="pill wn">${ic("clk")}In progress</span></div></div>
+   <div class="row"><div class="mn"><div class="t1">Pothole near BDA park</div><div class="t2 mono">SMD-00801 · Roads</div>
+     <div style="margin-top:7px">${sla(100,78,"dang","<b>12d 11h</b> elapsed","Limit 10d · <b>2d 11h over</b>")}</div></div>
+    <div class="rt"><span class="pill dg">${ic("up")}Escalated</span></div></div>
+  </div>
+  <div class="card"><div class="ch"><b>Ward pulse · July</b><span class="m">n=609</span></div><div class="cb">
+   <div class="grid3">
+    <div><div class="k">Resolved</div><div class="v" style="font-size:22px">68<small>%</small></div></div>
+    <div><div class="k">Median</div><div class="v" style="font-size:22px">4.2<small>d</small></div></div>
+    <div><div class="k">Your rank</div><div class="v" style="font-size:22px">61<small>st</small></div></div>
+   </div></div></div>
+ </div>${tabbar("Home")}`};
+
+P.file={role:"citizen",route:"/file",name:"File a complaint",shell:"m",
+ desc:"Step 2 of 4. The AI is an <b>editable suggestion</b>, never a decision — classification appears as a chip you can change, and duplicate detection fires <i>before</i> submit.",
+ ux:["Duplicate detection reframed as an offer, not a block: co-signing an existing case is a better outcome than a second ticket, and it strengthens the original.","AI rephrasing shows the original underneath so the citizen never loses their own words — critical for trust and for RTI evidence.","Voice is a peer of typing, not a fallback. 18 languages in the selector, live transcript visible while speaking."],
+ html:()=>`${hdr("File a complaint","Step 2 of 4 · Describe",0)}
+ <div class="body">
+  <div class="stepper">${[["Category","done"],["Describe","on"],["Location",""],["Confirm",""]].map(([n,s],i)=>
+    `<div class="s ${s}"><i>${s==="done"?"✓":i+1}</i><b>${n}</b></div>`).join("")}</div>
+  <div class="card"><div class="cb">
+    <div class="k">What's the problem?</div>
+    <div class="inp" style="margin-top:8px;line-height:1.55">Sewage water overflowing outside 27th Road since Tuesday, whole lane smells, children walk through it to school.</div>
+    <div style="display:flex;gap:8px;margin-top:9px;align-items:center">
+      <div class="btn g" style="flex:1">${ic("mic")}Speak instead</div>
+      <span class="pill nu">${ic("globe")}हिन्दी</span></div>
+    <div class="aihint"><b>AI rephrased for the department.</b> "Continuous sewage overflow on 27th Road causing pedestrian obstruction and health hazard since 21 July." Your original wording is kept on the case.</div>
+  </div></div>
+  <div class="card"><div class="cb">
+    <div class="k">Routed to</div>
+    <div class="chips" style="margin-top:8px">
+      <span class="pill br">${ic("chk")}Water & Sewage · 94%</span><span class="chip">Change department</span></div>
+    <div class="k" style="margin-top:13px">Priority signals</div>
+    <div class="chips" style="margin-top:8px"><span class="pill wn">Health hazard</span><span class="pill nu">School route</span></div>
+  </div></div>
+  <div class="card" style="border-color:var(--info-line)"><div class="cb">
+    <div style="display:flex;gap:10px"><div class="av" style="background:var(--info-bg);border-color:var(--info-line);color:var(--info)">3</div>
+    <div><div class="t1" style="font-size:12.5px;font-weight:600">3 neighbours reported this already</div>
+    <div class="t2" style="font-size:11px;line-height:1.5;margin-top:3px">SMD-00847 is open with the same department, 40 m away. Co-signing adds your voice to a live case instead of starting a new one.</div></div></div>
+    <div style="display:flex;gap:8px;margin-top:11px"><div class="btn p" style="flex:1">Co-sign SMD-00847</div><div class="btn s">File separately</div></div>
+  </div></div>
+ </div>${tabbar("")}`};
+
+P.casedetail={role:"citizen",route:"/cases/[id]",name:"Case · service journey",shell:"m",
+ desc:"The signature moment. A ride-tracker reads as <b>what happens next and when</b> — so the tracker leads with the pending step and the clock, not with history.",
+ ux:["Stage durations are shown, not just timestamps — delay hides between events, never in them.","The escalation rung is drawn before it happens, dashed, with the exact date. Nothing about escalation should require asking.","Co-sign count is social weight the officer's queue actually consumes, so it's shown to the citizen as a real lever."],
+ html:()=>`${hdr("Sewage overflow","SMD-00847 · Water & Sewage",0)}
+ <div class="body">
+  <div class="card"><div class="cb">
+   <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+    <div><div class="k">Time left before escalation</div><div class="v">3d 04h <small>of 7d</small></div></div>
+    <span class="pill wn">${ic("clk")}Day 4 of 7</span></div>
+   <div style="margin-top:12px">${sla(55,78,"warn","Filed <b>22 Jul, 6:41 PM</b>","Limit <b>31 Jul</b>")}</div>
+   <div style="display:flex;gap:7px;margin-top:12px"><span class="pill if">${ic("up")}14 co-signs</span>
+    <span class="pill nu">${ic("pin")}40 m radius</span><span class="pill nu">Public</span></div>
+  </div></div>
+  <div class="card"><div class="ch"><b>Service journey</b><span class="m">TIME IN STAGE</span></div><div class="cb">
+   <div class="jrn"><div class="fill" style="height:56%"></div>
+    <div class="jn done"><div class="d">${ic("chk")}</div><div class="w">22 JUL · 6:41 PM<em>21 min</em></div><div class="h">Filed</div></div>
+    <div class="jn done"><div class="d">${ic("chk")}</div><div class="w">22 JUL · 7:02 PM<em>15h 13m</em></div><div class="h">Acknowledged</div></div>
+    <div class="jn done"><div class="d">${ic("chk")}</div><div class="w">23 JUL · 10:15 AM<em>2d 5h</em></div><div class="h">Assigned</div>
+      <div class="who"><div class="av">RM</div><div><div class="t1">R. Manjunath</div>
+      <div class="t2">Junior Engineer · Sanitation</div></div>
+      <div class="pill br" style="margin-left:auto">Call</div></div></div>
+    <div class="jn live"><div class="d"></div><div class="w">25 JUL · 3:20 PM<em>3d 18h so far</em></div>
+      <div class="h">In progress · site inspected</div><div class="p">2 photos added. Excavation booked for 30 Jul.</div></div>
+    <div class="jn next"><div class="d">${ic("up")}</div><div class="w" style="color:var(--dang)">31 JUL · 6:41 PM · AUTOMATIC</div>
+      <div class="h">Escalates to Ward Lead</div><div class="p">Happens on its own if the SLA lapses. No request needed.</div></div>
+    <div class="jn pend"><div class="d"></div><div class="w">PENDING</div><div class="h">You confirm the fix</div></div>
+   </div></div></div>
+  <div class="card"><div class="ch"><b>Comparable cases</b><span class="m">SAME CATEGORY · WARD</span></div><div class="cb">
+   <div class="tcap" style="margin:0 0 6px"><span>Median time to close</span><span><b>8.1 days</b> · n=34</span></div>
+   ${sla(100,78,"dang","Limit <b>7d</b>","<b style='color:var(--dang)'>1.1d over</b> typical")}</div></div>
+ </div>${tabbar("Cases")}`};
+
+P.cases={role:"citizen",route:"/cases",name:"My cases",shell:"m",
+ desc:"Filter tabs, then rows that all carry the same SLA grammar as everywhere else.",
+ ux:["Sorted by time remaining, never by date filed. The row that needs you is always first.","Closed cases keep their outcome number so the history reads as a record, not a graveyard.","Empty state offers the feed, not a shrug — there is always something to co-sign."],
+ html:()=>`${hdr("My cases","6 total · 2 need attention",0)}
+ <div class="body">
+  <div class="chips" style="margin-bottom:11px"><span class="chip on">Active 2</span><span class="chip">Awaiting me 1</span><span class="chip">Closed 3</span></div>
+  <div class="card">
+   ${[["Pothole near BDA park","SMD-00801 · Roads",100,"dang","12d 11h elapsed","2d 11h over","dg","up","Escalated"],
+      ["Sewage overflow, 27th Rd","SMD-00847 · Water",55,"warn","3d 20h elapsed","3d 04h left","wn","clk","In progress"],
+      ["Streetlight out, 14th Cross","SMD-00612 · Power",38,"ok","1d 22h to fix","2d early","ok","chk","Confirm fix"]]
+     .map(([t,m,p,s,l,r,pk,pi,pl])=>`<div class="row"><div class="mn"><div class="t1">${t}</div>
+      <div class="t2 mono">${m}</div><div style="margin-top:7px">${sla(p,78,s,`<b>${l}</b>`,`<b>${r}</b>`)}</div></div>
+      <div class="rt"><span class="pill ${pk}">${ic(pi)}${pl}</span></div></div>`).join("")}
+  </div>
+  <div class="card"><div class="ch"><b>Closed</b><span class="m">OUTCOME · TIME</span></div>
+   <div class="row"><div class="mn"><div class="t1">Garbage not lifted, 9th Rd</div><div class="t2">Closed 18 Jul · you confirmed</div></div>
+    <div class="rt"><div class="t1" style="color:var(--ok)">2d 4h</div><div class="t2">of 3d</div></div></div>
+   <div class="row"><div class="mn"><div class="t1">Water supply interrupted</div><div class="t2">Closed 11 Jul · auto-closed</div></div>
+    <div class="rt"><div class="t1" style="color:var(--dang)">9d 6h</div><div class="t2">of 7d</div></div></div>
+  </div>
+ </div>${tabbar("Cases")}`};
+
+P.feed={role:"citizen",route:"/feed",name:"Public feed",shell:"m",
+ desc:"Civic social proof. Upvote is cheap; <b>co-sign carries a reason and a location</b>, so it costs something and therefore means something.",
+ ux:["Two distinct actions with different weights — upvote is a signal, co-sign is testimony that enters the officer's priority score.","Sort defaults to 'Near you', not 'Hot'. Proximity beats popularity for a civic feed or the loudest neighbourhood wins.","Resolved cases stay in the feed with their outcome. Seeing things get fixed is the whole retention mechanic."],
+ html:()=>`${hdr("Ward feed","K-East · 41 open nearby",1)}
+ <div class="body">
+  <div class="chips" style="margin-bottom:11px"><span class="chip on">${'Near you'}</span><span class="chip">Hot</span><span class="chip">Resolved</span><span class="chip">Water</span></div>
+  ${[["Sewage overflow, 27th Rd","Water · 40 m away",14,"wn","clk","Day 4 of 7","In progress"],
+     ["Garbage pile, Nehru Market","Sanitation · 220 m",38,"dg","up","Escalated","Escalated"],
+     ["Broken footpath slab","Roads · 310 m",6,"ok","chk","Closed in 3d","Resolved"]]
+   .map(([t,m,co,pk,pi,pl])=>`<div class="card"><div class="cb">
+    <div style="display:flex;justify-content:space-between;gap:10px"><div>
+      <div class="t1" style="font-size:13.5px;font-weight:600">${t}</div><div class="t2" style="font-size:11px;color:var(--muted);margin-top:3px">${m}</div></div>
+      <span class="pill ${pk}">${ic(pi)}${pl}</span></div>
+    <div style="display:flex;gap:7px;margin-top:11px;align-items:center">
+      <div class="btn s" style="padding:7px 11px">${ic("up")}${co}</div>
+      <div class="btn g" style="padding:7px 11px">Co-sign</div>
+      <div style="margin-left:auto;font-size:10.5px;color:var(--faint)" class="mono">${co} neighbours</div></div>
+   </div></div>`).join("")}
+  <div class="card flat" style="border-style:dashed"><div class="cb" style="text-align:center">
+    <div class="t2" style="font-size:11.5px;line-height:1.5">You've seen everything within 500 m.<br>Widen the radius to see the whole ward.</div>
+    <div class="btn s" style="margin-top:9px">Expand to 2 km</div></div></div>
+ </div>${tabbar("Feed")}`};
+
+P.ward={role:"citizen",route:"/ward/[code]",name:"Ward heatmap",shell:"m",
+ desc:"Density by 100 m cell, with the legend and the <b>denominator</b> always visible. A heatmap without n is decoration.",
+ ux:["Sequential single-hue scale, not rainbow — rainbow scales are unreadable for the 8% of men with CVD.","Tapping a cell filters the list below it rather than opening a modal; the map and the list stay in one mental model.","Department breakdown uses one shared scale so four rows compare at a glance."],
+ html:()=>{
+  let cells="";const cen=[[4,3,2.6],[9,5,3.2],[13,3,2.1],[6,8,2.3]];
+  const sc=["var(--track)","var(--brand-line)","var(--brand-soft)","var(--brand)","var(--dang)"];
+  for(let r=0;r<10;r++)for(let c=0;c<16;c++){let v=0;
+    cen.forEach(([cx,cy,rad])=>{v+=Math.max(0,1-Math.hypot(c-cx,(r-cy)*1.35)/rad);});
+    v+=(R()-.5)*.18;const l=v<=.05?0:Math.min(4,Math.floor(v*4.6));
+    cells+=`<i class="${l>=3?'an-heat':''}" style="background:${l===0?'var(--track)':sc[l]};opacity:${l===0?.45:1};animation-delay:-${((r*16+c)%11).toFixed(1)}s"></i>`;}
+  return `${hdr("Ward K-East","24 wards · MCGM · July 2026",0)}
+  <div class="body">
+   <div class="card"><div class="ch"><b>Open complaints</b><span class="m">PER 100 m CELL · n=609</span></div><div class="cb">
+     <div class="heat" style="grid-template-columns:repeat(16,1fr)">${cells}</div>
+     <div class="legend"><span>Low</span><span class="sc">${sc.map(c=>`<i style="background:${c}"></i>`).join("")}</span><span>40+</span>
+      <span style="margin-left:auto" class="mono">TAP A CELL TO FILTER</span></div></div></div>
+   <div class="card"><div class="ch"><b>By department</b><span class="m">MEDIAN DAYS vs SLA</span></div>
+    ${[["Power · BEST","1.4","2d",54,"ok"],["Sanitation","2.8","3d",73,"ok"],["Water & Sewage","8.1","7d",90,"warn"],["Roads","19.3","10d",100,"dang"]]
+     .map(([n,v,l,p,s])=>`<div class="row"><div class="mn"><div class="t1">${n}</div>
+      <div style="margin-top:7px"><div class="trk" style="height:5px"><i style="width:${p}%;background:var(--${s})"></i><u style="left:78%"></u></div></div></div>
+      <div class="rt" style="width:64px"><div class="t1" style="color:var(--${s})">${v}</div><div class="t2">SLA ${l}</div></div></div>`).join("")}
+   </div>
+  </div>${tabbar("Feed")}`}};
+
+P.profile={role:"citizen",route:"/profile",name:"Profile & reputation",shell:"m",
+ desc:"Gamification that can't be farmed. Points come from <b>verified outcomes</b>, never from volume of complaints filed.",
+ ux:["Deliberate design choice: no leaderboard of complaints filed. That metric rewards spam and punishes wards that are already well-served.","Reputation is earned on confirmed resolutions, accurate categorisation and co-signs that turned out valid — all verifiable after the fact.","Streaks are framed around civic participation (confirming fixes, co-signing) rather than daily app opens."],
+ html:()=>`${hdr("Priya Sharma","Ward K-East · member since 2024",0)}
+ <div class="body">
+  <div class="card"><div class="cb">
+    <div style="display:flex;gap:13px;align-items:center">
+      <div class="av" style="width:50px;height:50px;font-size:16px;border-radius:var(--r);flex:0 0 auto">PS</div>
+      <div style="flex:1;min-width:0">
+        <div class="t1" style="font-size:15px;font-weight:600">Verified Resolver</div>
+        <div class="t2" style="margin-top:3px">Tier 3 · <b style="color:var(--ink)">1,840</b> points</div>
+      </div>
+      <div style="text-align:center;flex:0 0 auto">
+        ${streakEmblem(18,30,58)}
+        <div class="t2" style="font-size:9.5px;margin-top:4px;white-space:nowrap"><b style="color:var(--ink);font-size:12px">18</b> day streak</div>
+      </div>
+    </div>
+    <div style="margin-top:14px">
+      <div class="trk" style="height:6px"><i style="width:61%;background:var(--gold)"></i></div>
+      <div class="tcap" style="white-space:nowrap"><span><b>Tier 3</b></span><span>660 pts to Tier 4</span></div>
+    </div>
+  </div></div>
+  <div class="card"><div class="ch"><b>Earned on outcomes</b><span class="m">NOT ON VOLUME</span></div><div class="cb">
+   <div class="grid3" style="gap:9px">
+    <div><div class="k">Confirmed fixes</div><div class="v" style="font-size:21px">11</div></div>
+    <div><div class="k">Valid co-signs</div><div class="v" style="font-size:21px">34</div></div>
+    <div><div class="k">Accuracy</div><div class="v" style="font-size:21px">92<small>%</small></div></div>
+   </div>
+   <div class="aihint" style="margin-top:11px">Points accrue when a case you filed or co-signed is <b>confirmed resolved by a citizen</b> — never for filing alone.</div>
+  </div></div>
+  <div class="card"><div class="ch"><b>Badges</b><span class="m">6 OF 14</span></div><div class="cb">
+   <div class="grid4">${[["star","First voice",1],["chk","Verified resolver",1],["users","Neighbour",1],["flame","Streak starter",1],
+     ["shield","Ward guardian",0],["pin","Mapper",0],["doc","Chronicler",0],["globe","Translator",0]]
+     .map(([i,n,on])=>`<div class="badge ${on?'':'off'}">${ic(i)}<b>${n}</b></div>`).join("")}</div></div></div>
+ </div>${tabbar("Profile")}`};
+
+P.notif={role:"citizen",route:"/notifications",name:"Notifications",shell:"m",
+ desc:"Grouped by case, not by time. <b>Actionable items float to the top</b> and are visually distinct from informational updates.",
+ ux:["Two tiers: things needing you (confirm a fix, answer an info request) versus things that merely happened.","Every entry names the case and the actor. 'Your complaint was updated' is a useless notification.","Bulk 'mark read' never touches the actionable tier — you can't accidentally dismiss an obligation."],
+ html:()=>`${hdr("Notifications","3 need you · 8 updates",0)}
+ <div class="body">
+  <div class="card" style="border-color:var(--warn-line)"><div class="ch" style="background:var(--warn-bg)">
+    <b style="color:var(--warn)">Needs you</b><span class="m" style="color:var(--warn)">3</span></div>
+   ${[["Confirm the fix on SMD-00612","BESCOM marked it resolved 2 days ago","Confirm"],
+      ["Answer info request on SMD-00847","Engineer asked for a landmark photo","Reply"],
+      ["Re-open window closes tomorrow","SMD-00588 auto-closes in 22 hours","Review"]]
+    .map(([t,s,b])=>`<div class="row"><div class="mn"><div class="t1">${t}</div><div class="t2">${s}</div></div>
+     <div class="rt"><span class="pill br">${b}</span></div></div>`).join("")}</div>
+  <div class="card"><div class="ch"><b>Updates</b><span class="m">LAST 7 DAYS</span></div>
+   ${[["SMD-00847 · assigned","R. Manjunath, Junior Engineer","2h"],
+      ["SMD-00801 · escalated","SLA lapsed, moved to Ward Lead","1d"],
+      ["14 neighbours co-signed","Sewage overflow, 27th Rd","2d"],
+      ["Ward K-East ranked 61st","Up 14 places this month","3d"]]
+    .map(([t,s,w])=>`<div class="row"><div class="mn"><div class="t1">${t}</div><div class="t2">${s}</div></div>
+     <div class="rt"><div class="t2 mono">${w}</div></div></div>`).join("")}</div>
+ </div>${tabbar("Home")}`};
+
+P.leaderboard={role:"citizen",route:"/leaderboard",name:"Leaderboard",shell:"m",
+ desc:"Wards compete, not citizens. The board ranks <b>civic outcomes</b> — SLA compliance and confirmed fixes — never volume of complaints filed.",
+ ux:["Ranking wards rather than people is the single most important call here. A citizen leaderboard by complaints filed rewards spam and shames under-served areas twice.","The citizen board that does exist is ranked by confirmed resolutions and co-sign accuracy — both only verifiable after an outcome, so neither can be farmed.","Your own ward is pinned in view regardless of rank, so the board is never demoralising to open."],
+ html:()=>`${hdr("Leaderboard","24 wards · MCGM · July 2026",0)}
+ <div class="body">
+  <div class="chips" style="margin-bottom:11px"><span class="chip on">Wards</span><span class="chip">Departments</span><span class="chip">Citizens</span></div>
+  <div class="card"><div class="ch"><b>Ward performance</b><span class="m">SLA COMPLIANCE</span></div>
+   ${[["1","A · Colaba","88","2.8 d","ok",0],["2","D · Grant Rd","84","3.1 d","ok",0],["3","H-West · Khar","72","5.2 d","warn",0],
+      ["…","","","","",0],["16","K-East · Bandra","41","11.2 d","dang",1],["17","P-North · Malad","39","9.4 d","dang",0]]
+    .map(([r,w,p,m,s,mine])=>r==="…"
+     ?`<div class="row" style="justify-content:center;padding:6px"><div class="t2 mono">· · ·</div></div>`
+     :`<div class="row" ${mine?'style="background:var(--brand-soft)"':''}>
+       <div class="mono" style="width:22px;color:var(--faint);font-size:11px;padding-top:2px">${r}</div>
+       <div class="mn"><div class="t1">${w}${mine?' <span class="pill br" style="margin-left:5px">Your ward</span>':''}</div>
+        <div style="margin-top:7px"><div class="trk" style="height:5px"><i style="width:${p}%;background:var(--${s})"></i><u style="left:75%"></u></div></div></div>
+       <div class="rt" style="width:56px"><div class="t1" style="color:var(--${s})">${p}%</div><div class="t2">${m}</div></div></div>`).join("")}
+  </div>
+  <div class="card"><div class="ch"><b>Top contributors</b><span class="m">CONFIRMED OUTCOMES ONLY</span></div>
+   ${[["MQ","M. Qureshi","31 confirmed fixes · 96% accuracy","2,410"],
+      ["PS","Priya Sharma","11 confirmed fixes · 92% accuracy","1,840"],
+      ["AF","A. Fernandes","9 confirmed fixes · 89% accuracy","1,505"]]
+    .map(([i,n,d,p])=>`<div class="row"><div class="av">${i}</div><div class="mn"><div class="t1">${n}</div>
+     <div class="t2">${d}</div></div><div class="rt"><div class="t1">${p}</div><div class="t2">points</div></div></div>`).join("")}
+   <div class="cb"><div class="aihint">Points come only from cases <b>confirmed resolved by a citizen</b>. Filing a complaint earns nothing on its own — by design.</div></div>
+  </div>
+ </div>${tabbar("Profile")}`};
+
+P.voice={role:"citizen",route:"/file · voice",name:"Voice capture",shell:"m",
+ desc:"The signature interaction. Mid-recording: live transcript in the speaker's own language, <b>uncommitted words shown greyed</b> so the citizen sees the machine is still listening, not finished.",
+ ux:["Partial transcription rendered in a lighter weight — showing only committed text makes speech-to-text feel broken during natural pauses.","Language is switchable mid-recording without losing the buffer. Indian speech is code-mixed; forcing one language up front loses half the sentence.","Big cancel, deliberate finish. The waveform is real amplitude, not decoration — a flat line tells someone their mic is muted, which is the top voice-UI failure."],
+ html:()=>`${hdr("Speak your complaint","Step 2 of 4 · Describe",0)}
+ <div class="body" style="display:flex;flex-direction:column">
+  <div class="card"><div class="cb">
+   <div class="orbwrap"><div class="orbstage lg"><div class="orb2">${ic("mic")}</div></div>
+    <div class="wv">${[.4,.7,1,.55,.85,.35,.95,.6,.45,.8,.5,1,.65,.3,.75,.9,.4,.6].map((h,i)=>
+      `<i style="height:${(h*100).toFixed(0)}%;animation-delay:${(i*.07).toFixed(2)}s"></i>`).join("")}</div>
+    <div class="t2 mono" style="margin-top:11px;font-size:10px;color:var(--faint)">RECORDING · 00:14</div></div>
+  </div></div>
+  <div class="card" style="flex:1"><div class="ch"><b>Live transcript</b>
+    <span class="pill nu">${ic("globe")}हिन्दी ▾</span></div>
+   <div class="cb"><div class="tx">
+    27वीं रोड के बाहर मंगलवार से सीवेज का पानी बह रहा है, पूरी गली में बदबू है,
+    <u>बच्चे उसी में से होकर स्कूल…</u></div>
+    <div class="aihint" style="margin-top:12px"><b>Translating as you speak.</b> Sewage water overflowing outside 27th Road since Tuesday, whole lane smells, children walk through it…</div>
+   </div></div>
+  <div class="chips" style="margin-bottom:11px">${["हिन्दी","मराठी","English","ગુજરાતી","+14"].map((l,i)=>
+    `<span class="chip ${i===0?'on':''}">${l}</span>`).join("")}</div>
+  <div style="display:flex;gap:8px"><div class="btn s" style="flex:1">Cancel</div>
+   <div class="btn p" style="flex:2">${ic("chk")}Done · use this</div></div>
+ </div>`};
+
+P.tracker={role:"citizen",route:"/cases/[id] · variants",name:"Tracker · 3 variants",shell:"board3",
+ desc:"The brief asks to reimagine the signature moment. Three readings of the same case, each winning in a different context.",
+ ux:["<b>Stepper</b> wins where vertical space is scarce — case rows, officer tables, notification previews. It answers 'which stage' and nothing more.","<b>Map</b> wins when there is a physical crew and a physical site. This is the literal Uber reading, and it only earns its space once field-ping data exists — otherwise it's a fake.","<b>Timeline</b> wins on the case page itself, because it's the only variant that can show stage durations, the named officer, and the future escalation rung together."],
+ html:()=>{
+  const stepper=`<div class="mini"><div class="mh"><b>A · Compact stepper</b><span>ROWS, TABLES</span></div><div class="mb">
+   <div class="stepper" style="margin-bottom:12px">${[["Filed","done"],["Ack","done"],["Assigned","done"],["Progress","on"],["Resolved",""],["Closed",""]]
+     .map(([n,s],i)=>`<div class="s ${s}"><i>${s==="done"?"✓":i+1}</i><b>${n}</b></div>`).join("")}</div>
+   ${sla(55,78,"warn","<b>Day 4</b> of 7","<b>3d 04h left</b>")}
+   <div class="t2" style="font-size:10.5px;color:var(--muted);margin-top:11px;line-height:1.5">Fits one row. Reads at a glance. Carries no detail beyond stage and clock — which is exactly right in a list.</div>
+  </div></div>`;
+  let g="";for(let i=0;i<8;i++)g+=`<line x1="0" y1="${18+i*26}" x2="300" y2="${18+i*26}" stroke="var(--line-2)" stroke-width="1"/>`;
+  for(let i=0;i<10;i++)g+=`<line x1="${14+i*32}" y1="0" x2="${14+i*32}" y2="210" stroke="var(--line-2)" stroke-width="1"/>`;
+  const map=`<div class="mini"><div class="mh"><b>B · Map & crew</b><span>NEEDS FIELD PINGS</span></div>
+   <svg viewBox="0 0 300 210" style="display:block;width:100%;background:var(--surface-2)">
+    <g opacity=".55">${g}</g>
+    <rect x="0" y="88" width="300" height="16" fill="var(--line-2)" opacity=".8"/>
+    <rect x="140" y="0" width="14" height="210" fill="var(--line-2)" opacity=".8"/>
+    <path class="an-flow" d="M62 168 L62 96 L147 96" fill="none" stroke="var(--brand)" stroke-width="3" stroke-dasharray="7 5" stroke-linecap="round"/>
+    <circle cx="62" cy="168" r="7" fill="var(--brand)"/><circle cx="62" cy="168" r="14" fill="var(--brand)" opacity=".18"/>
+    <text x="62" y="190" font-size="8.5" fill="var(--muted)" text-anchor="middle" font-family="JetBrains Mono, monospace">DEPOT</text>
+    <path d="M147 96 m0 -20 a13 13 0 1 1 .1 0 Z" fill="var(--dang)"/><circle cx="147" cy="83" r="4.6" fill="var(--surface)"/>
+    <text x="147" y="118" font-size="8.5" fill="var(--dang)" text-anchor="middle" font-family="JetBrains Mono, monospace">27TH RD</text>
+    <g class="an-crew"><circle cx="90" cy="96" r="6" fill="var(--warn)"/>
+     <circle class="an-ping" cx="90" cy="96" r="12" fill="none" stroke="var(--warn)" stroke-width="1.6"/></g>
+    <rect x="70" y="58" width="70" height="17" rx="4" fill="var(--warn)"/>
+    <text x="105" y="70" font-size="8.5" fill="#fff" text-anchor="middle" font-family="JetBrains Mono, monospace">CREW · 20 MIN</text>
+   </svg>
+   <div class="mb" style="padding-top:11px"><div class="t1" style="font-size:12px">Crew en route · arriving 11:40</div>
+    <div class="t2" style="font-size:10.5px;color:var(--muted);margin-top:5px;line-height:1.5">Only honest once the field app emits pings. A simulated ETA on a civic tool destroys trust faster than no ETA at all.</div></div></div>`;
+  const timeline=`<div class="mini"><div class="mh"><b>C · Live timeline</b><span>CASE PAGE · DEFAULT</span></div><div class="mb">
+   <div class="jrn"><div class="fill" style="height:52%"></div>
+    <div class="jn done"><div class="d">${ic("chk")}</div><div class="w">22 JUL<em>21 min</em></div><div class="h">Filed</div></div>
+    <div class="jn done"><div class="d">${ic("chk")}</div><div class="w">23 JUL<em>2d 5h</em></div><div class="h">Assigned</div>
+     <div class="who"><div class="av" style="width:24px;height:24px;font-size:9px">RM</div>
+      <div><div class="t1" style="font-size:11px">R. Manjunath</div></div></div></div>
+    <div class="jn live"><div class="d"></div><div class="w">25 JUL<em>3d 18h</em></div><div class="h">Inspected</div></div>
+    <div class="jn next"><div class="d">${ic("up")}</div><div class="w" style="color:var(--dang)">31 JUL · AUTO</div><div class="h">Escalates</div></div>
+   </div>
+   <div class="t2" style="font-size:10.5px;color:var(--muted);margin-top:4px;line-height:1.5">The only variant that shows time <i>in</i> each stage, which is where delay actually hides.</div>
+  </div></div>`;
+  return stepper+map+timeline;}};
+
+P.onboard={role:"citizen",route:"/onboarding",name:"Onboarding",shell:"board3",
+ desc:"Three cards, one promise each. Onboarding earns its interruption only if it teaches something the UI can't say by itself.",
+ ux:["Card 2 is the only one that matters — it sets the expectation that a clock exists and escalation is automatic. Without it, the SLA bar means nothing on first sight.","Language is chosen on card 1, before any prose the user might not read.","Skippable at every step, and the whole flow is re-openable from Profile. Onboarding you can't get back is onboarding people rush through."],
+ html:()=>[["1","Speak, don't type","Describe the problem in any of 18 languages. We'll route it to the right department and keep your own words on the record.","mic"],
+   ["2","A clock starts, and a name","Every category has a legal time limit. You'll see a named officer and the time remaining — and it escalates on its own if that time runs out.","clk"],
+   ["3","You're not alone","Neighbours can co-sign your case. Co-signed cases close faster, and you can see how your whole ward is doing.","users"]]
+  .map(([n,t,b,i])=>`<div class="mini"><div class="mh"><b>Step ${n} of 3</b><span>SKIP</span></div><div class="mb">
+   <div style="text-align:center;padding:14px 0 6px"><div class="orb" style="width:56px;height:56px;box-shadow:0 0 0 8px var(--brand-soft)">${ic(i)}</div></div>
+   <div class="t1" style="font-size:15px;text-align:center;margin-top:14px;font-weight:600">${t}</div>
+   <div class="t2" style="font-size:11.5px;text-align:center;margin-top:7px;line-height:1.6;color:var(--muted)">${b}</div>
+   ${n==="1"?`<div class="chips" style="justify-content:center;margin-top:13px">${["हिन्दी","English","मराठी","+15"].map((l,k)=>`<span class="chip ${k===1?'on':''}">${l}</span>`).join("")}</div>`:""}
+   <div style="display:flex;gap:5px;justify-content:center;margin-top:16px">${[1,2,3].map(k=>
+     `<i style="width:${k===+n?18:6}px;height:6px;border-radius:3px;background:var(--${k===+n?'brand':'line-2'});display:block"></i>`).join("")}</div>
+   <div class="btn p w" style="margin-top:13px">${n==="3"?"Get started":"Next"}</div>
+  </div></div>`).join("")};
+
+P.dcitizen={role:"citizen",route:"/ · desktop",name:"Citizen · desktop",shell:"d",
+ desc:"The other half of the citizen shell. Top nav instead of a bottom bar, two columns — <b>your cases lead, ward context follows.</b>",
+ ux:["Same content, different priority order. On mobile the hero is first because scroll is cheap; on desktop the cases sit top-left where the eye lands.","The file CTA stays visible in the header rather than becoming a floating button — desktop has no thumb zone to defend.","Max content width is held at roughly 1100px; a grievance list stretched to 1920px is unreadable."],
+ html:t=>`<div class="dtop"><div class="lg dis">समाधान</div>
+  <nav>${[["Home",1],["Feed",0],["My cases",0],["Ward",0],["Profile",0]].map(([n,o])=>
+    `<a href="#" class="${o?'on':''}">${n}</a>`).join("")}</nav>
+  <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+   <span class="pill nu">${ic("globe")}English</span>
+   <div class="btn p" style="padding:8px 13px">${ic("plus")}File a complaint</div>
+   <div class="av">PS</div></div></div>
+ <div class="dbody">
+  <div>
+   <div class="card"><div class="ch"><b>Your active cases</b><span class="m">BY TIME LEFT</span></div>
+    ${[["Pothole near BDA park","SMD-00801 · Roads",100,"dang","12d 11h elapsed","2d 11h over","dg","up","Escalated"],
+       ["Sewage overflow, 27th Rd","SMD-00847 · Water",55,"warn","3d 20h elapsed","3d 04h left","wn","clk","In progress"],
+       ["Streetlight out, 14th Cross","SMD-00612 · Power",38,"ok","1d 22h to fix","2d early","ok","chk","Confirm fix"]]
+     .map(([ti,m,p,s,l,r,pk,pi,pl])=>`<div class="row"><div class="mn"><div class="t1">${ti}</div>
+      <div class="t2 mono">${m}</div><div style="margin-top:7px;max-width:340px">${sla(p,78,s,`<b>${l}</b>`,`<b>${r}</b>`)}</div></div>
+      <div class="rt"><span class="pill ${pk}">${ic(pi)}${pl}</span></div></div>`).join("")}</div>
+   <div class="card"><div class="ch"><b>Near you</b><span class="m">41 OPEN WITHIN 500 m</span></div>
+    ${[["Garbage pile, Nehru Market","Sanitation · 220 m","38"],["Broken footpath slab","Roads · 310 m","6"]]
+     .map(([ti,m,c])=>`<div class="row"><div class="mn"><div class="t1">${ti}</div><div class="t2">${m}</div></div>
+      <div class="rt"><span class="pill nu">${ic("up")}${c}</span></div></div>`).join("")}</div>
+  </div>
+  <div>
+   <div class="hero" style="margin-bottom:12px">${THEMES[t].hero()}</div>
+   <div class="card"><div class="ch"><b>Ward K-East · July</b><span class="m">n=609</span></div><div class="cb">
+    <div class="grid3"><div><div class="k">Resolved</div><div class="v" style="font-size:20px">68<small>%</small></div></div>
+     <div><div class="k">Median</div><div class="v" style="font-size:20px">4.2<small>d</small></div></div>
+     <div><div class="k">Rank</div><div class="v" style="font-size:20px">16<small>/24</small></div></div></div></div></div>
+   <div class="card"><div class="ch"><b>Your standing</b></div><div class="cb">
+    <div style="display:flex;align-items:center;gap:11px"><div class="av" style="width:40px;height:40px;font-size:14px">PS</div>
+     <div style="flex:1"><div class="t1">Verified Resolver · Tier 3</div>
+      <div class="trk" style="height:5px;margin-top:6px"><i style="width:61%;background:var(--gold)"></i></div></div>
+     <div style="text-align:center;flex:0 0 auto">${streakEmblem(18,30,42)}
+      <div class="t2" style="font-size:9px;margin-top:3px;white-space:nowrap"><b style="color:var(--ink)">18</b> days</div></div></div></div></div>
+  </div>
+ </div>`};
+
+/* ---------- OFFICER ---------- */
+P.inbox={role:"officer",route:"/inbox",name:"Ranked inbox",shell:"d",
+ desc:"Triage, not a list. Rank = <b>SLA risk × co-sign weight × severity</b>, so the row at the top is the one that costs most to ignore.",
+ ux:["Status changes happen in-card. Opening a case to change one field is the single biggest time sink in this kind of tool.","The rank score is shown and decomposed on hover — an opaque priority number gets ignored by the people it's meant to help.","Bulk select supports assign and acknowledge only. Bulk resolve is deliberately absent; it's the main vector for gaming close rates."],
+ html:()=>`<div class="staff">${sside("officer","Inbox")}<main class="smain">
+  <div class="top"><div><h2 class="dis">Inbox</h2><div class="sub">63 open · 14 breaching within 48 h · sorted by risk</div></div>
+    <div class="chips"><span class="chip on">All</span><span class="chip">Breaching 14</span><span class="chip">Unassigned 9</span><span class="chip">Awaiting info 6</span></div></div>
+  <div class="grid4" style="margin-bottom:13px">
+   ${[["Open","63","Across 8 categories",""],["Past SLA","9","+3 since Friday","dang"],["Closed this week","58","+11 vs last","ok"],["Close quality","78","%· AI-scored","warn"]]
+    .map(([k,v,d,c])=>`<div class="card flat" style="margin:0"><div class="cb"><div class="k">${k}</div>
+     <div class="v" style="font-size:24px;${c?`color:var(--${c})`:''}">${v}</div><div class="dd">${d}</div></div></div>`).join("")}</div>
+  <div class="card" style="overflow:hidden"><table>
+   <thead><tr><th style="width:5%">Rank</th><th style="width:27%">Case</th><th style="width:14%">Category</th>
+    <th style="width:19%" class="r">Elapsed vs SLA</th><th style="width:11%">Weight</th><th style="width:12%">Status</th><th class="r" style="width:12%">Action</th></tr></thead>
+   <tbody>
+   ${[["1","Transformer sparking, 14th Cross","SMD-00889","Power · Safety","24 h",83,"dang","19h 48m","4h 12m left","38","dg","alert","Urgent"],
+      ["2","Pothole near BDA park","SMD-00801","Roads","10 d",100,"dang","12d 11h","2d 11h over","21","dg","up","Escalated"],
+      ["3","Sewage overflow, 27th Rd","SMD-00847","Water · Sewage","7 d",55,"warn","3d 20h","3d 04h left","14","wn","clk","Inspected"],
+      ["4","Garbage pile, Nehru Market","SMD-00872","Sanitation","3 d",58,"warn","1d 18h","1d 06h left","38","nu","clk","Assigned"],
+      ["5","Streetlight out, 14th Cross","SMD-00612","Power","4 d",38,"ok","1d 22h","2d early","3","ok","chk","Resolved"]]
+    .map(([n,t,id,cat,sl,p,s,e,l,w,pk,pi,pl])=>`<tr>
+     <td class="mono" style="color:var(--faint)">${n}</td>
+     <td><div class="t1s">${t}</div><div class="idm">${id}</div></td>
+     <td>${cat}<div class="t2s">SLA ${sl}</div></td>
+     <td class="r"><div style="width:140px;margin-left:auto"><div class="trk" style="height:5px"><i style="width:${p}%;background:var(--${s})"></i><u style="left:78%"></u></div>
+       <div class="tcap"><span>${e}</span><span><b style="color:var(--${s})">${l}</b></span></div></div></td>
+     <td><span class="pill if">${ic("up")}${w}</span></td>
+     <td><span class="pill ${pk}">${ic(pi)}${pl}</span></td>
+     <td class="r"><span class="pill nu">Act ▾</span></td></tr>`).join("")}
+   </tbody></table></div>
+  </main></div>`};
+
+P.ocase={role:"officer",route:"/case/[id]",name:"Case · officer view",shell:"d",
+ desc:"Closing is where quality is won or lost. The <b>AI close-quality score runs before submit</b>, as coaching, not as a post-hoc audit.",
+ ux:["Boilerplate detection warns while the officer is still typing. Catching it after closure only creates an adversarial metric.","The citizen's original words sit alongside the AI-rephrased version so nothing is lost in routing.","Co-signers are listed by name — 14 people are waiting on this, which is different from one."],
+ html:()=>`<div class="staff">${sside("officer","Inbox")}<main class="smain">
+  <div class="top"><div><h2 class="dis">Sewage overflow, 27th Rd</h2>
+   <div class="sub mono">SMD-00847 · Water & Sewage · filed 22 Jul, 6:41 PM</div></div>
+   <div class="chips"><span class="pill wn">${ic("clk")}3d 04h left</span><span class="pill if">${ic("up")}14 co-signs</span></div></div>
+  <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:13px">
+   <div>
+    <div class="card"><div class="ch"><b>Report</b><span class="m">CITIZEN + AI</span></div><div class="cb">
+      <div class="k">As filed (हिन्दी, transcribed)</div>
+      <div class="t2s" style="margin-top:5px;line-height:1.55;font-size:11.5px">Sewage water overflowing outside 27th Road since Tuesday, whole lane smells, children walk through it to school.</div>
+      <div class="aihint"><b>AI summary for routing.</b> Continuous sewage overflow, 27th Rd. Pedestrian obstruction, health hazard, school route affected. Classified Water & Sewage at 94% confidence.</div></div></div>
+    <div class="card"><div class="ch"><b>Close this case</b><span class="m">QUALITY CHECKED BEFORE SUBMIT</span></div><div class="cb">
+      <div class="inp" style="line-height:1.55">Line cleared and jetted. Blockage was tree root ingress at the 27th Rd junction chamber. Chamber cover replaced. Photographs attached.</div>
+      <div style="display:flex;gap:11px;margin-top:11px;align-items:center">
+        <div style="flex:1"><div class="k">Close quality</div>
+          <div class="trk" style="height:6px;margin-top:6px"><i style="width:86%;background:var(--ok)"></i><u style="left:60%"></u></div>
+          <div class="tcap"><span><b>86</b> / 100</span><span>Pass mark 60</span></div></div>
+        <span class="pill ok">${ic("chk")}Specific cause named</span></div>
+      <div style="display:flex;gap:8px;margin-top:12px"><div class="btn p">Resolve & notify citizen</div>
+        <div class="btn s">Request more info</div><div class="btn g">Reassign</div></div></div></div>
+   </div>
+   <div>
+    <div class="card"><div class="ch"><b>Journey</b></div><div class="cb"><div class="jrn">
+      <div class="jn done"><div class="d">${ic("chk")}</div><div class="w">22 JUL<em>21 min</em></div><div class="h">Filed</div></div>
+      <div class="jn done"><div class="d">${ic("chk")}</div><div class="w">22 JUL<em>15h</em></div><div class="h">Acknowledged</div></div>
+      <div class="jn done"><div class="d">${ic("chk")}</div><div class="w">23 JUL<em>2d 5h</em></div><div class="h">Assigned to you</div></div>
+      <div class="jn live"><div class="d"></div><div class="w">25 JUL<em>3d 18h</em></div><div class="h">Inspected</div></div>
+      <div class="jn next"><div class="d">${ic("up")}</div><div class="w" style="color:var(--dang)">31 JUL · AUTO</div><div class="h">Escalates to Ward Lead</div></div>
+    </div></div></div>
+    <div class="card"><div class="ch"><b>Co-signers</b><span class="m">14</span></div>
+      ${[["A. Fernandes","40 m · 22 Jul"],["S. Iyer","60 m · 23 Jul"],["M. Qureshi","85 m · 23 Jul"]]
+       .map(([n,m])=>`<div class="row"><div class="av">${n[0]}</div><div class="mn"><div class="t1">${n}</div><div class="t2">${m}</div></div></div>`).join("")}
+      <div class="row"><div class="mn"><div class="t2">+ 11 more within 120 m</div></div></div></div>
+   </div></div></main></div>`};
+
+P.clusters={role:"officer",route:"/clusters",name:"Clusters",shell:"d",
+ desc:"Similar cases grouped so one field visit closes eight tickets. <b>Cluster confidence is exposed</b> — the officer decides, not the model.",
+ ux:["Each cluster shows what it's grouped on (geography, category, time window) so a wrong grouping is obvious and reversible.","Acting on a cluster still writes individual case histories — every citizen gets their own resolution note.","Clusters sorted by tickets-per-visit, which is the actual efficiency lever."],
+ html:()=>`<div class="staff">${sside("officer","Clusters")}<main class="smain">
+  <div class="top"><div><h2 class="dis">Clusters</h2><div class="sub">8 groups · 41 of 63 open cases can be batched</div></div>
+   <div class="chips"><span class="chip on">By location</span><span class="chip">By cause</span><span class="chip">By category</span></div></div>
+  ${[["27th Rd sewage line","Water & Sewage",8,"120 m radius · filed within 5 days",94,"warn","Oldest breaches in 3d 04h"],
+     ["Nehru Market waste route","Sanitation",6,"Same collection route · 3 days",88,"nu","Oldest breaches in 1d 06h"],
+     ["Ward K-East streetlights","Power",5,"Same feeder line 174-B",76,"ok","All within SLA"]]
+   .map(([t,c,n,basis,conf,s,note])=>`<div class="card"><div class="cb">
+    <div style="display:flex;justify-content:space-between;gap:14px;align-items:flex-start">
+     <div><div class="t1s" style="font-size:14px">${t}</div>
+      <div class="t2s" style="margin-top:4px">${c} · ${basis}</div></div>
+     <div style="display:flex;gap:7px;align-items:center"><span class="pill nu">${n} cases</span>
+      <span class="pill ${s==='ok'?'ok':s==='warn'?'wn':'nu'}">${note}</span></div></div>
+    <div style="display:flex;gap:14px;margin-top:12px;align-items:center">
+      <div style="flex:1"><div class="k">Cluster confidence</div>
+        <div class="trk" style="height:5px;margin-top:5px"><i style="width:${conf}%;background:var(--brand)"></i><u style="left:70%"></u></div>
+        <div class="tcap"><span><b>${conf}%</b></span><span>Review below 70%</span></div></div>
+      <div class="btn p">Schedule one visit</div><div class="btn s">Split cluster</div></div>
+   </div></div>`).join("")}
+  </main></div>`};
+
+P.metrics={role:"officer",route:"/metrics",name:"My metrics",shell:"d",
+ desc:"Personal performance framed as <b>where your time goes</b>, not as a scoreboard. Comparison is to ward median, never to named peers.",
+ ux:["Stage-time breakdown shows the officer where their own delay actually sits — usually acknowledgement, not fieldwork.","Reopen rate is surfaced next to close rate so speed can't be optimised in isolation.","No peer leaderboard on the officer's own page. Ranking staff publicly by close count produces exactly the boilerplate closures the quality score is trying to prevent."],
+ html:()=>`<div class="staff">${sside("officer","Metrics")}<main class="smain">
+  <div class="top"><div><h2 class="dis">My metrics</h2><div class="sub">Last 90 days · compared to ward median</div></div>
+   <div class="chips"><span class="chip">30d</span><span class="chip on">90d</span><span class="chip">Year</span></div></div>
+  <div class="grid4" style="margin-bottom:13px">
+   ${[["Closed","214","+11% vs prior","ok"],["Within SLA","81","%· median 68%","ok"],["Close quality","78","median 71","warn"],["Reopened","4.2","%· median 6.1%","ok"]]
+    .map(([k,v,d,c])=>`<div class="card flat" style="margin:0"><div class="cb"><div class="k">${k}</div>
+     <div class="v" style="font-size:24px">${v}${k==="Within SLA"||k==="Reopened"?'<small>%</small>':''}</div><div class="dd" style="color:var(--${c})">${d}</div></div></div>`).join("")}</div>
+  <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:13px">
+   <div class="card"><div class="ch"><b>Where your time goes</b><span class="m">MEDIAN HOURS PER STAGE</span></div><div class="cb">
+    ${[["Acknowledge",18,"warn","18h","target 4h"],["Assign",9,"ok","9h","target 12h"],["Field visit",46,"ok","46h","target 72h"],["Close-out",27,"warn","27h","target 12h"]]
+     .map(([n,v,s,val,t])=>`<div style="margin-bottom:11px"><div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:5px">
+      <b>${n}</b><span style="color:var(--muted)">${val} · ${t}</span></div>
+      <div class="trk" style="height:6px"><i style="width:${Math.min(100,v*1.6)}%;background:var(--${s})"></i><u style="left:60%"></u></div></div>`).join("")}
+    <div class="aihint">Acknowledgement is your largest gap against target. Cases acknowledged within 4 hours close <b>2.3 days faster</b> on average.</div></div></div>
+   <div class="card"><div class="ch"><b>Closures per week</b><span class="m">90 DAYS</span></div><div class="cb">
+    <div class="bars">${[11,14,9,17,13,19,16,21,18,14,22,17,24].map(v=>`<i style="height:${v*4}%"></i>`).join("")}</div>
+    <div class="blab">${["W1","","","W4","","","W7","","","W10","","","W13"].map(l=>`<span>${l}</span>`).join("")}</div></div></div>
+  </div></main></div>`};
+
+P.osettings={role:"officer",route:"/settings",name:"Settings",shell:"d",
+ desc:"Notification thresholds are the real setting here — an officer who gets pinged on everything gets pinged on nothing.",
+ ux:["SLA alert lead time is user-configurable per category, because a 24h safety SLA and a 10-day roads SLA need different warning horizons.","Language preference is separate from the language cases arrive in — officers read in one, citizens write in eighteen.","Delegation is explicit and dated, so leave cover never leaves a queue unattended."],
+ html:()=>`<div class="staff">${sside("officer","Settings")}<main class="smain">
+  <div class="top"><div><h2 class="dis">Settings</h2><div class="sub">Rajesh Kulkarni · Sanitation · Ward K-East</div></div></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px">
+   <div class="card"><div class="ch"><b>SLA alerts</b><span class="m">LEAD TIME BEFORE BREACH</span></div>
+    ${[["Safety · 24 h","4 hours before"],["Water · 7 d","24 hours before"],["Roads · 10 d","48 hours before"],["Sanitation · 3 d","12 hours before"]]
+     .map(([a,b])=>`<div class="row"><div class="mn"><div class="t1">${a}</div></div>
+      <div class="rt"><span class="pill nu">${b} ▾</span></div></div>`).join("")}</div>
+   <div class="card"><div class="ch"><b>Language</b></div>
+    ${[["Interface","English"],["Read cases in","English (auto-translate)"],["Reply in","मराठी"]]
+     .map(([a,b])=>`<div class="row"><div class="mn"><div class="t1">${a}</div></div>
+      <div class="rt"><span class="pill nu">${ic("globe")}${b} ▾</span></div></div>`).join("")}
+    <div class="cb"><div class="aihint">Citizens write in 18 languages. Cases are machine-translated for you and your reply is translated back, with both versions kept on the record.</div></div></div>
+   <div class="card"><div class="ch"><b>Delegation</b></div><div class="cb">
+     <div class="row" style="padding:0 0 11px"><div class="av">SM</div><div class="mn"><div class="t1">S. More · Junior Engineer</div>
+      <div class="t2">Covering 2–9 Aug · full inbox access</div></div><div class="rt"><span class="pill ok">${ic("chk")}Active</span></div></div>
+     <div class="btn s w">Add cover</div></div></div>
+   <div class="card"><div class="ch"><b>Notifications</b></div>
+    ${[["Case assigned to me","Push + email"],["SLA breach imminent","Push"],["Citizen replied","Push"],["Weekly metrics digest","Email"]]
+     .map(([a,b])=>`<div class="row"><div class="mn"><div class="t1">${a}</div></div><div class="rt"><span class="pill nu">${b}</span></div></div>`).join("")}</div>
+  </div></main></div>`};
+
+/* ---------- ADMIN ---------- */
+P.overview={role:"admin",route:"/overview",name:"Overview",shell:"d",
+ desc:"District oversight. Leads with the <b>systemic bottleneck</b>, not with a wall of KPIs — the first question is always 'where is the constraint'.",
+ ux:["Top card names one bottleneck in a sentence with the evidence behind it. Dashboards that open with twelve equal tiles get scanned and abandoned.","Ward table sorted by SLA compliance ascending — the worst is first, because that's the actionable end.","Trend deltas are always paired with an absolute so a 40% improvement on n=5 can't masquerade as a win."],
+ html:()=>`<div class="staff">${sside("admin","Overview")}<main class="smain">
+  <div class="top"><div><h2 class="dis">District overview</h2><div class="sub">24 wards · 8 departments · July 2026</div></div>
+   <div class="chips"><span class="chip">30d</span><span class="chip on">Month</span><span class="chip">Quarter</span></div></div>
+  <div class="card" style="border-color:var(--warn-line)"><div class="cb" style="display:flex;gap:14px;align-items:flex-start">
+    <div class="av" style="background:var(--warn-bg);border-color:var(--warn-line);color:var(--warn)">${ic("alert")}</div>
+    <div style="flex:1"><div class="t1s" style="font-size:14px">Roads acknowledgement is the district constraint</div>
+     <div class="t2s" style="margin-top:4px;line-height:1.55">Roads cases wait a median <b>4.1 days</b> before acknowledgement against a 1-day target — 61% of total overrun across all departments traces to this single stage. Field time is within target.</div>
+     <div style="display:flex;gap:7px;margin-top:9px"><span class="pill wn">Affects 11 of 24 wards</span><span class="pill nu">2,840 cases</span></div></div>
+    <div class="btn p">Open trend</div></div></div>
+  <div class="grid4" style="margin-bottom:13px">
+   ${[["Filed this month","14,208","+6.2% · +826","nu"],["Within SLA","64","%· +2.1 pts","ok"],["Escalated","1,109","7.8% of filed","warn"],["Reopen rate","6.1","%· −0.4 pts","ok"]]
+    .map(([k,v,d,c])=>`<div class="card flat" style="margin:0"><div class="cb"><div class="k">${k}</div>
+     <div class="v" style="font-size:23px">${v}${k==="Within SLA"||k==="Reopen rate"?'<small>%</small>':''}</div>
+     <div class="dd" style="color:var(--${c==='nu'?'muted':c})">${d}</div></div></div>`).join("")}</div>
+  <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:13px">
+   <div class="card" style="overflow:hidden"><div class="ch"><b>Wards</b><span class="m">SLA COMPLIANCE ↑ WORST FIRST</span></div>
+    <table><thead><tr><th style="width:26%">Ward</th><th style="width:14%" class="r">Open</th>
+     <th style="width:34%">Within SLA</th><th style="width:26%" class="r">Median close</th></tr></thead><tbody>
+    ${[["K-East · Bandra","412",41,"dang","11.2 d"],["P-North · Malad","388",53,"dang","9.4 d"],
+       ["G-South · Worli","221",66,"warn","6.1 d"],["H-West · Khar","174",72,"warn","5.2 d"],["A · Colaba","96",88,"ok","2.8 d"]]
+     .map(([w,o,p,s,m])=>`<tr><td class="t1s">${w}</td><td class="r">${o}</td>
+      <td><div class="trk" style="height:5px"><i style="width:${p}%;background:var(--${s})"></i><u style="left:75%"></u></div>
+       <div class="tcap"><span><b>${p}%</b></span><span>Target 75%</span></div></td>
+      <td class="r">${m}</td></tr>`).join("")}</tbody></table></div>
+   <div class="card"><div class="ch"><b>Filed vs closed</b><span class="m">12 WEEKS</span></div><div class="cb">
+    <div class="bars" style="height:96px">${[62,71,58,80,74,88,79,94,86,72,98,84].map((v,i)=>
+      `<i style="height:${v}%;background:${i>8?'var(--warn)':'var(--brand)'}"></i>`).join("")}</div>
+    <div class="blab">${["W1","","","W4","","","W7","","","W10","",""].map(l=>`<span>${l}</span>`).join("")}</div>
+    <div class="aihint" style="margin-top:10px">Backlog grew in 3 of the last 4 weeks — filings are outpacing closures by a median of <b>112 cases/week</b>.</div></div></div>
+  </div></main></div>`};
+
+P.officers={role:"admin",route:"/officers",name:"Officer accountability",shell:"d",
+ desc:"Accountability without a public shaming board. Load is shown <b>beside</b> performance, because an officer with 3× the caseload is not underperforming.",
+ ux:["Caseload column sits immediately left of SLA compliance so the two are read together. Separating them produces unfair conclusions and staff mistrust.","Quality and speed shown together — a fast closer with a high reopen rate is a problem, not a top performer.","Row action is 'rebalance', not 'flag'. The tool's job is redistributing work, not building a case file."],
+ html:()=>`<div class="staff">${sside("admin","Officers")}<main class="smain">
+  <div class="top"><div><h2 class="dis">Officer accountability</h2><div class="sub">41 officers · 8 departments · load-adjusted</div></div>
+   <div class="chips"><span class="chip on">All</span><span class="chip">Overloaded 6</span><span class="chip">Quality &lt;60 · 3</span></div></div>
+  <div class="card" style="overflow:hidden"><table>
+   <thead><tr><th style="width:22%">Officer</th><th style="width:14%">Department</th><th class="r" style="width:11%">Open load</th>
+    <th style="width:22%">Within SLA</th><th class="r" style="width:11%">Quality</th><th class="r" style="width:10%">Reopen</th><th class="r" style="width:10%"></th></tr></thead>
+   <tbody>
+   ${[["R. Manjunath","Water","112",44,"dang","81","3.1%","3× median load"],
+      ["S. More","Sanitation","38",71,"warn","74","5.2%",""],
+      ["A. Pillai","Roads","94",39,"dang","52","11.4%","Quality below floor"],
+      ["V. Naik","Power","29",92,"ok","88","2.0%",""],
+      ["D. Shaikh","Water","41",78,"ok","79","4.4%",""]]
+    .map(([n,d,l,p,s,q,r,flag])=>`<tr>
+     <td><div style="display:flex;align-items:center;gap:8px"><div class="av" style="width:26px;height:26px;font-size:10px">${n.split(" ")[1][0]}</div>
+      <div><div class="t1s">${n}</div>${flag?`<div class="t2s" style="color:var(--warn)">${flag}</div>`:""}</div></div></td>
+     <td>${d}</td><td class="r"><b>${l}</b></td>
+     <td><div class="trk" style="height:5px"><i style="width:${p}%;background:var(--${s})"></i><u style="left:75%"></u></div>
+      <div class="tcap"><span><b>${p}%</b></span><span>Target 75%</span></div></td>
+     <td class="r">${q}</td><td class="r">${r}</td>
+     <td class="r"><span class="pill nu">Rebalance</span></td></tr>`).join("")}
+   </tbody></table></div>
+  <div class="card"><div class="cb"><div class="aihint">Load-adjusted view. R. Manjunath carries <b>3× the district median caseload</b>; his SLA compliance is the lowest in Water but his close quality is the second highest. Redistribution, not review.</div></div></div>
+  </main></div>`};
+
+P.officerdetail={role:"admin",route:"/officers/[id]",name:"Officer detail",shell:"d",
+ desc:"One officer, in context. Opens with <b>load versus capacity</b>, because that's the question that determines whether anything else on the page is a fair reading.",
+ ux:["Load-vs-capacity leads. Reading SLA compliance before caseload is how good staff get managed out of a job they were set up to fail at.","Stage breakdown identifies where this officer's time actually goes, so the intervention is specific rather than 'try harder'.","Actions are redistribute and add cover. There is deliberately no disciplinary action in this UI — that conversation belongs to a human, not a dashboard."],
+ html:()=>`<div class="staff">${sside("admin","Officers")}<main class="smain">
+  <div class="top"><div style="display:flex;gap:12px;align-items:center">
+    <div class="av" style="width:44px;height:44px;font-size:15px;border-radius:var(--r)">RM</div>
+    <div><h2 class="dis">R. Manjunath</h2><div class="sub">Junior Engineer · Water & Sewage · Ward K-East · since 2019</div></div></div>
+   <div class="chips"><span class="pill dg">${ic("alert")}3× median load</span><span class="chip">Rebalance</span><span class="chip on">Add cover</span></div></div>
+  <div class="card" style="border-color:var(--dang-line)"><div class="cb" style="display:flex;gap:16px;align-items:center">
+    <div style="flex:1"><div class="k">Open load vs district capacity guideline</div>
+     <div class="trk" style="height:8px;margin-top:8px"><i style="width:100%;background:var(--dang)"></i><u style="left:33%"></u></div>
+     <div class="tcap"><span><b>112 open</b></span><span>Guideline <b>37</b> · <b style="color:var(--dang)">3.0× over</b></span></div></div>
+    <div style="text-align:right"><div class="k">Reading</div>
+     <div class="t2s" style="max-width:260px;margin-top:5px;line-height:1.55;font-size:11.5px">Lowest SLA compliance in Water, second-highest close quality in the district. This is a distribution problem.</div></div></div></div>
+  <div class="grid4" style="margin-bottom:13px">
+   ${[["Within SLA","44","%· target 75%","dang"],["Close quality","81","median 71","ok"],["Reopened","3.1","%· median 6.1%","ok"],["Closed 90d","214","+11% vs prior","ok"]]
+    .map(([k,v,d,c])=>`<div class="card flat" style="margin:0"><div class="cb"><div class="k">${k}</div>
+     <div class="v" style="font-size:23px;color:var(--${c})">${v}${k.includes("SLA")||k==="Reopened"?'<small>%</small>':''}</div>
+     <div class="dd">${d}</div></div></div>`).join("")}</div>
+  <div style="display:grid;grid-template-columns:1fr 1.3fr;gap:13px">
+   <div class="card"><div class="ch"><b>Where the time goes</b><span class="m">MEDIAN PER STAGE</span></div><div class="cb">
+    ${[["Acknowledge",92,"dang","41h","target 4h"],["Assign",30,"ok","9h","target 12h"],["Field visit",64,"ok","46h","target 72h"],["Close-out",96,"dang","38h","target 12h"]]
+     .map(([n,v,s,val,t])=>`<div style="margin-bottom:11px"><div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:5px">
+      <b>${n}</b><span style="color:var(--muted)">${val} · ${t}</span></div>
+      <div class="trk" style="height:6px"><i style="width:${v}%;background:var(--${s})"></i><u style="left:60%"></u></div></div>`).join("")}
+    <div class="aihint">Field time is inside target. Both gaps are desk stages — consistent with volume, not with effort.</div></div></div>
+   <div class="card" style="overflow:hidden"><div class="ch"><b>Oldest open cases</b><span class="m">5 OF 112</span></div>
+    <table><thead><tr><th style="width:44%">Case</th><th style="width:20%">Category</th><th class="r" style="width:20%">Over SLA</th><th class="r" style="width:16%"></th></tr></thead><tbody>
+    ${[["Sewage backflow, Linking Rd","SMD-00512","Sewage","14d 06h"],["Manhole cover missing","SMD-00530","Safety","11d 22h"],
+       ["Water contamination, 3rd Ln","SMD-00544","Water","9d 14h"],["Drain overflow, Nehru Rd","SMD-00559","Sewage","8d 03h"],
+       ["Pipe burst, Station Rd","SMD-00566","Water","7d 11h"]]
+     .map(([t,id,c,o])=>`<tr><td><div class="t1s">${t}</div><div class="idm">${id}</div></td><td>${c}</td>
+      <td class="r"><b style="color:var(--dang)">${o}</b></td><td class="r"><span class="pill nu">Move</span></td></tr>`).join("")}
+    </tbody></table></div>
+  </div></main></div>`};
+
+P.trends={role:"admin",route:"/trends",name:"Trends",shell:"d",
+ desc:"Systemic storytelling. Each trend is a <b>claim with evidence and a suggested action</b>, not a chart left for the reader to interpret.",
+ ux:["Every insight names its sample size and time window inline. An AI-written trend without n is an opinion.","Charts are small and subordinate to the sentence — the sentence is the finding, the chart is the proof.","'Dismiss' is available on every insight and is recorded, so the model's precision can be measured over time."],
+ html:()=>`<div class="staff">${sside("admin","Trends")}<main class="smain">
+  <div class="top"><div><h2 class="dis">Trends</h2><div class="sub">AI-detected · July 2026 · 14,208 cases analysed</div></div>
+   <div class="chips"><span class="chip on">All</span><span class="chip">Seasonal</span><span class="chip">Geographic</span><span class="chip">Process</span></div></div>
+  ${[["Monsoon drainage complaints lead road failures by 18 days","Geographic · n=1,204",
+     "Drain-blockage reports in a 300 m cell predict a road-surface complaint in the same cell within 18 days, 71% of the time. Pre-monsoon desilting in the 40 highest-risk cells would pre-empt an estimated 480 road cases.","Schedule desilting",[34,41,38,52,61,74,88,71,64],"warn"],
+    ["Acknowledgement delay, not fieldwork, drives Roads overrun","Process · n=2,840",
+     "Median field-visit time for Roads is 3.2 days against a 5-day allowance — within target. Acknowledgement takes 4.1 days against a 1-day target, accounting for 61% of total overrun.","Open officer view",[88,84,86,81,83,79,82,78,80],"dang"],
+    ["Co-signed cases close 2.4 days faster","Process · n=3,190",
+     "Cases with 10 or more co-signs close a median 2.4 days faster than single-filer cases of the same category and ward. Effect holds after controlling for severity.","Surface in triage",[41,46,52,58,63,69,74,79,86],"ok"]]
+   .map(([t,m,b,cta,series,s])=>`<div class="card"><div class="cb">
+    <div style="display:flex;gap:16px;align-items:flex-start">
+     <div style="flex:1"><div style="display:flex;gap:9px;align-items:center">
+       <span class="pill ${s==='ok'?'ok':s==='warn'?'wn':'dg'}">${ic("chart")}${m.split(" · ")[0]}</span>
+       <span class="t2s mono">${m.split(" · ")[1]}</span></div>
+      <div class="t1s" style="font-size:14.5px;margin-top:8px">${t}</div>
+      <div class="t2s" style="margin-top:5px;line-height:1.6;font-size:11.5px">${b}</div>
+      <div style="display:flex;gap:8px;margin-top:11px"><div class="btn p" style="padding:8px 13px">${cta}</div>
+        <div class="btn g" style="padding:8px 13px">Dismiss</div></div></div>
+     <div style="width:170px;flex:0 0 auto"><div class="bars" style="height:64px">
+       ${series.map(v=>`<i style="height:${v}%;background:var(--${s})"></i>`).join("")}</div>
+       <div class="blab"><span>9 months</span></div></div></div>
+   </div></div>`).join("")}
+  </main></div>`};
+
+P.policy={role:"admin",route:"/policy",name:"Policy digest",shell:"d",
+ desc:"A monthly brief a district magistrate can act on or forward. <b>Every claim links to its cases</b> — no unsourced assertions in an official document.",
+ ux:["Structured as recommendation → evidence → estimated impact → owner. That's the shape a decision-maker can sign off.","Export to PDF preserves case-ID references so the document survives outside the tool.","Draft status is explicit; nothing is published to the ward without a human approving it."],
+ html:()=>`<div class="staff">${sside("admin","Policy")}<main class="smain">
+  <div class="top"><div><h2 class="dis">Policy digest · July 2026</h2>
+   <div class="sub">Draft · generated 28 Jul · awaiting your approval</div></div>
+   <div class="chips"><span class="pill wn">${ic("clk")}Draft</span><span class="chip">Export PDF</span><span class="chip on">Approve & publish</span></div></div>
+  <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:13px">
+   <div>
+   ${[["Move Roads acknowledgement to auto-ack on filing","High impact · low cost",
+      "61% of Roads SLA overrun occurs before a human sees the case. An automatic acknowledgement with a named duty officer at filing would remove a median 3.1 days from every Roads case.",
+      "≈ 2,840 cases/month","Roads · Ward Leads",1],
+     ["Pre-monsoon desilting in 40 predicted cells","High impact · medium cost",
+      "Drain-blockage density predicts road-surface failure in the same cell within 18 days at 71% precision, n=1,204.",
+      "≈ 480 cases pre-empted","Storm Water Drains",0],
+     ["Raise co-sign weight in triage ranking","Medium impact · no cost",
+      "Co-signed cases already close 2.4 days faster; weighting them higher compounds an effect the system produces for free.",
+      "≈ 1.1 days median","Platform",0]]
+    .map(([t,tag,ev,imp,own,pri])=>`<div class="card"><div class="cb">
+     <div style="display:flex;gap:9px;align-items:center"><span class="pill ${pri?'dg':'nu'}">${pri?'Priority 1':'Recommended'}</span>
+      <span class="t2s">${tag}</span></div>
+     <div class="t1s" style="font-size:14px;margin-top:8px">${t}</div>
+     <div class="t2s" style="margin-top:5px;line-height:1.6;font-size:11.5px">${ev}</div>
+     <div style="display:flex;gap:20px;margin-top:11px">
+      <div><div class="k">Est. impact</div><div class="t1s" style="margin-top:3px">${imp}</div></div>
+      <div><div class="k">Owner</div><div class="t1s" style="margin-top:3px">${own}</div></div>
+      <div style="margin-left:auto"><span class="pill br">View 12 cases</span></div></div>
+    </div></div>`).join("")}
+   </div>
+   <div><div class="card"><div class="ch"><b>Month at a glance</b></div><div class="cb">
+     ${[["Filed","14,208"],["Closed","12,984"],["Within SLA","64%"],["Escalated","1,109"],["Backlog change","+1,224"]]
+      .map(([k,v])=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:12px">
+       <span style="color:var(--muted)">${k}</span><b>${v}</b></div>`).join("")}
+     <div class="aihint" style="margin-top:11px">Digest drafted from 14,208 cases. Every figure links to its source records and is reproducible from the case log.</div></div></div>
+    <div class="card"><div class="ch"><b>Distribution</b></div><div class="cb">
+     ${[["Ward Leads","24 recipients"],["Dept. Heads","8 recipients"],["Public ward pages","24 pages"]]
+      .map(([a,b])=>`<div class="row" style="padding:9px 0"><div class="mn"><div class="t1">${a}</div><div class="t2">${b}</div></div>
+       <div class="rt"><span class="pill nu">On approval</span></div></div>`).join("")}</div></div>
+   </div></div></main></div>`};
+
+/* ---------- AUTH ---------- */
+P.login={role:"auth",route:"/login",name:"Login & role switch",shell:"m",
+ desc:"Phone + OTP for citizens, email for staff. The <b>demo persona picker</b> is a first-class surface, not a hidden dev route.",
+ ux:["One field visible at a time. An auth screen with four inputs and three toggles is where civic apps lose first-time users.","Language selection happens before login, not after — someone who can't read the login screen can't get to settings.","Role switch is one tap with the persona's actual context shown, so a demo never starts on the wrong data."],
+ html:t=>`<div style="position:relative;flex:1;display:flex;flex-direction:column;overflow:hidden">
+  <div style="position:absolute;inset:0;opacity:.9">${THEMES[t].hero()}</div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 18%,var(--bg) 62%)"></div>
+  <div style="position:relative;margin-top:auto;padding:20px 18px 26px">
+   <div style="text-align:center;margin-bottom:16px">
+    <div class="dis" style="font-size:34px;font-family:'Tiro Devanagari Sanskrit',serif">समाधान</div>
+    <div class="t2" style="font-size:11.5px;color:var(--muted);margin-top:4px">Track your complaint like a ride</div></div>
+   <div class="card"><div class="cb">
+    <div class="k">Mobile number</div>
+    <div class="inp" style="margin-top:7px;display:flex;gap:8px"><b>+91</b><span class="ph">98765 43210</span></div>
+    <div class="btn p w" style="margin-top:10px">Send OTP</div>
+    <div style="display:flex;align-items:center;gap:9px;margin:13px 0">
+      <div style="flex:1;height:1px;background:var(--line)"></div>
+      <span class="t2" style="font-size:10px;color:var(--faint)">OR</span>
+      <div style="flex:1;height:1px;background:var(--line)"></div></div>
+    <div class="btn s w">Staff sign-in with email</div>
+   </div></div>
+   <div class="card"><div class="ch"><b>Demo personas</b><span class="m">ROLE SWITCH</span></div>
+    ${[["PS","Priya Sharma","Citizen · Ward K-East · 6 cases"],
+       ["RK","Rajesh Kulkarni","Officer · Sanitation · 63 open"],
+       ["AD","Anita Deshmukh","Admin · District · 24 wards"]]
+     .map(([i,n,d])=>`<div class="row"><div class="av">${i}</div><div class="mn"><div class="t1">${n}</div>
+      <div class="t2">${d}</div></div><div class="rt"><span class="pill br">Enter</span></div></div>`).join("")}</div>
+   <div style="text-align:center;margin-top:12px"><span class="pill nu">${ic("globe")}English · हिन्दी · मराठी · +15</span></div>
+  </div></div>`};
+
+P.roleswitch={role:"auth",route:"/role-switch",name:"Role switch",shell:"m",
+ desc:"A demo surface treated as a real one. Each persona shows the <b>state you'll land in</b>, so a live demo never opens on the wrong data.",
+ ux:["Every persona card previews its actual context — open counts, ward, department. Switching blind is how demos derail.","The ward-KE trio is grouped separately because it's for multi-device demos where three people act on the same cases simultaneously.","Current session is marked, and switching is non-destructive — you can go back without re-authenticating."],
+ html:()=>`${hdr("Switch role","Demo personas · session resets on switch",0)}
+ <div class="body">
+  <div class="card"><div class="ch"><b>Single-user demo</b><span class="m">3 PERSONAS</span></div>
+   ${[["PS","Priya Sharma","Citizen","Ward K-East · 6 cases · 2 need attention · Tier 3",1],
+      ["RK","Rajesh Kulkarni","Officer","Sanitation · 63 open · 14 breaching in 48 h",0],
+      ["AD","Anita Deshmukh","Admin","District · 24 wards · 14,208 cases this month",0]]
+    .map(([i,n,r,d,cur])=>`<div class="row" ${cur?'style="background:var(--brand-soft)"':''}>
+     <div class="av">${i}</div><div class="mn"><div class="t1">${n} <span class="pill nu" style="margin-left:4px">${r}</span></div>
+      <div class="t2" style="margin-top:4px">${d}</div></div>
+     <div class="rt"><span class="pill ${cur?'ok':'br'}">${cur?'Current':'Enter'}</span></div></div>`).join("")}</div>
+  <div class="card"><div class="ch"><b>Multi-user demo · Ward K-East</b><span class="m">3 DEVICES, SAME CASES</span></div>
+   ${[["AF","A. Fernandes","Citizen · files and co-signs"],["SM","S. More","Officer · receives and resolves"],["VL","V. Lokhande","Ward Lead · receives escalations"]]
+    .map(([i,n,d])=>`<div class="row"><div class="av">${i}</div><div class="mn"><div class="t1">${n}</div>
+     <div class="t2">${d}</div></div><div class="rt"><span class="pill br">Enter</span></div></div>`).join("")}
+   <div class="cb"><div class="aihint">All three act on the same live case set. File on one device and watch it land on the other two — this is the escalation loop demo.</div></div></div>
+  <div class="btn s w">Sign out entirely</div>
+ </div>`};
+
+/* ---------- CROSS-CUTTING STATES ---------- */
+P.empty={role:"states",route:"empty states",name:"Empty states",shell:"board2",
+ desc:"Four empties. Every one offers <b>an action, not an apology</b> — an empty screen with a shrug is a dead end.",
+ ux:["No-cases-yet points at the feed: there is always something to co-sign, so a new user is never stranded.","Officer zero-inbox is a genuine achievement and says so, but still surfaces the clusters queue so it isn't a full stop.","Feed-exhausted offers a wider radius rather than pretending there is nothing left, which would be false.","Search-no-results echoes the query and offers to file — a failed search in a grievance app often means an unreported problem.","The glyph is composed inside the illustration's own coordinate space, never overlaid with negative margins."],
+ html:()=>[["No cases yet","citizen · /cases","doc","brand","You haven't filed anything yet.","41 open cases near you need co-signers — adding your voice to one is often faster than filing fresh.","Browse the feed"],
+  ["Inbox clear","officer · /inbox","chk","ok","Nothing breaching. Genuinely.","All 63 open cases are inside their SLA window. 8 clusters are ready to batch if you want to get ahead.","Open clusters"],
+  ["End of feed","citizen · /feed","pin","brand","You've seen everything within 500 m.","Widen the radius for the rest of Ward K-East, or switch to the heatmap for the whole picture.","Expand to 2 km"],
+  ["No results","citizen · search","search","muted","Nothing matches &ldquo;broken lift&rdquo;.","Lifts aren't a municipal category — but if this is a public building, file it under Buildings & Estates.","File a complaint"]]
+ .map(([t,r,i,tint,h,b,cta])=>{
+  const stroke=tint==="muted"?"var(--muted)":`var(--${tint})`;
+  const badgeBg=tint==="muted"?"var(--surface-2)":`var(--${tint}-soft,var(--${tint}-bg))`;
+  const badgeLn=tint==="muted"?"var(--line-strong)":`var(--${tint}-line)`;
+  return `<div class="mini"><div class="mh"><b>${t}</b><span>${r.toUpperCase()}</span></div><div class="mb">
+  <div class="empt">
+   <div class="art"><svg viewBox="0 0 104 62" style="width:100%;color:${stroke}">
+     <rect x="4" y="8" width="70" height="46" rx="6" fill="var(--track)"/>
+     <rect x="13" y="18" width="38" height="5" rx="2.5" fill="var(--line-strong)"/>
+     <rect x="13" y="29" width="50" height="5" rx="2.5" fill="var(--line-strong)" opacity=".6"/>
+     <rect x="13" y="40" width="26" height="5" rx="2.5" fill="var(--line-strong)" opacity=".35"/>
+     <circle cx="80" cy="42" r="17" fill="${badgeBg}" stroke="${badgeLn}"/>
+     <use href="#i-${i}" x="70" y="32" width="20" height="20"/></svg></div>
+   <div class="t">${h}</div><div class="s">${b}</div>
+   <div class="btn s" style="margin-top:14px;width:100%">${cta}</div></div>
+ </div></div>`;}).join("")};
+
+P.loading={role:"states",route:"loading states",name:"Loading states",shell:"board3",
+ desc:"Skeletons that match the real layout, so nothing jumps when data lands. <b>No spinners on content</b> — spinners hide progress.",
+ ux:["Skeleton rows mirror the exact geometry of the loaded row, including the SLA bar. A skeleton that doesn't match causes a layout shift, which is worse than a blank.","The branded orb is reserved for full-page auth transitions where there is genuinely nothing to skeleton.","Optimistic state shows the citizen's submission already in the list, greyed, with a retry path — filing should feel instant even on 2G."],
+ html:()=>`<div class="mini"><div class="mh"><b>Skeleton · case list</b><span>MATCHES LOADED GEOMETRY</span></div>
+  ${[1,2,3].map(()=>`<div class="skrow"><div style="flex:1">
+    <div class="sk" style="width:62%;height:11px"></div>
+    <div class="sk" style="width:40%;height:9px;margin-top:7px"></div>
+    <div class="sk" style="width:100%;height:6px;margin-top:11px;border-radius:4px"></div>
+    <div class="sk" style="width:78%;height:8px;margin-top:6px"></div></div>
+   <div class="sk" style="width:64px;height:20px;border-radius:6px"></div></div>`).join("")}</div>
+ <div class="mini"><div class="mh"><b>Branded loader</b><span>AUTH ONLY</span></div><div class="mb">
+  <div style="text-align:center">
+   <div class="orbstage sm"><div class="orb2" style="width:64px;height:64px">${ic("shield")}</div></div>
+   <div class="t2" style="font-size:11.5px;color:var(--muted)">Verifying your number…</div>
+   <div class="trk" style="height:4px;margin:11px auto 22px;width:120px"><i class="sk" style="width:60%;background:var(--brand)"></i></div></div>
+  <div class="t2" style="font-size:10.5px;color:var(--muted);line-height:1.5">Used only where there is no layout to skeleton — sign-in and role switch.</div></div></div>
+ <div class="mini"><div class="mh"><b>Optimistic submit</b><span>2G-FIRST</span></div>
+  <div class="row" style="opacity:.55"><div class="mn"><div class="t1">Sewage overflow, 27th Rd</div>
+   <div class="t2 mono">SENDING…</div>
+   <div style="margin-top:8px"><div class="trk" style="height:5px"><i class="sk" style="width:35%;background:var(--brand)"></i></div></div></div>
+   <div class="rt"><span class="pill nu">${ic("clk")}Queued</span></div></div>
+  <div class="row"><div class="mn"><div class="t1">Pothole near BDA park</div><div class="t2 mono">SMD-00801 · Roads</div></div>
+   <div class="rt"><span class="pill dg">${ic("up")}Escalated</span></div></div>
+  <div class="mb" style="padding-top:11px"><div class="t2" style="font-size:10.5px;color:var(--muted);line-height:1.5">The case appears in the list immediately and syncs in the background. On a dropped connection it stays queued rather than disappearing.</div></div></div>`};
+
+P.errors={role:"states",route:"error & offline",name:"Errors & offline",shell:"board3",
+ desc:"Three failures. Each one names <b>what happened, what was preserved, and what to do</b> — in that order.",
+ ux:["Offline is the PWA's normal state in much of India, not an exception. Cached cases stay readable and new filings queue rather than fail.","Submit failure leads with 'your draft is saved' because that's the user's actual fear. The error code goes last, small, for support.","404 on a ward code offers the ward picker rather than a dead end — a mistyped code is the most likely cause.","No failure state uses a bare icon at display size. The glyph is always badge-sized and secondary to the sentence."],
+ html:()=>`<div class="mini"><div class="mh"><b>Offline</b><span>PWA · CACHED SHELL</span></div>
+  <div class="bnr" style="background:var(--warn-bg);border-color:var(--warn-line)">
+   <span class="icobox" style="width:15px;height:15px;color:var(--warn);margin-top:1px">${ic("alert")}</span>
+   <div class="bt" style="color:var(--warn)"><b>You're offline.</b> Showing cases saved on this device.</div></div>
+  <div class="row"><div class="mn"><div class="t1">Sewage overflow, 27th Rd</div>
+   <div class="t2 mono">SMD-00847 · SYNCED 2h AGO</div></div>
+   <div class="rt"><span class="pill nu">${ic("clk")}Cached</span></div></div>
+  <div class="row"><div class="mn"><div class="t1">New complaint</div><div class="t2 mono">1 QUEUED TO SEND</div></div>
+   <div class="rt"><span class="pill wn">Queued</span></div></div>
+  <div class="mb" style="padding-top:12px"><div class="t2" style="font-size:11px;color:var(--muted);line-height:1.55">Filing still works. Everything queues and sends when the connection returns.</div></div></div>
+
+ <div class="mini"><div class="mh"><b>Submit failed</b><span>DRAFT PRESERVED</span></div><div class="mb">
+  <div class="empt">
+   <div class="art"><svg viewBox="0 0 104 62" style="width:100%;color:var(--danger)">
+     <rect x="4" y="8" width="70" height="46" rx="6" fill="var(--track)"/>
+     <rect x="13" y="18" width="38" height="5" rx="2.5" fill="var(--line-strong)"/>
+     <rect x="13" y="29" width="50" height="5" rx="2.5" fill="var(--line-strong)" opacity=".6"/>
+     <rect x="13" y="40" width="26" height="5" rx="2.5" fill="var(--line-strong)" opacity=".35"/>
+     <circle cx="80" cy="42" r="17" fill="var(--danger-bg)" stroke="var(--danger-line)"/>
+     <use href="#i-alert" x="70" y="32" width="20" height="20"/></svg></div>
+   <div class="t">Your draft is saved.</div>
+   <div class="s">We couldn't reach the server just now. Nothing you typed was lost — including the voice transcript and both photos.</div>
+   <div class="acts"><div class="btn p">Try again</div><div class="btn s">Save for later</div></div>
+   <div class="t2 mono" style="font-size:9px;color:var(--faint);margin-top:12px">REF SMD-DRAFT-4471 · ERR 503</div></div></div></div>
+
+ <div class="mini"><div class="mh"><b>Ward not found</b><span>404</span></div><div class="mb">
+  <div class="empt">
+   <div class="art"><svg viewBox="0 0 104 62" style="width:100%;color:var(--muted)">
+     <g stroke="var(--line-strong)" stroke-width="1">
+      ${[0,1,2,3].map(i=>`<line x1="8" y1="${14+i*12}" x2="96" y2="${14+i*12}"/>`).join("")}
+      ${[0,1,2,3,4,5,6].map(i=>`<line x1="${10+i*14}" y1="8" x2="${10+i*14}" y2="54"/>`).join("")}</g>
+     <circle cx="52" cy="31" r="16" fill="var(--surface-2)" stroke="var(--line-strong)"/>
+     <use href="#i-pin" x="42" y="21" width="20" height="20"/></svg></div>
+   <div class="t">No ward with code &ldquo;KE-9&rdquo;.</div>
+   <div class="s">MCGM has 24 wards. Did you mean <b>K-East</b> — Bandra, Khar and Santacruz East?</div>
+   <div class="chips" style="justify-content:center;margin-top:13px">${["K-East","K-West","P-North"].map((w,i)=>
+     `<span class="chip ${i===0?'on':''}">${w}</span>`).join("")}</div>
+   <div class="btn s" style="margin-top:11px;width:100%">See all 24 wards</div></div></div></div>`};
+
+P.rtl={role:"states",route:"RTL · اردو",name:"RTL (Urdu)",shell:"m",
+ desc:"The layout mirrored, not just the text. The journey rail moves to the right edge and progress reads right-to-left — but <b>numerals and case IDs stay LTR</b>.",
+ ux:["Mirroring must use logical properties (inset-inline-start) rather than left/right, or the tracker rail ends up on the wrong side — which is exactly what happens in the current build.","Case IDs, dates and durations are wrapped in an LTR embed. Bidi-reordering a reference number makes it unquotable over the phone.","Nastaliq needs roughly 2.1 line-height to avoid clipping descenders; the Latin type scale can't be reused unmodified."],
+ html:()=>`<div dir="rtl">${hdr('<span class="urdu">شکایت کی صورتحال</span>','<span class="ltrnum mono">SMD-00847</span> · پانی اور نکاسی',0)}
+ <div class="body">
+  <div class="card"><div class="cb">
+   <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+    <div><div class="k">اضافے سے پہلے باقی وقت</div>
+     <div class="v"><span class="ltrnum">3d 04h</span> <small><span class="ltrnum">of 7d</span></small></div></div>
+    <span class="pill wn">${ic("clk")}<span class="ltrnum">4 / 7</span></span></div>
+   <div style="margin-top:12px">${sla(55,78,"warn",'<span class="ltrnum">22 Jul</span> کو درج','حد <span class="ltrnum">31 Jul</span>')}</div>
+   <div style="display:flex;gap:7px;margin-top:12px"><span class="pill if">${ic("up")}<span class="ltrnum">14</span> تائید</span>
+    <span class="pill nu">عوامی</span></div></div></div>
+  <div class="card"><div class="ch"><b class="urdu">سفر</b><span class="m">STAGE TIME</span></div><div class="cb">
+   <div class="jrn"><div class="fill" style="height:52%"></div>
+    <div class="jn done"><div class="d">${ic("chk")}</div><div class="w"><span class="ltrnum">22 JUL</span><em class="ltrnum">21 min</em></div>
+     <div class="h urdu">درج ہوئی</div></div>
+    <div class="jn done"><div class="d">${ic("chk")}</div><div class="w"><span class="ltrnum">23 JUL</span><em class="ltrnum">2d 5h</em></div>
+     <div class="h urdu">افسر کو سونپی گئی</div>
+     <div class="who"><div class="av">RM</div><div><div class="t1">R. Manjunath</div>
+      <div class="t2 urdu">جونیئر انجینئر</div></div></div></div>
+    <div class="jn live"><div class="d"></div><div class="w"><span class="ltrnum">25 JUL</span><em class="ltrnum">3d 18h</em></div>
+     <div class="h urdu">معائنہ مکمل</div></div>
+    <div class="jn next"><div class="d">${ic("up")}</div><div class="w" style="color:var(--dang)"><span class="ltrnum">31 JUL</span> · خودکار</div>
+     <div class="h urdu">وارڈ لیڈ کو منتقل</div></div>
+   </div></div></div>
+ </div>${tabbar("Cases")}</div>`};
+
+/* ================= MOTION SPEC ================= */
+const EASE={
+ out:"cubic-bezier(.22,1,.36,1)", inOut:"cubic-bezier(.65,0,.35,1)",
+ spring:"type:'spring', stiffness:420, damping:34"};
+
+const MOTION_TOKENS=`<b>Motion tokens — put these in the theme layer, not in components.</b>
+<div class="mspec">
+ <div class="mrow"><div class="mk">--dur-instant<br>80 ms</div><div class="mv">Press feedback, checkbox, chip toggle. Below 80 ms reads as a glitch; above 120 ms reads as lag.</div></div>
+ <div class="mrow"><div class="mk">--dur-fast<br>160 ms</div><div class="mv">Hover, focus ring, in-card status change, pill swap. <em>ease-out</em></div></div>
+ <div class="mrow"><div class="mk">--dur-base<br>240 ms</div><div class="mv">Route transitions, accordion, sheet slide. <em>${EASE.out}</em></div></div>
+ <div class="mrow"><div class="mk">--dur-slow<br>420 ms</div><div class="mv">Theme circular reveal, journey-rail fill, celebratory confirmations. <em>${EASE.inOut}</em></div></div>
+ <div class="mrow"><div class="mk">--ease-out</div><div class="mv"><em>${EASE.out}</em> — the default. Fast start, soft landing. Everything entering the screen uses this.</div></div>
+ <div class="mrow"><div class="mk">--ease-spring</div><div class="mv"><em>${EASE.spring}</em> — reserved for direct manipulation only: drag-to-escalate, sheet dismiss, pull-to-refresh.</div></div>
+ <div class="mrow"><div class="mk">Reduced motion</div><div class="mv">Every entry below collapses to an opacity fade at <b>120 ms</b>. Never remove the transition entirely — an instant swap loses the causal link between tap and result.</div></div>
+</div>`;
+
+const MOTION={
+ _default:{j:"Standard route change within a shell.",
+  s:[["Shell","Persists. Header, sidebar and tab bar never re-animate — only the content region swaps.","<em>layout: false</em>"],
+     ["Content out","Opacity 1→0, y 0→−4px.","<em>120 ms ease-out</em>"],
+     ["Content in","Opacity 0→1, y 8px→0.","<em>240 ms ease-out</em>"],
+     ["Lists","Children stagger 24 ms, capped at 8 items. Beyond that the stagger reads as slow loading.","<em>staggerChildren: .024</em>"]]},
+
+ home:{j:"Cold open. Priya taps the icon; the app must feel awake before data arrives.",
+  s:[["Hero parallax","Background translates y at 0.4× scroll velocity, clamped to 40px. Pauses entirely below 60 fps.","<em>useScroll → useTransform</em>"],
+     ["Hero feather","Top and bottom gradient masks are static. Never animate a mask — it thrashes compositing.","<em>none</em>"],
+     ["Case cards","Skeletons already laid out; real data cross-fades in place at 160 ms. No layout shift, no pop.","<em>160 ms opacity only</em>"],
+     ["SLA bars","Width animates 0→value once, 420 ms, staggered 60 ms per row. Only on first paint, never on re-render.","<em>420 ms ease-out</em>"],
+     ["CTA","Marigold button lifts 1px and deepens shadow on press-in, releases in 80 ms.","<em>whileTap scale .98</em>"]]},
+
+ file:{j:"The friction moment. Every millisecond of hesitation here is an abandoned complaint.",
+  s:[["Step change","Outgoing step slides x −24px + fades; incoming enters from +24px. Direction reverses on Back.","<em>240 ms, custom={dir}</em>"],
+     ["Stepper rail","Completed segment fills left→right 300 ms as the step commits, tick scales 0→1 with spring.","<em>spring 420/34</em>"],
+     ["AI rephrase","Suggested text types in at 12 ms/char up to 400 ms, then settles. Original stays visible below — never cross-fade one into the other.","<em>240 ms max</em>"],
+     ["Duplicate card","Slides down and pushes content, 240 ms. Deliberately not a modal — it must not feel like a blocker.","<em>height auto, ease-out</em>"],
+     ["Classification chip","Confidence bar sweeps to value; if under 70% the chip pulses once to invite correction.","<em>300 ms, single pulse</em>"]]},
+
+ voice:{j:"Priya holds the mic. The system must prove it is listening within 200 ms or she will stop talking.",
+  s:[["Dialog enter","Sheet rises from bottom 90%→0 with backdrop fade. Spring, because it is a direct-manipulation surface.","<em>spring 420/34</em>"],
+     ["Orb ripple","Two concentric rings scale .86→1.14 and fade, 2.6 s loop, 1.3 s offset. This is the 'I am alive' signal.","<em>2.6 s infinite</em>"],
+     ["Waveform","Bars driven by real mic amplitude at 60 fps, not a canned loop. A flat line must mean a muted mic.","<em>requestAnimationFrame</em>"],
+     ["Transcript","Committed words fade in at full opacity; the interim tail renders at 45% and updates in place without reflow.","<em>120 ms</em>"],
+     ["Language swap","Chip row slides; the transcript buffer is preserved and re-labelled. Never clear text on language change.","<em>160 ms</em>"]]},
+
+ casedetail:{j:"The return visit. Priya opens this two or three times a week to check one thing: has anything moved.",
+  s:[["Rail fill","Green progress fills top→bottom to the live node, 420 ms, once per mount.","<em>420 ms ease-in-out</em>"],
+     ["Live node","Amber halo breathes at 2 s. Only ever one live node — two breathing dots destroy the signal.","<em>2 s infinite</em>"],
+     ["Countdown","Digits crossfade per tick, no odometer roll. Tabular figures mean zero layout shift.","<em>100 ms opacity</em>"],
+     ["New event","On arrival the node drops in from y −8px and the rail extends to meet it. This is the payoff moment — it earns 420 ms.","<em>420 ms, spring tick</em>"],
+     ["Escalation rung","Dashed border animates dash-offset slowly, 3 s loop, signalling 'pending, automatic'.","<em>3 s linear infinite</em>"]]},
+
+ inbox:{j:"Rajesh opens this at 9:40 am and again after every field visit. Speed of scan beats delight.",
+  s:[["Rows","No entrance animation on the table. 63 staggered rows is 1.5 s of waiting for a power user.","<em>none</em>"],
+     ["Filter chips","Rows filter with layout animation, 200 ms. Position shifts are animated, opacity is not.","<em>layout, 200 ms</em>"],
+     ["In-card status","Select commits optimistically; the pill morphs colour in 160 ms and the row re-sorts after a 600 ms grace so it doesn't jump under the cursor.","<em>160 ms + 600 ms delay</em>"],
+     ["SLA bar","Static on load. Animates only when a value actually changes, so movement always means news.","<em>240 ms on change</em>"],
+     ["Breach crossing","Row background flashes danger tint once over 600 ms, then settles. One flash, never a loop.","<em>600 ms, once</em>"]]},
+
+ empty:{j:"First run, or a genuinely clear queue. Both need to feel intentional, not broken.",
+  s:[["Illustration","Fades and scales .96→1 over 300 ms. Slow enough to read as designed rather than as a failed image load.","<em>300 ms ease-out</em>"],
+     ["Copy","Follows at 80 ms delay so the eye lands on the graphic first.","<em>240 ms, delay .08</em>"],
+     ["Action","Enters last at 160 ms delay. The sequence teaches the reading order.","<em>240 ms, delay .16</em>"]]},
+
+ loading:{j:"2G. The single most common network condition in the deployment.",
+  s:[["Skeleton in","No entrance — present on first frame. A skeleton that fades in is just a slower blank screen.","<em>none</em>"],
+     ["Shimmer","1.4 s linear sweep. Disable entirely under reduced-motion; a static grey block is a valid skeleton.","<em>1.4 s infinite</em>"],
+     ["Data swap","Skeleton cross-fades to content at 160 ms with identical geometry, so nothing reflows.","<em>160 ms</em>"],
+     ["Optimistic row","New case appears immediately at 55% opacity with an indeterminate bar; settles to 100% on server ack.","<em>240 ms on ack</em>"]]},
+
+ errors:{j:"The connection dropped mid-submit. What Priya fears is losing what she typed.",
+  s:[["Offline banner","Slides down from under the header, 240 ms, and stays. Never auto-dismiss a persistent condition.","<em>240 ms ease-out</em>"],
+     ["Reconnect","Banner turns success green for 1.2 s, then collapses. Queued items animate their send.","<em>1.2 s then 240 ms</em>"],
+     ["Submit failure","Card shakes x ±4px twice over 300 ms — the one place a shake is warranted, because it must interrupt.","<em>300 ms, once</em>"],
+     ["Draft saved","Confirmation fades in beneath and persists. This is the reassurance; it must not disappear.","<em>240 ms, no exit</em>"]]},
+
+ profile:{j:"The reward loop. Must feel earned without turning a grievance app into a game.",
+  s:[["Tier bar","Fills to current value 600 ms on mount, once per session.","<em>600 ms ease-out</em>"],
+     ["Badge unlock","Scales 0→1.08→1 with a spring and a single ring pulse. One badge at a time, queued.","<em>spring, queued</em>"],
+     ["Streak flame","Static by default. Animates for 900 ms only on the day the streak increments.","<em>900 ms, event-only</em>"],
+     ["Deliberate restraint","No confetti, no sound, no full-screen takeover. The underlying subject is a civic failure someone reported.","<em>—</em>"]]},
+
+ login:{j:"First contact. Often on a borrowed phone with a poor connection.",
+  s:[["Backdrop","Hero pans x 0→−3% over 40 s, infinite alternate. Slow enough to be subliminal.","<em>40 s alternate</em>"],
+     ["OTP field","Digits scale 1→1.06→1 on entry, 80 ms each. Auto-advance is instant, never animated.","<em>80 ms</em>"],
+     ["Sign-in loader","Full screen, brand orb pulses at 1.6 s. Minimum display 600 ms so it never flickers.","<em>1.6 s, min 600 ms</em>"],
+     ["Handoff","Loader cross-fades directly into the destination shell. No intermediate blank frame.","<em>240 ms</em>"]]},
+
+ rtl:{j:"Same journeys, mirrored. Motion direction is part of the mirroring.",
+  s:[["Direction flip","All x-axis motion negates under RTL. A step that enters from +24px in LTR enters from −24px in RTL.","<em>x * (isRTL ? -1 : 1)</em>"],
+     ["Rail fill","Still fills top→bottom. Vertical motion is not mirrored — only horizontal.","<em>unchanged</em>"],
+     ["Numerals","Countdown and IDs sit in LTR embeds and must not animate position, only opacity.","<em>opacity only</em>"]]}
+};
+
+const BUILD=`<b>Handing this to Claude Code.</b> The whole system is portable as tokens plus a provider — no component rewrites required.
+<div class="mspec">
+ <div class="mrow"><div class="mk">Theme layer</div><div class="mv">Four <code>[data-theme]</code> blocks in <code>globals.css</code>. Keep your existing semantic names; add the missing <b>radius</b>, <b>shadow</b> and <b>display-font</b> tokens — they carry most of the character difference between Civic Steel and Nilgiri Mist.</div></div>
+ <div class="mrow"><div class="mk">Theme picker</div><div class="mv">All four ship to the end user. Persist to <code>localStorage</code> + cookie so RSC renders the right theme on first paint and there is no flash. Apply on <code>&lt;html&gt;</code> via <code>data-theme</code>.</div></div>
+ <div class="mrow"><div class="mk">Primitives first</div><div class="mv">Build <code>SlaBar</code>, <code>StatusPill</code>, <code>JourneyRail</code>, <code>MetricCard</code>, <code>DataTable</code> before any page. Every screen here is those five plus layout.</div></div>
+ <div class="mrow"><div class="mk">The invariant</div><div class="mv"><code>SlaBar</code> must never render without its limit marker. Make <code>limitDays</code> a required prop so a duration can't be shown without its reference.</div></div>
+ <div class="mrow"><div class="mk">Motion</div><div class="mv">One <code>&lt;PageTransition&gt;</code> wrapper in each shell's <code>template.tsx</code>. Shell components sit outside it so they never re-animate.</div></div>
+</div>`;
+
+/* ================= WIRING ================= */
+const ORDER={Citizen:["home","dcitizen","file","voice","casedetail","tracker","cases","feed","ward","profile","leaderboard","notif"],
+             Officer:["inbox","ocase","clusters","metrics","osettings"],
+             Admin:["overview","officers","officerdetail","trends","policy"],
+             Auth:["login","roleswitch","onboard"],
+             "Cross-cutting":["empty","loading","errors","rtl"]};
+let theme="dawn", page="home", tab="ux";
+
+document.getElementById("tsw").innerHTML=Object.entries(THEMES).map(([k,v])=>
+ `<button class="tbtn" data-t="${k}" aria-pressed="${k===theme}">
+   <span class="cs">${v.cs.map(c=>`<i style="background:${c}"></i>`).join("")}</span>
+   <span class="nm">${v.name}</span><span class="sb">${v.sub}</span></button>`).join("");
+
+document.getElementById("rail").innerHTML=Object.entries(ORDER).map(([g,ids])=>
+ `<div class="rl">${g}</div>`+ids.map(id=>
+  `<button data-p="${id}" aria-current="${id===page}">${P[id].name}<span class="rn">${ids.indexOf(id)+1}</span></button>`).join("")).join("");
+
+function render(){
+  const p=P[page];
+  document.getElementById("meta").innerHTML=
+   `<div class="rt mono">${p.role.toUpperCase()} &nbsp;·&nbsp; ${p.route}</div>
+    <h2>${p.name}</h2><p>${p.desc}</p>`;
+  const inner=`<div class="app" data-theme="${theme}">${p.html(theme)}</div>`;
+  const deck=document.getElementById("deck");
+  if(p.shell==="m") deck.innerHTML=`<div class="phone">${inner}</div>`;
+  else if(p.shell==="d") deck.innerHTML=`<div class="laptop"><div class="lchrome"><i></i><i></i><i></i><span class="u">samadhan.gov.in${p.route}</span></div>${inner}</div>`;
+  else deck.innerHTML=`<div style="width:100%;max-width:1120px" data-theme="${theme}">
+    <div class="board ${p.shell==="board2"?"g2":"g3"}">${p.html(theme)}</div></div>`;
+  const m=MOTION[page]||MOTION._default;
+  const panes={
+   ux:`${THEMES[theme].note}<b style="display:block;margin-top:12px">UX decisions on this screen</b>
+       <ul>${p.ux.map(u=>`<li>${u}</li>`).join("")}</ul>`,
+   motion:`<b>User journey — ${m.j}</b>
+       <div class="mspec">${m.s.map(([k,v,t])=>
+         `<div class="mrow"><div class="mk">${k}</div><div class="mv">${v}<br>${t}</div></div>`).join("")}</div>
+       <div style="margin-top:16px">${MOTION_TOKENS}</div>`,
+   build:BUILD};
+  document.getElementById("note").innerHTML=panes[tab];
+  document.querySelectorAll(".itab").forEach(b=>b.setAttribute("aria-selected",b.dataset.i===tab));
+  document.querySelectorAll("#rail button").forEach(b=>b.setAttribute("aria-current",b.dataset.p===page));
+  document.querySelectorAll(".tbtn").forEach(b=>b.setAttribute("aria-pressed",b.dataset.t===theme));
+}
+document.getElementById("tsw").onclick=e=>{const b=e.target.closest(".tbtn");if(b){theme=b.dataset.t;render();}};
+document.getElementById("rail").onclick=e=>{const b=e.target.closest("button");if(b){page=b.dataset.p;render();}};
+document.getElementById("itabs").onclick=e=>{const b=e.target.closest(".itab");if(b){tab=b.dataset.i;render();}};
+render();
+</script>

@@ -28,9 +28,9 @@ export function ThemeToggle() {
       return;
     }
 
-    // Circular reveal of the new theme, growing from the toggle button. flushSync
-    // applies the mode change (and the provider's derived data-theme, which keeps
-    // staff on samadhan-pro) synchronously so the transition captures it.
+    // Circular reveal growing from the toggle button. flushSync applies the mode
+    // change synchronously (the selected theme is unchanged; only data-mode
+    // flips) so the View Transition captures the new light/dark state.
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
     const x = left + width / 2;
     const y = top + height / 2;

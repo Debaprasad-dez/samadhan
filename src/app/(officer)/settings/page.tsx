@@ -2,6 +2,7 @@ import { requireRole } from "@/lib/auth";
 import { getDict, translate } from "@/lib/i18n";
 import { Card, CardContent } from "@/components/ui/card";
 import { OfficerSettingsForm } from "@/components/officer/settings-form";
+import { ThemePicker } from "@/components/citizen/theme-gallery";
 
 export default async function OfficerSettings() {
   const user = await requireRole(["OFFICER"]);
@@ -22,6 +23,20 @@ export default async function OfficerSettings() {
       <Card>
         <CardContent className="p-5">
           <OfficerSettingsForm initialLanguage={user.language} />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardContent className="space-y-3 p-5">
+          <div>
+            <h2 className="font-display text-lg font-semibold">
+              {t("profile.appearance")}
+            </h2>
+            <p className="text-muted-foreground text-sm">
+              {t("profile.appearanceSub")}
+            </p>
+          </div>
+          <ThemePicker />
         </CardContent>
       </Card>
     </div>

@@ -57,6 +57,7 @@ const NAV: Record<"officer" | "admin", NavGroup[]> = {
       items: [
         { href: "/trends", labelKey: "nav.trends", icon: TrendingUp },
         { href: "/policy", labelKey: "nav.policy", icon: FileText },
+        { href: "/appearance", labelKey: "profile.appearance", icon: Settings },
       ],
     },
   ],

@@ -1,141 +1,64 @@
 "use client";
 
-import { useState } from "react";
-import { Check, ChevronRight } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Check } from "lucide-react";
 import {
   useTheme,
-  THEMES,
+  OFFERED_THEMES,
   THEME_LABELS,
-  THEME_META,
-  type ThemeName,
+  THEME_PICKER,
 } from "@/components/providers/theme-provider";
 import { ModeControl } from "@/components/shared/mode-control";
-import { useT } from "@/components/providers/locale-provider";
 import { cn } from "@/lib/utils";
 
-// A square, curved colour-hint box painted in a theme's own palette (data-theme
-// resolves --g-* regardless of the active theme).
-function ColorHint({
-  theme,
-  className,
-}: {
-  theme: ThemeName;
-  className?: string;
-}) {
-  return (
-    <span
-      data-theme={theme}
-      aria-hidden
-      className={cn(
-        "grid flex-none grid-cols-2 overflow-hidden rounded-xl ring-1 ring-black/10",
-        className,
-      )}
-    >
-      <i style={{ background: "var(--g-primary)" }} />
-      <i style={{ background: "var(--g-accent)" }} />
-      <i style={{ background: "var(--g-gold)" }} />
-      <i style={{ background: "var(--g-bg)" }} />
-    </span>
-  );
-}
-
-export function ThemeGallery() {
+// Appearance control (design spec §1.3): a 2×2 grid of theme cards — each with a
+// three-swatch strip, name and sub-label — plus the light/dark segmented
+// control. Picking a card applies + persists the theme; the mode control flips
+// light/dark within it. (A 2×2 grid, not a cycling toggle: with four options a
+// toggle can take three taps to reach a known state.)
+export function ThemePicker() {
   const { theme, setTheme } = useTheme();
-  const t = useT();
-  const [open, setOpen] = useState(false);
-
   return (
-    <div className="space-y-5">
-      {/* Theme — opens the picker modal */}
-      <div className="space-y-2">
-        <p className="text-muted-foreground text-xs font-semibold uppercase tracking-wide">
-          {t("settings.theme")}
-        </p>
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-3">
+        {OFFERED_THEMES.map((id) => {
+          const active = theme === id;
+          const { sub, swatch } = THEME_PICKER[id];
+          return (
             <button
+              key={id}
               type="button"
-              className="border-border bg-surface hover:bg-accent-muted flex w-full items-center gap-3 rounded-xl border p-3 text-left transition"
+              aria-pressed={active}
+              aria-label={`Theme: ${THEME_LABELS[id]}`}
+              onClick={() => setTheme(id)}
+              className={cn(
+                "flex flex-col gap-2 rounded-xl border p-3 text-left transition-colors",
+                active
+                  ? "border-brand ring-brand/40 ring-2"
+                  : "border-border hover:border-border-strong",
+              )}
             >
-              <ColorHint theme={theme} className="h-11 w-11" />
-              <span className="min-w-0 flex-1">
-                <span className="block truncate font-display text-base font-semibold">
-                  {THEME_LABELS[theme]}
-                </span>
-                <span className="text-muted-foreground block truncate text-xs">
-                  {THEME_META[theme].tradition}
-                </span>
+              <span className="flex gap-1.5" aria-hidden>
+                {swatch.map((c, i) => (
+                  <span
+                    key={i}
+                    className="h-6 w-6 rounded-full border border-black/10"
+                    style={{ background: c }}
+                  />
+                ))}
               </span>
-              <ChevronRight className="text-muted-foreground h-4 w-4 flex-none" />
+              <span className="flex items-center justify-between">
+                <span className="text-sm font-semibold">{THEME_LABELS[id]}</span>
+                {active && <Check className="text-brand h-4 w-4" />}
+              </span>
+              <span className="text-muted-foreground text-xs">{sub}</span>
             </button>
-          </DialogTrigger>
-
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle className="font-display">
-                Choose your heritage
-              </DialogTitle>
-              <DialogDescription>
-                Each theme dresses Samadhan in a living Indian art tradition.
-              </DialogDescription>
-            </DialogHeader>
-
-            <div className="-mr-1 max-h-[60vh] space-y-1.5 overflow-y-auto pr-1">
-              {THEMES.map((name) => {
-                const active = name === theme;
-                return (
-                  <button
-                    key={name}
-                    type="button"
-                    onClick={() => {
-                      setTheme(name);
-                      setOpen(false);
-                    }}
-                    aria-pressed={active}
-                    className={cn(
-                      "flex w-full items-center gap-3 rounded-xl border p-2.5 text-left transition",
-                      active
-                        ? "border-brand bg-brand-soft/50 ring-brand ring-1"
-                        : "border-border hover:bg-accent-muted",
-                    )}
-                  >
-                    <ColorHint theme={name} className="h-12 w-12" />
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate font-display text-[15px] font-semibold">
-                        {THEME_LABELS[name]}
-                      </span>
-                      <span className="text-muted-foreground block truncate text-xs">
-                        {THEME_META[name].tradition}
-                      </span>
-                    </span>
-                    {active && (
-                      <span className="bg-brand text-brand-foreground grid h-5 w-5 flex-none place-items-center rounded-full">
-                        <Check className="h-3 w-3" />
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          </DialogContent>
-        </Dialog>
+          );
+        })}
       </div>
-
-      {/* Mode — full-width segmented control */}
-      <div className="space-y-2">
-        <p className="text-muted-foreground text-xs font-semibold uppercase tracking-wide">
-          {t("settings.mode")}
-        </p>
-        <ModeControl className="w-full" />
-      </div>
+      <ModeControl className="max-w-xs" />
     </div>
   );
 }
+
+// Back-compat alias (the profile page previously imported ThemeGallery).
+export const ThemeGallery = ThemePicker;

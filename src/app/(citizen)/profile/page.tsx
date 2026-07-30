@@ -7,7 +7,7 @@ import { TierChip } from "@/components/case/reputation-tier";
 import { TierEmblem } from "@/components/art/tier-emblem";
 import { BadgeGrid } from "@/components/citizen/badge-grid";
 import { SettingsForm } from "@/components/citizen/settings-form";
-import { ModeControl } from "@/components/shared/mode-control";
+import { ThemePicker } from "@/components/citizen/theme-gallery";
 import { LogoutButton } from "@/components/shared/logout-button";
 import { getT } from "@/lib/t";
 import { Card, CardContent } from "@/components/ui/card";
@@ -108,7 +108,7 @@ export default async function ProfilePage() {
             {t("profile.appearanceSub")}
           </p>
         </div>
-        <ModeControl className="max-w-xs" />
+        <ThemePicker />
       </section>
 
       <section className="border-border flex items-center justify-between border-t pt-6">

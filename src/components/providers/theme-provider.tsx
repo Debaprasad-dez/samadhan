@@ -9,14 +9,16 @@ import {
   type ReactNode,
 } from "react";
 
-// Two-axis theming (design §2.2): cultural theme × light/dark mode.
+// Two-axis theming (design spec): user-selected theme × light/dark mode.
 export const THEMES = [
   "bharat-dawn",
+  "civic-steel",
+  "nilgiri-mist",
+  "mughal-indigo",
+  // Retained but NOT offered in the picker (dormant cultural palettes).
   "mithila-bloom",
   "warli-earth",
-  "mughal-indigo",
   "coromandel-pattachitra",
-  "nilgiri-mist",
 ] as const;
 export type ThemeName = (typeof THEMES)[number];
 export type Mode = "light" | "dark" | "system";
@@ -24,50 +26,39 @@ type ResolvedMode = "light" | "dark";
 
 export const THEME_LABELS: Record<ThemeName, string> = {
   "bharat-dawn": "Bharat Dawn",
+  "civic-steel": "Civic Steel",
+  "nilgiri-mist": "Nilgiri Mist",
+  "mughal-indigo": "Mughal Indigo",
   "mithila-bloom": "Mithila Bloom",
   "warli-earth": "Warli Earth",
-  "mughal-indigo": "Mughal Indigo",
   "coromandel-pattachitra": "Coromandel Pattachitra",
-  "nilgiri-mist": "Nilgiri Mist",
 };
 
-// Heritage metadata for the theme picker (design addendum §8.2/§8.5) — the
-// tradition each theme honours + a respectful one-line note on the art form.
-export const THEME_META: Record<
-  ThemeName,
-  { tradition: string; blurb: string }
+// The four themes offered to end users (design spec §1.3). Each ships with both
+// light and dark variants; the light/dark toggle flips the mode within a theme.
+export const OFFERED_THEMES = [
+  "bharat-dawn",
+  "civic-steel",
+  "nilgiri-mist",
+  "mughal-indigo",
+] as const;
+export type OfferedTheme = (typeof OFFERED_THEMES)[number];
+
+// Picker metadata: sub-label + a three-swatch strip (bg, brand, accent/ink).
+export const THEME_PICKER: Record<
+  OfferedTheme,
+  { sub: string; swatch: [string, string, string] }
 > = {
-  "bharat-dawn": {
-    tradition: "Banaras Ghats",
-    blurb:
-      "Sunrise over the Ganga — marigold garlands, temple gold and the daily renewal of civic hope.",
-  },
-  "mithila-bloom": {
-    tradition: "Madhubani · Bihar",
-    blurb:
-      "Line-dense Mithila painting — fish, peacocks and lotus ponds in natural-dye colour.",
-  },
-  "warli-earth": {
-    tradition: "Warli · Maharashtra",
-    blurb:
-      "White rice-paste figures on mud-ochre — minimal tribal geometry and the tarpa dance.",
-  },
-  "mughal-indigo": {
-    tradition: "Mughal Miniature",
-    blurb:
-      "Indigo night, jali lattice and gold leaf — Indo-Islamic refinement and pietra dura.",
-  },
-  "coromandel-pattachitra": {
-    tradition: "Pattachitra · Odisha",
-    blurb:
-      "Palm-leaf etching, bold outlines and ornate floral borders — temple narrative art.",
-  },
-  "nilgiri-mist": {
-    tradition: "Kerala Mural",
-    blurb:
-      "Misty Western Ghats and backwaters — tea-estate calm with Theyyam vermillion.",
-  },
+  "bharat-dawn": { sub: "Ghat sunrise · warm", swatch: ["#FBF6EC", "#B4541A", "#A9862F"] },
+  "civic-steel": { sub: "Neutral · dense", swatch: ["#F5F6F8", "#1F5FD0", "#0D1117"] },
+  "nilgiri-mist": { sub: "Cool · calm", swatch: ["#EFF2F0", "#136F63", "#7C7233"] },
+  "mughal-indigo": { sub: "Jali night · brass", swatch: ["#0D1226", "#C9A24A", "#6FA8E8"] },
 };
+
+/** The default theme for a role: staff get Civic Steel, everyone else Bharat Dawn. */
+export function defaultThemeForRole(role: string): ThemeName {
+  return role === "officer" || role === "admin" ? "civic-steel" : "bharat-dawn";
+}
 
 interface ThemeContextValue {
   theme: ThemeName;
@@ -89,6 +80,9 @@ export function modeStorageKey(role: string) {
   return `samadhan-mode-${role}`;
 }
 
+const isOffered = (v: string | null): v is ThemeName =>
+  !!v && (OFFERED_THEMES as readonly string[]).includes(v);
+
 function systemMode(): ResolvedMode {
   if (typeof window === "undefined") return "light";
   return window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -99,15 +93,14 @@ function systemMode(): ResolvedMode {
 export function ThemeProvider({
   children,
   role = "citizen",
-  lockedTheme,
+  defaultTheme = "bharat-dawn",
   forcedMode,
 }: {
   children: ReactNode;
   /** Per-role storage namespace. */
   role?: string;
-  /** When set, this theme is forced and the cultural picker is disabled
-   *  (staff dashboards: a fixed professional theme + light/dark only). */
-  lockedTheme?: string;
+  /** Fallback theme when nothing is stored yet (role default). */
+  defaultTheme?: ThemeName;
   /** When set, the light/dark mode is pinned and the toggle is disabled
    *  (logged-out pages: login always renders in light mode). */
   forcedMode?: ResolvedMode;
@@ -115,63 +108,52 @@ export function ThemeProvider({
   const THEME_KEY = themeStorageKey(role);
   const MODE_KEY = modeStorageKey(role);
 
+  const [theme, setThemeState] = useState<ThemeName>(defaultTheme);
   const [mode, setModeState] = useState<Mode>("light");
   const [resolvedMode, setResolvedMode] = useState<ResolvedMode>(
     forcedMode ?? "light",
   );
 
-  // Two visual palettes only: light → Bharat Dawn, dark → Mughal Indigo. The
-  // theme is DERIVED from the resolved mode, not user-picked. Staff keep their
-  // locked professional theme (samadhan-pro) across both modes.
-  const themeForMode = (rm: ResolvedMode): string =>
-    lockedTheme ?? (rm === "dark" ? "mughal-indigo" : "bharat-dawn");
-  // The theme actually written to the DOM (for context readers).
-  const effectiveTheme = themeForMode(resolvedMode);
-  // The mode actually written to the DOM: the pin wins when present.
   const effectiveMode: Mode = forcedMode ?? mode;
 
-  // Hydrate mode from storage (the no-flash script already set the attributes
-  // pre-paint). Theme is derived from mode, so only the mode is stored.
+  // Hydrate theme + mode from storage (the no-flash script already set the
+  // attributes pre-paint, so this only syncs React state).
   useEffect(() => {
+    const t = localStorage.getItem(THEME_KEY);
+    if (isOffered(t)) setThemeState(t);
     if (!forcedMode) {
       const m = localStorage.getItem(MODE_KEY);
       if (m === "light" || m === "dark" || m === "system") setModeState(m);
     }
-  }, [MODE_KEY, forcedMode]);
+  }, [THEME_KEY, MODE_KEY, forcedMode]);
 
-  const apply = useCallback(
-    (m: Mode) => {
-      const rm: ResolvedMode = m === "system" ? systemMode() : m;
-      const t = lockedTheme ?? (rm === "dark" ? "mughal-indigo" : "bharat-dawn");
-      const el = document.documentElement;
-      el.setAttribute("data-theme", t);
-      el.setAttribute("data-mode", rm);
-      setResolvedMode(rm);
-    },
-    [lockedTheme],
-  );
+  const apply = useCallback((t: ThemeName, m: Mode) => {
+    const rm: ResolvedMode = m === "system" ? systemMode() : m;
+    const el = document.documentElement;
+    el.setAttribute("data-theme", t);
+    el.setAttribute("data-mode", rm);
+    setResolvedMode(rm);
+  }, []);
 
   useEffect(() => {
-    apply(effectiveMode);
-  }, [effectiveMode, apply]);
+    apply(theme, effectiveMode);
+  }, [theme, effectiveMode, apply]);
 
   // Follow system changes while in "system" mode (skip when the mode is pinned).
   useEffect(() => {
     if (forcedMode || mode !== "system") return;
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const handler = () => apply("system");
+    const handler = () => apply(theme, "system");
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
-  }, [mode, apply, forcedMode]);
+  }, [mode, theme, apply, forcedMode]);
 
-  // Kept for the (now dormant) theme gallery API. Theme is derived from mode in
-  // the live app, so this only persists a preference and does not change the DOM.
   const setTheme = useCallback(
     (t: ThemeName) => {
-      if (lockedTheme) return;
+      setThemeState(t);
       localStorage.setItem(THEME_KEY, t);
     },
-    [lockedTheme, THEME_KEY],
+    [THEME_KEY],
   );
 
   const setMode = useCallback(
@@ -185,14 +167,7 @@ export function ThemeProvider({
 
   return (
     <ThemeContext.Provider
-      value={{
-        theme: effectiveTheme as ThemeName,
-        setTheme,
-        mode: effectiveMode,
-        setMode,
-        resolvedMode,
-        themes: THEMES,
-      }}
+      value={{ theme, setTheme, mode: effectiveMode, setMode, resolvedMode, themes: OFFERED_THEMES }}
     >
       {children}
     </ThemeContext.Provider>

@@ -39,10 +39,10 @@ export default async function RootLayout({
 }) {
   const user = await getCurrentUser();
   const role = user?.role?.toLowerCase() ?? "citizen";
-  // Officer/admin (staff) dashboards are locked to one professional theme —
-  // a plain light/dark toggle, no cultural picker. Citizens keep the gallery.
-  const lockedTheme =
-    role === "officer" || role === "admin" ? "samadhan-pro" : undefined;
+  // All four themes are user-selectable; the role only sets the default —
+  // staff start on Civic Steel, everyone else on Bharat Dawn.
+  const defaultTheme =
+    role === "officer" || role === "admin" ? "civic-steel" : "bharat-dawn";
   // Light/dark is a signed-in feature: logged-out pages (login, etc.) always
   // render in light mode regardless of stored preference or OS setting.
   const forcedMode: "light" | "dark" | undefined = user ? undefined : "light";
@@ -58,14 +58,14 @@ export default async function RootLayout({
         <script
           suppressHydrationWarning
           dangerouslySetInnerHTML={{
-            __html: themeNoFlashScript(role, lockedTheme, forcedMode),
+            __html: themeNoFlashScript(role, defaultTheme, forcedMode),
           }}
         />
       </head>
       <body className="min-h-dvh bg-background text-foreground font-sans antialiased">
         <ThemeProvider
           role={role}
-          lockedTheme={lockedTheme}
+          defaultTheme={defaultTheme}
           forcedMode={forcedMode}
         >
           <QueryProvider>

@@ -76,6 +76,7 @@ export function VoiceMicButton({ ariaLabel }: { ariaLabel: string }) {
   const [finalText, setFinalText] = useState("");
   const [interim, setInterim] = useState("");
   const recRef = useRef<SpeechRec | null>(null);
+  const userStoppedRef = useRef(false);
 
   // Reset transcript each time the dialog opens.
   useEffect(() => {
@@ -99,26 +100,47 @@ export function VoiceMicButton({ ariaLabel }: { ariaLabel: string }) {
       return;
     }
     setSupported(true);
+    userStoppedRef.current = false;
 
+    // Single-utterance recognition (continuous=false) that auto-restarts on end,
+    // matching the proven /file mic (useVoiceInput). Continuous mode made Chrome
+    // emit progressive/cumulative finals ("there", "there is", "there is a"…),
+    // which concatenated into repeated words — so take ONE final per session and
+    // append it, restarting to keep listening across the speaker's pauses.
     const rec = new Ctor();
-    rec.continuous = true;
+    rec.continuous = false;
     rec.interimResults = true;
     rec.lang = lang;
+
+    let cancelled = false;
+    let appended = false;
     rec.onresult = (e) => {
-      // `e.results` is cumulative for the whole session in continuous mode, so
-      // rebuild from index 0 and REPLACE state — never append. Appending re-fired
-      // finals is what caused "There There is There is a…" duplication.
-      let fin = "";
-      let itr = "";
-      for (let i = 0; i < e.results.length; i++) {
-        const r = e.results[i];
-        if (r.isFinal) fin += r[0].transcript;
-        else itr += r[0].transcript;
+      const res = e.results[e.results.length - 1];
+      const text = res[0].transcript;
+      if (res.isFinal) {
+        if (!appended) {
+          appended = true;
+          setFinalText((p) => (p ? p + " " : "") + text.trim());
+        }
+        setInterim("");
+      } else {
+        setInterim(text);
       }
-      setFinalText(fin.trim());
-      setInterim(itr);
     };
-    rec.onend = () => setListening(false);
+    rec.onend = () => {
+      if (cancelled || userStoppedRef.current) {
+        setListening(false);
+        return;
+      }
+      // New session → allow the next utterance's final to append.
+      appended = false;
+      try {
+        rec.start();
+        setListening(true);
+      } catch {
+        setListening(false);
+      }
+    };
     rec.onerror = (e) => {
       setListening(false);
       if (e?.error === "not-allowed" || e?.error === "service-not-allowed")
@@ -135,6 +157,7 @@ export function VoiceMicButton({ ariaLabel }: { ariaLabel: string }) {
     }
 
     return () => {
+      cancelled = true;
       try {
         rec.abort();
       } catch {
@@ -148,6 +171,7 @@ export function VoiceMicButton({ ariaLabel }: { ariaLabel: string }) {
   const transcript = (finalText + " " + interim).trim();
 
   function stopAndContinue() {
+    userStoppedRef.current = true;
     try {
       recRef.current?.stop();
     } catch {
@@ -159,6 +183,7 @@ export function VoiceMicButton({ ariaLabel }: { ariaLabel: string }) {
   }
 
   function close() {
+    userStoppedRef.current = true;
     try {
       recRef.current?.abort();
     } catch {
