@@ -13,7 +13,12 @@ export function WardGrid({
     <div className="grid grid-cols-4 gap-2 sm:grid-cols-6">
       {wards.map((w) => {
         const empty = w.total === 0;
-        const hue = Math.round((w.score / 100) * 145); // 0 red → 145 green
+        // Sequential SINGLE-HUE scale (spec §3): one hue (teal), pale → deep as
+        // the resolution score rises. No red↔green diverging rainbow.
+        const t = w.score / 100;
+        const light = 92 - t * 55; // 92% pale → 37% deep
+        const sat = 22 + t * 48;
+        const lightText = !empty && light < 58;
         return (
           <Link
             key={w.code}
@@ -22,11 +27,15 @@ export function WardGrid({
             style={{
               backgroundColor: empty
                 ? "hsl(var(--surface-muted))"
-                : `hsl(${hue} 55% 45%)`,
+                : `hsl(162 ${sat}% ${light}%)`,
             }}
             className={cn(
               "flex aspect-square flex-col items-center justify-center rounded-md text-xs font-semibold transition-transform hover:scale-[1.04]",
-              empty ? "text-muted-foreground" : "text-white",
+              empty
+                ? "text-muted-foreground"
+                : lightText
+                  ? "text-white"
+                  : "text-foreground",
               selected === w.code && "ring-foreground ring-2 ring-offset-2",
             )}
           >

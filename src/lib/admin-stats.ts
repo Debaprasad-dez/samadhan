@@ -15,6 +15,16 @@ export interface Overview {
     slaMetPct: number;
     reopenRate: number;
   };
+  // The single worst constraint, surfaced first (spec §3: lead with the
+  // bottleneck): the department carrying the most open backlog and the ward
+  // breaching SLA most.
+  bottleneck: {
+    department: string;
+    departmentCode: string;
+    openCount: number;
+    ward: string;
+    breachPct: number;
+  };
   volumeByDay: { date: string; count: number }[];
   byDepartment: { department: string; count: number }[];
   topWardsByVolume: { ward: string; count: number }[];
@@ -117,6 +127,38 @@ export async function getOverview(periodDays = 30): Promise<Overview> {
     .slice(0, 5)
     .map((c) => ({ id: c.id, number: c.number, title: c.title, ward: c.wardCode }));
 
+  // Bottleneck: worst department by open backlog + worst ward by SLA breach.
+  const deptOpen = new Map<string, number>();
+  for (const c of cases)
+    if (OPEN_STATES.includes(c.status))
+      deptOpen.set(c.departmentCode, (deptOpen.get(c.departmentCode) ?? 0) + 1);
+  const worstDept = [...deptOpen.entries()].sort((a, b) => b[1] - a[1])[0];
+
+  const wardBreachAgg = new Map<string, { total: number; breached: number }>();
+  for (const c of cases) {
+    const cur = wardBreachAgg.get(c.wardCode) ?? { total: 0, breached: 0 };
+    cur.total += 1;
+    const breached = c.resolvedAt
+      ? c.resolvedAt > c.slaDueAt
+      : c.status !== "CLOSED" && now > c.slaDueAt;
+    if (breached) cur.breached += 1;
+    wardBreachAgg.set(c.wardCode, cur);
+  }
+  const worstWard = [...wardBreachAgg.entries()]
+    .filter(([, v]) => v.total >= 3)
+    .map(([code, v]) => ({ code, pct: (v.breached / v.total) * 100 }))
+    .sort((a, b) => b.pct - a.pct)[0];
+
+  const bottleneck = {
+    department: worstDept
+      ? worstDept[0].replace(/_/g, " ").toLowerCase()
+      : "—",
+    departmentCode: worstDept ? worstDept[0] : "—",
+    openCount: worstDept ? worstDept[1] : 0,
+    ward: worstWard ? `${wardName(worstWard.code)} (${worstWard.code})` : "—",
+    breachPct: worstWard ? Math.round(worstWard.pct) : 0,
+  };
+
   return {
     kpis: {
       open,
@@ -126,6 +168,7 @@ export async function getOverview(periodDays = 30): Promise<Overview> {
       slaMetPct: Math.round(slaMetPct),
       reopenRate: Number(reopenRate.toFixed(1)),
     },
+    bottleneck,
     volumeByDay,
     byDepartment,
     topWardsByVolume,
@@ -140,6 +183,9 @@ export interface OfficerRow {
   department: string;
   ward: string;
   total: number;
+  /** Current open load (assigned, not yet resolved/closed) — shown beside
+   *  performance so load and outcomes read together (spec §3). */
+  open: number;
   resolvedPct: number;
   avgDays: number;
   qualityAvg: number;
@@ -185,6 +231,7 @@ export async function getOfficerRows(): Promise<OfficerRow[]> {
       department: o.departmentCode ?? "—",
       ward: o.wardCode ?? "—",
       total: mine.length,
+      open: mine.length - resolved.length,
       resolvedPct: mine.length === 0 ? 0 : Math.round((resolved.length / mine.length) * 100),
       avgDays: Number(avgDays.toFixed(1)),
       qualityAvg: Number(qualityAvg.toFixed(1)),

@@ -21,8 +21,14 @@ interface Persona {
   name: string;
   role: string;
   blurb: string;
+  /** Where this persona lands after switching (preview of their landing state). */
+  landing: string;
   icon: LucideIcon;
 }
+
+const CITIZEN_LANDING = "Lands on the civic home + your cases";
+const OFFICER_LANDING = "Lands on the ranked inbox";
+const ADMIN_LANDING = "Lands on the accountability overview";
 
 const PERSONAS: Persona[] = [
   {
@@ -30,6 +36,7 @@ const PERSONAS: Persona[] = [
     name: "Priya Sharma",
     role: "Citizen",
     blurb: "File and track complaints in Bandra West.",
+    landing: CITIZEN_LANDING,
     icon: User,
   },
   {
@@ -37,6 +44,7 @@ const PERSONAS: Persona[] = [
     name: "Rajesh Kumar",
     role: "Sanitation Officer",
     blurb: "Work a prioritised queue in Andheri East.",
+    landing: OFFICER_LANDING,
     icon: Wrench,
   },
   {
@@ -44,6 +52,7 @@ const PERSONAS: Persona[] = [
     name: "Anita Desai",
     role: "District Magistrate",
     blurb: "See systemic issues and accountability.",
+    landing: ADMIN_LANDING,
     icon: ShieldCheck,
   },
 ];
@@ -57,6 +66,7 @@ const DEMO_PERSONAS: Persona[] = [
     name: "Aarav Sharma",
     role: "Citizen · Andheri East",
     blurb: "Fresh account. File a complaint to kick off the flow.",
+    landing: CITIZEN_LANDING,
     icon: User,
   },
   {
@@ -64,6 +74,7 @@ const DEMO_PERSONAS: Persona[] = [
     name: "Zara Khan",
     role: "Citizen · Andheri East",
     blurb: "Same ward — co-sign and upvote Aarav's complaint live.",
+    landing: CITIZEN_LANDING,
     icon: User,
   },
   {
@@ -71,6 +82,7 @@ const DEMO_PERSONAS: Persona[] = [
     name: "Vivek Nair",
     role: "Sanitation Officer · Andheri East",
     blurb: "Picks up their complaints and resolves them in real time.",
+    landing: OFFICER_LANDING,
     icon: Wrench,
   },
 ];
@@ -132,6 +144,10 @@ export function RoleSwitcher() {
             <p className="text-brand text-sm">{p.role}</p>
           </div>
           <p className="text-muted-foreground text-sm">{p.blurb}</p>
+          {/* Landing-state preview (spec §3): where this persona arrives. */}
+          <span className="bg-surface-muted text-muted-foreground rounded-full px-2 py-0.5 text-[11px] font-medium">
+            {p.landing}
+          </span>
           <span className="text-muted-foreground mt-1 text-xs">
             {pending === p.key ? "Switching…" : "Continue →"}
           </span>

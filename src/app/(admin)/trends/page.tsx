@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Boxes, Flame, Sparkles } from "lucide-react";
+import { Boxes, Flame, Sparkles, Target } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -43,22 +43,27 @@ export default function TrendsPage() {
         </p>
       </div>
 
-      {/* AI narrative */}
+      {/* Claim → evidence → action (spec §3). */}
+      {/* 1. The claim (AI root-cause narrative) */}
       <Card>
         <CardContent className="space-y-2 p-5">
-          <p className="text-brand inline-flex items-center gap-1.5 text-sm font-semibold">
-            <Sparkles className="h-4 w-4" /> Root-cause analysis
+          <p className="text-brand inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide">
+            <Sparkles className="h-4 w-4" /> The claim
           </p>
           {loading ? (
             <Skeleton className="h-16 w-full" />
           ) : (
-            <p className="text-muted-foreground whitespace-pre-wrap text-sm leading-relaxed">
+            <p className="text-foreground whitespace-pre-wrap text-sm leading-relaxed">
               {data?.narrative}
             </p>
           )}
         </CardContent>
       </Card>
 
+      {/* 2. The evidence */}
+      <p className="text-muted-foreground text-xs font-semibold uppercase tracking-wide">
+        The evidence
+      </p>
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
         {/* clusters */}
         <section className="space-y-3">
@@ -128,6 +133,33 @@ export default function TrendsPage() {
           </Card>
         </aside>
       </div>
+
+      {/* 3. The action — derived from the strongest evidence. */}
+      {!loading && data && (data.hotspots.length > 0 || data.clusters.length > 0) && (
+        <Card className="border-brand/30 bg-brand-soft/40">
+          <CardContent className="space-y-2 p-5">
+            <p className="text-brand inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide">
+              <Target className="h-4 w-4" /> The action
+            </p>
+            <ul className="space-y-1 text-sm">
+              {data.hotspots[0] && (
+                <li>
+                  Prioritise <b>{data.hotspots[0].ward}</b> —{" "}
+                  <span className="tabular-nums">{data.hotspots[0].breachRate}%</span>{" "}
+                  of cases breaching SLA.
+                </li>
+              )}
+              {data.clusters[0] && (
+                <li>
+                  Investigate the <b>{data.clusters[0].title}</b> cluster —{" "}
+                  <span className="tabular-nums">{data.clusters[0].count}</span> cases
+                  across {data.clusters[0].wards.length} ward(s).
+                </li>
+              )}
+            </ul>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

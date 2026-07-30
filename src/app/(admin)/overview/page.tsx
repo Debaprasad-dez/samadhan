@@ -1,3 +1,4 @@
+import { AlertTriangle } from "lucide-react";
 import { requireRole } from "@/lib/auth";
 import { getOverview } from "@/lib/admin-stats";
 import { VolumeChart, DeptBarChart } from "@/components/admin/charts";
@@ -24,6 +25,40 @@ export default async function AdminOverview() {
           City-wide accountability · last 30 days
         </p>
       </div>
+
+      {/* Lead with the bottleneck (spec §3) — the single worst constraint. */}
+      <Card className="border-danger/30 bg-danger-soft/50">
+        <CardContent className="p-5">
+          <p className="text-danger inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide">
+            <AlertTriangle className="h-4 w-4" /> Biggest bottleneck
+          </p>
+          <div className="mt-3 grid gap-4 sm:grid-cols-2">
+            <div>
+              <p className="font-display text-2xl font-bold capitalize">
+                {o.bottleneck.department}
+              </p>
+              <p className="text-muted-foreground text-sm">
+                <span className="text-foreground font-semibold tabular-nums">
+                  {o.bottleneck.openCount}
+                </span>{" "}
+                open cases — the largest departmental backlog.
+              </p>
+            </div>
+            <div>
+              <p className="font-display text-2xl font-bold">
+                {o.bottleneck.ward}
+              </p>
+              <p className="text-muted-foreground text-sm">
+                Breaching SLA on{" "}
+                <span className="text-danger font-semibold tabular-nums">
+                  {o.bottleneck.breachPct}%
+                </span>{" "}
+                of cases — the worst ward.
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-6">
         {kpis.map((k) => (

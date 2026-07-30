@@ -57,7 +57,7 @@ export default async function WardPage({
       <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
         <section className="space-y-3">
           <p className="text-muted-foreground text-sm">
-            Mumbai wards — colour = resolution score (red → green). Tap to
+            Mumbai wards — deeper teal = higher resolution score. Tap to
             explore.
           </p>
           <WardGrid wards={wards} selected={stat.code} />

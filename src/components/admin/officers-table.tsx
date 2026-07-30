@@ -10,6 +10,8 @@ const COLS: { k: keyof OfficerRow; l: string; num?: boolean }[] = [
   { k: "name", l: "Officer" },
   { k: "department", l: "Dept" },
   { k: "ward", l: "Ward" },
+  // Load (open + total) sits left of performance (resolved % / speed / quality).
+  { k: "open", l: "Open load", num: true },
   { k: "total", l: "Cases", num: true },
   { k: "resolvedPct", l: "Resolved %", num: true },
   { k: "avgDays", l: "Avg days", num: true },
