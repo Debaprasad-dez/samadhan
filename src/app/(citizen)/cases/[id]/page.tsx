@@ -102,6 +102,13 @@ export default async function CaseDetail({
   }
   const elapsedHours = (Date.now() - c.createdAt.getTime()) / 3_600_000;
   const slaLimitDays = slaDaysForCategory(c.categoryId);
+  const remainingMs = c.slaDueAt.getTime() - Date.now();
+  const remH = Math.round(Math.abs(remainingMs) / 3_600_000);
+  const remLabel =
+    remainingMs >= 0
+      ? `${Math.floor(remH / 24)}d ${String(remH % 24).padStart(2, "0")}h`
+      : "overdue";
+  const dayOf = Math.min(slaLimitDays, Math.max(1, Math.ceil(elapsedHours / 24)));
 
   return (
     <div className="space-y-6">
@@ -130,6 +137,34 @@ export default async function CaseDetail({
       <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
         {/* left: body + timeline + evidence */}
         <div className="space-y-6">
+          {/* Mockup SLA header — leads with the clock, not history. */}
+          {isOpen && (
+            <div className="mk">
+              <div className="card">
+                <div className="cb">
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10 }}>
+                    <div>
+                      <div className="k">Time left before escalation</div>
+                      <div className="v">
+                        {remLabel} <small>of {slaLimitDays}d</small>
+                      </div>
+                    </div>
+                    <span className="pill wn">
+                      Day {dayOf} of {slaLimitDays}
+                    </span>
+                  </div>
+                  <div style={{ marginTop: 12 }}>
+                    <SlaBar elapsedHours={elapsedHours} limitDays={slaLimitDays} />
+                  </div>
+                  <div style={{ display: "flex", gap: 7, marginTop: 12 }}>
+                    <span className="pill if">{c._count.cosigns} co-signs</span>
+                    <span className="pill nu">{c.isPublic ? "Public" : "Private"}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           <Card>
             <CardContent className="p-5">
               <p className="text-muted-foreground mb-1 text-xs font-semibold uppercase">
