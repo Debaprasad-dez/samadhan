@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
@@ -34,21 +32,18 @@ export default function LeaderboardPage() {
       .finally(() => setLoading(false));
   }, [type, period]);
 
+  const heading = TABS.find((t) => t.k === type)?.l ?? "Wards";
+
   return (
-    <div className="space-y-6">
+    <div className="mk space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="font-display text-3xl font-semibold">Leaderboards</h1>
-        <div className="flex gap-1">
+        <div className="chips">
           {(["7d", "30d"] as const).map((p) => (
             <button
               key={p}
               onClick={() => setPeriod(p)}
-              className={cn(
-                "rounded-md border px-2.5 py-1 text-xs",
-                period === p
-                  ? "border-brand bg-brand-soft text-brand"
-                  : "text-muted-foreground",
-              )}
+              className={cn("chip", period === p && "on")}
             >
               {p === "7d" ? "7 days" : "30 days"}
             </button>
@@ -56,15 +51,17 @@ export default function LeaderboardPage() {
         </div>
       </div>
 
-      <Tabs value={type} onValueChange={setType}>
-        <TabsList className="grid w-full max-w-md grid-cols-3">
-          {TABS.map((t) => (
-            <TabsTrigger key={t.k} value={t.k}>
-              {t.l}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </Tabs>
+      <div className="chips">
+        {TABS.map((t) => (
+          <button
+            key={t.k}
+            onClick={() => setType(t.k)}
+            className={cn("chip", type === t.k && "on")}
+          >
+            {t.l}
+          </button>
+        ))}
+      </div>
 
       {loading ? (
         <div className="space-y-2">
@@ -73,37 +70,70 @@ export default function LeaderboardPage() {
           ))}
         </div>
       ) : rows.length === 0 ? (
-        <Card>
-          <CardContent className="text-muted-foreground p-10 text-center">
+        <div className="card">
+          <div className="cb" style={{ textAlign: "center", color: "var(--u-muted)" }}>
             Not enough activity in this period yet.
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       ) : (
-        <div className="overflow-hidden rounded-lg border">
-          {rows.map((r) => (
-            <div
-              key={`${r.rank}-${r.label}`}
-              className="flex items-center gap-3 border-b px-4 py-3 last:border-0"
-            >
-              <span
-                className={cn(
-                  "flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold",
-                  r.rank <= 3
-                    ? "bg-brand text-brand-foreground"
-                    : "bg-surface-muted text-muted-foreground",
-                )}
-              >
-                {r.rank}
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="truncate font-medium">{r.label}</p>
-                <p className="text-muted-foreground text-xs">{r.sublabel}</p>
+        <div className="card">
+          <div className="ch">
+            <b>{heading} performance</b>
+            <span className="m">RANKED</span>
+          </div>
+          {rows.map((r) => {
+            const m = r.score.match(/(\d+)/);
+            const pct = m ? Number(m[1]) : null;
+            const barColor =
+              pct == null
+                ? "var(--u-brand)"
+                : pct >= 70
+                  ? "var(--u-ok)"
+                  : pct >= 40
+                    ? "var(--u-warn)"
+                    : "var(--u-dang)";
+            return (
+              <div key={`${r.rank}-${r.label}`} className="row">
+                <div
+                  className="mono"
+                  style={{ width: 22, color: "var(--u-faint)", fontSize: 11, paddingTop: 2 }}
+                >
+                  {r.rank}
+                </div>
+                <div className="mn">
+                  <div className="t1">{r.label}</div>
+                  {pct != null ? (
+                    <div style={{ marginTop: 7 }}>
+                      <div className="trk" style={{ height: 5 }}>
+                        <i style={{ width: `${Math.min(100, pct)}%`, background: barColor }} />
+                        <u style={{ left: "75%" }} />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="t2">{r.sublabel}</div>
+                  )}
+                </div>
+                <div className="rt" style={{ width: 66 }}>
+                  <div className="t1" style={{ color: pct != null ? barColor : undefined }}>
+                    {r.score}
+                  </div>
+                  <div className="t2">{pct != null ? r.sublabel : ""}</div>
+                </div>
               </div>
-              <span className="text-sm font-medium">{r.score}</span>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
+
+      {/* Invariant 6 — points/rank accrue on confirmed outcomes only. */}
+      <div className="card">
+        <div className="cb">
+          <div className="aihint">
+            Points and rank come only from cases <b>confirmed resolved</b> —
+            filing a complaint earns nothing on its own, by design.
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
