@@ -355,27 +355,61 @@ export function IntakeWizard() {
               </Button>
             </div>
 
-            {/* duplicates panel */}
+            {/* duplicate detection — reframed as a co-sign offer (mockup). */}
             {dupes.length > 0 && (
-              <div className="bg-surface-muted space-y-2 rounded-md p-3">
-                <p className="text-sm font-medium">Others nearby reported similar</p>
-                {dupes.map((d) => (
-                  <div
-                    key={d.caseId}
-                    className="bg-surface flex items-center justify-between gap-3 rounded-md border p-2"
-                  >
-                    <p className="min-w-0 truncate text-sm">{d.title}</p>
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="secondary"
-                      onClick={() => router.push(`/cases/${d.caseId}`)}
-                    >
-                      <Users className="h-3.5 w-3.5" />
-                      Join
-                    </Button>
+              <div className="mk">
+                <div
+                  className="card"
+                  style={{ borderColor: "var(--u-infoline)", marginBottom: 0 }}
+                >
+                  <div className="cb">
+                    <div style={{ display: "flex", gap: 10 }}>
+                      <div
+                        className="av"
+                        style={{
+                          background: "var(--u-infobg)",
+                          borderColor: "var(--u-infoline)",
+                          color: "var(--u-info)",
+                        }}
+                      >
+                        {dupes.length}
+                      </div>
+                      <div style={{ minWidth: 0 }}>
+                        <div className="t1" style={{ fontSize: "12.5px" }}>
+                          {dupes.length} neighbour{dupes.length > 1 ? "s" : ""} reported
+                          this already
+                        </div>
+                        <div
+                          className="t2"
+                          style={{ fontSize: "11px", lineHeight: 1.5, marginTop: 3 }}
+                        >
+                          Co-signing adds your voice to a live case instead of starting
+                          a new one.
+                        </div>
+                      </div>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 11 }}>
+                      {dupes.map((d) => (
+                        <div key={d.caseId} style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                          <span
+                            className="t2 mono"
+                            style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+                          >
+                            {d.title}
+                          </span>
+                          <button
+                            type="button"
+                            className="btn p"
+                            style={{ padding: "7px 11px" }}
+                            onClick={() => router.push(`/cases/${d.caseId}`)}
+                          >
+                            Co-sign
+                          </button>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                ))}
+                </div>
               </div>
             )}
           </CardContent>
