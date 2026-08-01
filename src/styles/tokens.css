@@ -38,6 +38,12 @@
   --z-toast: 60;
   --z-command: 70;
 
-  /* Display font hook — themes may override (design §4.3). Default Tiro. */
-  --font-display: var(--font-tiro);
+  /* Display font hook — Fraunces (Latin), Tiro fallback for Devanagari.
+     Themes may override (Civic Steel uses Inter, see themes.css). */
+  --font-display: var(--font-fraunces), var(--font-tiro);
+}
+
+/* Civic Steel uses Inter for display too (dense, functional — mockup). */
+[data-theme="civic-steel"] {
+  --font-display: var(--font-inter), var(--font-mukta);
 }

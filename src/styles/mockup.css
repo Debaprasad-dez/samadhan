@@ -258,3 +258,39 @@
 .mk .stepper .s.on b { color: var(--u-ink); }
 .mk .stepper .s::after { content: ""; position: absolute; top: 11px; left: 50%; width: 100%; height: 1.5px; background: var(--u-line2); z-index: -1; }
 .mk .stepper .s:last-child::after { display: none; }
+
+/* =============================================================================
+   Ambient hero-illustration motion (mockup). Slow, low-fi, decorative only;
+   stepped easing on flickers so they read as hand-drawn frames. Applied to the
+   procedural SVG heroes (src/lib/art/hero-scenes.ts).
+   ============================================================================= */
+.an-sun { animation: a-sun 84s ease-in-out infinite alternate; }
+@keyframes a-sun { 0% { transform: translateY(16px); } 100% { transform: translateY(-9px); } }
+.an-rays { transform-box: view-box; transform-origin: 470px 132px; animation: a-spin 300s linear infinite; }
+@keyframes a-spin { to { transform: rotate(360deg); } }
+.an-rip { animation: a-shim 7s steps(3, end) infinite; }
+@keyframes a-shim { 0%, 100% { opacity: .16; } 33% { opacity: .55; } 66% { opacity: .28; } }
+.an-flame { animation: a-flame 1.9s steps(2, end) infinite; }
+@keyframes a-flame { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.16, .8); } }
+.an-glow { animation: a-glow 3.4s steps(2, end) infinite; }
+@keyframes a-glow { 0%, 100% { opacity: .14; } 50% { opacity: .36; } }
+.an-tw { animation: a-star 6s steps(2, end) infinite; }
+@keyframes a-star { 0%, 100% { opacity: .2; } 50% { opacity: .95; } }
+.an-jali { animation: a-jali 34s ease-in-out infinite alternate; }
+@keyframes a-jali { 0% { opacity: .12; } 100% { opacity: .28; } }
+.an-moon { animation: a-moon 120s ease-in-out infinite alternate; }
+@keyframes a-moon { 0% { transform: translate(0, 0); } 100% { transform: translate(-18px, 11px); } }
+.an-finial { animation: a-glow 5s steps(2, end) infinite; }
+.an-mist { animation: a-mist 90s linear infinite alternate; }
+@keyframes a-mist { 0% { transform: translateX(-46px); } 100% { transform: translateX(46px); } }
+.an-mist2 { animation: a-mist 132s linear infinite alternate-reverse; }
+.an-sway { transform-box: fill-box; transform-origin: center bottom; animation: a-sway 16s ease-in-out infinite alternate; }
+@keyframes a-sway { 0% { transform: rotate(-1.4deg); } 100% { transform: rotate(1.4deg); } }
+.an-flow { animation: a-flow 4.5s linear infinite; }
+@keyframes a-flow { to { stroke-dashoffset: -28; } }
+.an-ping { transform-box: fill-box; transform-origin: center; animation: a-ping 4s ease-out infinite; }
+@keyframes a-ping { 0% { transform: scale(.55); opacity: .75; } 100% { transform: scale(1.65); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .an-sun, .an-rays, .an-rip, .an-flame, .an-glow, .an-tw, .an-jali, .an-moon,
+  .an-finial, .an-mist, .an-mist2, .an-sway, .an-flow, .an-ping { animation: none !important; }
+}

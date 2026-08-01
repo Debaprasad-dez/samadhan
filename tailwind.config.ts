@@ -107,7 +107,7 @@ const config: Config = {
         xl: "var(--radius-xl)",
       },
       fontFamily: {
-        sans: ["var(--font-mukta)", "system-ui", "sans-serif"],
+        sans: ["var(--font-inter)", "var(--font-mukta)", "system-ui", "sans-serif"],
         display: ["var(--font-display)", "Georgia", "serif"],
         mono: ["var(--font-jetbrains)", "ui-monospace", "monospace"],
         baloo: ["var(--font-baloo)", "system-ui", "sans-serif"],
