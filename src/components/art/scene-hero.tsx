@@ -31,7 +31,13 @@ const BLEED = 240;
  * the page — and a soft top/bottom feather that blends it into the page. No
  * zoom, grain, vignette, or tint. Reduced-motion freezes the parallax.
  */
-export function SceneHero({ className }: { className?: string }) {
+export function SceneHero({
+  className,
+  height = 420,
+}: {
+  className?: string;
+  height?: number;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
   const [theme, setTheme] = useState("bharat-dawn");
@@ -66,7 +72,7 @@ export function SceneHero({ className }: { className?: string }) {
     <div
       ref={ref}
       className={cn("relative overflow-hidden", className)}
-      style={{ height: 420, WebkitMaskImage: fade, maskImage: fade }}
+      style={{ height, WebkitMaskImage: fade, maskImage: fade }}
     >
       {/* parallax layer — bleeds past the hero on all sides so it never gaps */}
       <motion.div

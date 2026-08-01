@@ -194,30 +194,14 @@ export function VoiceMicButton({ ariaLabel }: { ariaLabel: string }) {
 
   return (
     <>
-      {/* Trigger — matches the CTA mic styling */}
+      {/* Trigger — flat mockup mic button (outline square). */}
       <button
         type="button"
         aria-label={ariaLabel}
         onClick={() => setOpen(true)}
-        className="relative flex w-[54px] flex-none items-center justify-center rounded-2xl"
-        style={{
-          background:
-            "linear-gradient(160deg,color-mix(in srgb,var(--g-gold-lt) 55%,#fff),color-mix(in srgb,var(--g-gold-lt) 82%,var(--g-bg)))",
-          border: "1px solid color-mix(in srgb,var(--g-gold) 45%,transparent)",
-          boxShadow:
-            "0 10px 22px -12px color-mix(in srgb,var(--g-gold) 70%,transparent),inset 0 1px 0 rgba(255,255,255,.7)",
-          color: "var(--g-primary-deep)",
-        }}
+        className="border-border-strong bg-surface text-foreground flex h-11 w-11 flex-none items-center justify-center rounded-lg border"
       >
-        <span
-          className="pointer-events-none absolute inset-0 rounded-2xl"
-          aria-hidden
-          style={{
-            border: "1.5px solid color-mix(in srgb,var(--g-primary) 50%,transparent)",
-            animation: "micpulse 2.6s ease-out infinite",
-          }}
-        />
-        <Mic className="h-[21px] w-[21px]" />
+        <Mic className="h-5 w-5" />
       </button>
 
       <Dialog
