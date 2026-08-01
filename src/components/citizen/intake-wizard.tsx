@@ -278,22 +278,19 @@ export function IntakeWizard() {
           toast.message(tr("leaveGuard.draftDiscarded"));
         }}
       />
-      {/* stepper */}
-      <div className="mb-6">
-        <div className="mb-2 flex items-center justify-between text-xs">
-          <span className="text-muted-foreground">
-            Step {s.step} of 4 · {STEPS[s.step - 1]}
-          </span>
-        </div>
-        <div className="flex gap-1.5">
-          {STEPS.map((_, i) => (
-            <span
-              key={i}
-              className={`h-1.5 flex-1 rounded-full ${
-                i < s.step ? "bg-brand" : "bg-surface-muted"
-              }`}
-            />
-          ))}
+      {/* stepper — mockup numbered/checked dots with labels */}
+      <div className="mk mb-6">
+        <div className="stepper">
+          {STEPS.map((label, i) => {
+            const n = i + 1;
+            const cls = n < s.step ? "done" : n === s.step ? "on" : "";
+            return (
+              <div key={label} className={`s ${cls}`}>
+                <i>{n < s.step ? "✓" : n}</i>
+                <b>{label}</b>
+              </div>
+            );
+          })}
         </div>
       </div>
 

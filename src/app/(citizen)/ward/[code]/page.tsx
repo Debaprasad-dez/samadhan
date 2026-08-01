@@ -61,6 +61,23 @@ export default async function WardPage({
             explore.
           </p>
           <WardGrid wards={wards} selected={stat.code} />
+          {/* Legend + denominator (spec §3) — single-hue scale, n always shown. */}
+          <div className="text-muted-foreground flex items-center gap-2 text-xs">
+            <span>Low</span>
+            <span className="flex gap-0.5">
+              {[0, 0.25, 0.5, 0.75, 1].map((v) => (
+                <span
+                  key={v}
+                  className="h-2.5 w-4 rounded-sm"
+                  style={{ background: `hsl(162 ${22 + v * 48}% ${92 - v * 55}%)` }}
+                />
+              ))}
+            </span>
+            <span>High</span>
+            <span className="ml-auto font-mono">
+              n={wards.reduce((a, w) => a + w.total, 0)} complaints
+            </span>
+          </div>
         </section>
 
         <aside className="space-y-4">
