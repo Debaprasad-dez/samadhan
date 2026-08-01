@@ -74,9 +74,9 @@ export default async function CitizenHome() {
   const month = new Date().toLocaleString("en", { month: "long" });
 
   return (
-    <div className="mk flex flex-col gap-3">
+    <div className="mk">
       {/* greeting */}
-      <div className="flex items-start justify-between pt-1">
+      <div className="flex items-start justify-between pb-3 pt-1">
         <div>
           <div className="font-display text-[19px] font-semibold">
             नमस्ते, {firstName}
@@ -106,19 +106,17 @@ export default async function CitizenHome() {
         </Link>
       </div>
 
-      {/* hero band */}
-      <div className="hero" style={{ height: 180 }}>
-        <div style={{ position: "absolute", inset: 0 }}>
-          <ThemedHero height={180} />
-        </div>
-        {/* bottom scrim for legible overlay text */}
+      {/* hero — animated themed scene at natural aspect */}
+      <div className="hero">
+        <ThemedHero />
         <div
+          aria-hidden
           style={{
             position: "absolute",
             inset: 0,
-            background: "linear-gradient(to top, rgba(0,0,0,.6), transparent 58%)",
+            background:
+              "linear-gradient(to top, rgba(0,0,0,.45), transparent 45%)",
           }}
-          aria-hidden
         />
         <div className="ov">
           <div className="ht dis">Raise your voice</div>

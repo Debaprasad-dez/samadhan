@@ -8,7 +8,7 @@ const W = 700;
 const H = 290;
 
 function heroDawn(): string {
-  let o = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">`;
+  let o = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" width="100%" xmlns="http://www.w3.org/2000/svg">`;
   o += `<defs><linearGradient id="dsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4B357"/><stop offset=".45" stop-color="#E88B4B"/><stop offset="1" stop-color="#C4623A"/></linearGradient></defs>`;
   o += `<rect width="${W}" height="${H}" fill="url(#dsky)"/>`;
   o += `<g class="an-sun" style="transform-origin:470px 132px"><circle cx="470" cy="132" r="52" fill="#FFE7B0" fill-opacity=".92"/></g>`;
@@ -47,7 +47,7 @@ function heroDawn(): string {
 
 function heroMughal(): string {
   const g = "#C9A24A";
-  let o = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">`;
+  let o = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" width="100%" xmlns="http://www.w3.org/2000/svg">`;
   o += `<defs><linearGradient id="msky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#101736"/><stop offset="1" stop-color="#070B1B"/></linearGradient><clipPath id="arch"><path d="M110 260 L110 120 Q110 46 202 46 Q294 46 294 120 L294 260 Z"/></clipPath></defs>`;
   o += `<rect width="${W}" height="${H}" fill="url(#msky)"/>`;
   for (let i = 0; i < 90; i++) {
@@ -85,7 +85,7 @@ function heroSteel(): string {
   const u = 15, ox = 352, oy = 76, b = "#1F5FD0";
   const P = (x: number, y: number, z: number): [number, number] => [ox + (x - y) * 0.866 * u, oy + (x + y) * 0.5 * u - z * u];
   const pt = (a: [number, number][]) => a.map((p) => p.map((n) => n.toFixed(1)).join(",")).join(" ");
-  let o = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">`;
+  let o = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" width="100%" xmlns="http://www.w3.org/2000/svg">`;
   o += `<rect width="${W}" height="${H}" fill="#EEF1F6"/>`;
   for (let i = 0; i <= 14; i++) { const a = P(i, 0, 0), z = P(i, 12, 0); o += `<line x1="${a[0].toFixed(1)}" y1="${a[1].toFixed(1)}" x2="${z[0].toFixed(1)}" y2="${z[1].toFixed(1)}" stroke="${b}" stroke-opacity=".13"/>`; }
   for (let j = 0; j <= 12; j++) { const a = P(0, j, 0), z = P(14, j, 0); o += `<line x1="${a[0].toFixed(1)}" y1="${a[1].toFixed(1)}" x2="${z[0].toFixed(1)}" y2="${z[1].toFixed(1)}" stroke="${b}" stroke-opacity=".13"/>`; }
@@ -112,7 +112,7 @@ function heroSteel(): string {
 }
 
 function heroNilgiri(): string {
-  let o = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">`;
+  let o = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" width="100%" xmlns="http://www.w3.org/2000/svg">`;
   o += `<defs><linearGradient id="nsk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DCE7E3"/><stop offset="1" stop-color="#F1F5F3"/></linearGradient></defs>`;
   o += `<rect width="${W}" height="${H}" fill="url(#nsk)"/>`;
   o += `<circle cx="182" cy="84" r="30" fill="#F6F2E2" fill-opacity=".9"/>`;

@@ -9,16 +9,10 @@ const SceneHero = dynamic(
   () => import("./scene-hero").then((m) => m.SceneHero),
   {
     ssr: false,
-    loading: () => <Skeleton className="h-full min-h-[160px] w-full" />,
+    loading: () => <Skeleton className="aspect-[700/290] w-full" />,
   },
 );
 
-export function ThemedHero({
-  className,
-  height,
-}: {
-  className?: string;
-  height?: number;
-}) {
-  return <SceneHero className={className} height={height} />;
+export function ThemedHero({ className }: { className?: string }) {
+  return <SceneHero className={className} />;
 }
