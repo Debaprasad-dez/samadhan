@@ -1,16 +1,14 @@
-import { Flame, FileText, ThumbsUp, Users } from "lucide-react";
 import { requireRole } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { initials } from "@/lib/utils";
 import { tierForScore } from "@/lib/reputation";
-import { TierChip } from "@/components/case/reputation-tier";
+import { REPUTATION_TIERS } from "@/types";
 import { TierEmblem } from "@/components/art/tier-emblem";
 import { BadgeGrid } from "@/components/citizen/badge-grid";
 import { SettingsForm } from "@/components/citizen/settings-form";
 import { ThemePicker } from "@/components/citizen/theme-gallery";
 import { LogoutButton } from "@/components/shared/logout-button";
 import { getT } from "@/lib/t";
-import { Card, CardContent } from "@/components/ui/card";
 
 export default async function ProfilePage() {
   const session = await requireRole(["CITIZEN"]);
@@ -26,64 +24,111 @@ export default async function ProfilePage() {
   const earned = user.badges.map((b) => b.badgeId);
   const tier = tierForScore(user.reputation);
   const t = getT(user.language ?? "en");
-  const stats = [
-    { label: t("profile.complaints"), value: user._count.cases, icon: FileText },
-    { label: t("profile.upvotesGiven"), value: user._count.upvotes, icon: ThumbsUp },
-    { label: t("profile.cosigns"), value: user._count.cosigns, icon: Users },
-  ];
+
+  // Tier progress for the reputation bar.
+  const tierIdx = REPUTATION_TIERS.findIndex(
+    (x) => user.reputation >= x.min && user.reputation <= x.max,
+  );
+  const curTier = REPUTATION_TIERS[tierIdx] ?? REPUTATION_TIERS[0];
+  const nextTier = REPUTATION_TIERS[tierIdx + 1];
+  const span = curTier.max - curTier.min || 1;
+  const progress = nextTier
+    ? Math.min(100, Math.round(((user.reputation - curTier.min) / span) * 100))
+    : 100;
+  const toNext = nextTier ? nextTier.min - user.reputation : 0;
 
   return (
-    <div className="space-y-6">
-      {/* identity */}
-      <div className="flex items-center gap-4">
-        <span
-          className="bg-brand-soft text-brand ring-brand/30 flex h-16 w-16 items-center justify-center rounded-full text-xl font-semibold ring-1"
-          aria-hidden
-        >
-          {initials(user.name)}
-        </span>
-        <div className="flex-1">
-          <h1 className="font-display text-2xl font-semibold">{user.name}</h1>
-          <div className="mt-1 flex items-center gap-2">
-            <TierChip reputation={user.reputation} />
-            <span className="text-warning inline-flex items-center gap-1 text-sm">
-              <Flame className="h-4 w-4" />
-              <span className="font-baloo font-semibold">
-                {user.streakDays}
+    <div className="mk space-y-6">
+      <div>
+        <h1 className="font-display text-2xl font-semibold">{user.name}</h1>
+        <p className="text-muted-foreground text-sm">
+          Ward {user.wardCode ?? "—"}
+        </p>
+      </div>
+
+      {/* Reputation header (mockup) — tier, points, streak, progress. */}
+      <div className="card">
+        <div className="cb">
+          <div style={{ display: "flex", gap: 13, alignItems: "center" }}>
+            <div
+              className="av"
+              style={{ width: 50, height: 50, fontSize: 16, borderRadius: "var(--u-r)", flex: "0 0 auto" }}
+            >
+              {initials(user.name)}
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div className="t1" style={{ fontSize: "15px" }}>
+                {tier}
+              </div>
+              <div className="t2" style={{ marginTop: 3 }}>
+                Tier {tierIdx + 1} ·{" "}
+                <b style={{ color: "var(--u-ink)" }}>
+                  {user.reputation.toLocaleString()}
+                </b>{" "}
+                points
+              </div>
+            </div>
+            <div style={{ textAlign: "center", flex: "0 0 auto" }}>
+              <TierEmblem tier={tier} className="mx-auto w-12" />
+              <div className="t2" style={{ fontSize: "9.5px", marginTop: 4, whiteSpace: "nowrap" }}>
+                <b style={{ color: "var(--u-ink)", fontSize: "12px" }}>
+                  {user.streakDays}
+                </b>{" "}
+                day streak
+              </div>
+            </div>
+          </div>
+          <div style={{ marginTop: 14 }}>
+            <div className="trk" style={{ height: 6 }}>
+              <i style={{ width: `${progress}%`, background: "var(--u-gold)" }} />
+            </div>
+            <div className="tcap">
+              <span>
+                <b>{tier}</b>
               </span>
-              {t("profile.dayStreak")}
-            </span>
+              <span>
+                {nextTier ? `${toNext} pts to ${nextTier.name}` : "Top tier"}
+              </span>
+            </div>
           </div>
         </div>
-        <TierEmblem tier={tier} className="w-16" />
+      </div>
+
+      {/* Earned on outcomes — reputation accrues on confirmed outcomes only. */}
+      <div className="card">
+        <div className="ch">
+          <b>Your activity</b>
+          <span className="m">POINTS ON OUTCOMES</span>
+        </div>
+        <div className="cb">
+          <div className="grid3" style={{ gap: 9 }}>
+            <div>
+              <div className="k">{t("profile.complaints")}</div>
+              <div className="v" style={{ fontSize: "21px" }}>{user._count.cases}</div>
+            </div>
+            <div>
+              <div className="k">{t("profile.upvotesGiven")}</div>
+              <div className="v" style={{ fontSize: "21px" }}>{user._count.upvotes}</div>
+            </div>
+            <div>
+              <div className="k">{t("profile.cosigns")}</div>
+              <div className="v" style={{ fontSize: "21px" }}>{user._count.cosigns}</div>
+            </div>
+          </div>
+          <div className="aihint" style={{ marginTop: 11 }}>
+            Points accrue when a case you filed or co-signed is{" "}
+            <b>confirmed resolved by a citizen</b> — never for filing alone.
+          </div>
+        </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="space-y-6">
-          <div className="grid grid-cols-3 gap-3">
-            {stats.map((s) => {
-              const Icon = s.icon;
-              return (
-                <Card key={s.label}>
-                  <CardContent className="p-4">
-                    <Icon className="text-muted-foreground h-4 w-4" />
-                    <p className="font-baloo mt-1 text-2xl font-semibold">
-                      {s.value}
-                    </p>
-                    <p className="text-muted-foreground text-xs">{s.label}</p>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-
-          <section className="space-y-3">
-            <h2 className="font-display text-lg font-semibold">
-              {t("profile.badges")}
-            </h2>
-            <BadgeGrid earned={earned} />
-          </section>
-        </div>
+        <section className="space-y-3">
+          <h2 className="font-display text-lg font-semibold">
+            {t("profile.badges")}
+          </h2>
+          <BadgeGrid earned={earned} />
+        </section>
 
         <section className="space-y-3">
           <h2 className="font-display text-lg font-semibold">
