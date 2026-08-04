@@ -1,6 +1,7 @@
 @import "../styles/tokens.css";
 @import "../styles/themes.css";
 @import "../styles/mockup.css";
+@import "../styles/citizen-home.css";
 
 @tailwind base;
 @tailwind components;

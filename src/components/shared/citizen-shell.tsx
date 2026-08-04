@@ -31,6 +31,10 @@ export function CitizenShell({
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
+  // The home route ships the design's own full-bleed layout (top bar, hero,
+  // bottom nav), so the shell steps aside there.
+  if (pathname === "/") return <>{children}</>;
+
   return (
     <div className="flex min-h-dvh flex-col">
       <header className="bg-background/80 border-border sticky top-0 z-10 flex h-14 items-center justify-between border-b px-4 backdrop-blur-md md:h-16 md:px-6">

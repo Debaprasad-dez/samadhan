@@ -14,7 +14,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Check,
-  Users,
+
 } from "lucide-react";
 import { WARDS, DEPARTMENTS, CATEGORIES } from "@/lib/seed-data";
 import { humanizeCode } from "@/lib/utils";
