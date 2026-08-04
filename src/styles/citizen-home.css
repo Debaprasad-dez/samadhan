@@ -336,3 +336,45 @@
 .chome .mrow .s3 { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
 .chome .mrow .v2 { margin-left: auto; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .chome .standing + .btn.w { margin-top: 16px; }
+
+/* ---------- cases-specific (samadhan-cases-mobile.html) ---------- */
+@keyframes ch-planeIn { from { opacity: 0; transform: translateY(-16px) } to { opacity: 1; transform: none } }
+.chome .limitplane { animation: ch-planeIn .8s cubic-bezier(.22,1,.36,1) 2.05s both; }
+.chome .filters { display: flex; gap: 7px; margin-top: 16px; overflow-x: auto; scrollbar-width: none; padding-bottom: 3px; }
+.chome .filters::-webkit-scrollbar { display: none; }
+.chome .fchip {
+  flex: 0 0 auto; display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line-2);
+  border-radius: 999px; padding: 11px 15px; font: inherit; font-size: 12.5px; font-weight: 500;
+  background: var(--surface); color: var(--ink); min-height: 44px; cursor: pointer; white-space: nowrap;
+}
+.chome .fchip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.chome .fchip .ct { font-variant-numeric: tabular-nums; opacity: .6; font-weight: 600; }
+.chome .fchip[aria-pressed="true"] .ct { opacity: .75; }
+.chome .crow {
+  display: flex; gap: 12px; align-items: flex-start; padding: 17px 0; border-bottom: 1px solid var(--line);
+  -webkit-tap-highlight-color: transparent; color: inherit; text-decoration: none;
+}
+.chome .crow:last-child { border-bottom: 0; }
+.chome .crow .body2 { flex: 1; min-width: 0; }
+.chome .crow .chev { flex: 0 0 auto; color: var(--faint); align-self: center; }
+.chome .crow .chev svg { width: 16px; height: 16px; display: block; }
+.chome .closed .crow { padding: 14px 0; }
+.chome .closed .t { font-size: 13.5px; }
+.chome .out { margin-left: auto; text-align: right; flex: 0 0 auto; }
+.chome .out .v3 { font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.chome .out .u3 { font-size: 10.5px; color: var(--muted); margin-top: 2px; }
+.chome .crow .hd { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.chome .crow .t { font-size: 15px; font-weight: 600; letter-spacing: -.012em; line-height: 1.3; }
+.chome .crow .m { font-family: var(--font-jetbrains), monospace; font-size: 10.5px; color: var(--faint); margin-top: 5px; }
+.chome .crow .trk { margin-top: 12px; }
+.chome .note2 {
+  background: var(--ok-bg); border: 1px solid var(--ok-line); border-radius: var(--r);
+  padding: 14px; margin-top: 15px;
+}
+/* filter chips hide the sections they exclude */
+.chome [data-filter="active"] section[data-sec="await"],
+.chome [data-filter="active"] section[data-sec="closed"],
+.chome [data-filter="await"] section[data-sec="active"],
+.chome [data-filter="await"] section[data-sec="closed"],
+.chome [data-filter="closed"] section[data-sec="active"],
+.chome [data-filter="closed"] section[data-sec="await"] { display: none; }
