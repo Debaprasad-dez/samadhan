@@ -7,7 +7,15 @@ import { Button } from "@/components/ui/button";
 import { useT } from "@/components/providers/locale-provider";
 import { cn } from "@/lib/utils";
 
-export function LogoutButton({ className }: { className?: string }) {
+export function LogoutButton({
+  className,
+  plain,
+}: {
+  className?: string;
+  /** Render a bare <button> carrying `className` verbatim, for screens that
+   *  supply their own design-system button styles. */
+  plain?: boolean;
+}) {
   const router = useRouter();
   const t = useT();
   const [loading, setLoading] = useState(false);
@@ -21,6 +29,19 @@ export function LogoutButton({ className }: { className?: string }) {
     } finally {
       setLoading(false);
     }
+  }
+
+  if (plain) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        disabled={loading}
+        className={className}
+      >
+        {t("common.signOut")}
+      </button>
+    );
   }
 
   return (
