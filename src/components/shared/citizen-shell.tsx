@@ -36,6 +36,7 @@ export function CitizenShell({
   if (
     pathname === "/" ||
     pathname === "/feed" ||
+    pathname === "/file" ||
     pathname.startsWith("/cases") ||
     pathname === "/profile"
   )

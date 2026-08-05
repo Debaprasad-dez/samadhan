@@ -1,21 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Image from "next/image";
 import { toast } from "sonner";
-import {
-  Mic,
-  MicOff,
-  Sparkles,
-  Upload,
-  X,
-  Loader2,
-  ChevronLeft,
-  ChevronRight,
-  Check,
-
-} from "lucide-react";
 import { WARDS, DEPARTMENTS, CATEGORIES } from "@/lib/seed-data";
 import { humanizeCode } from "@/lib/utils";
 import { useIntakeStore } from "@/store/intake";
@@ -29,54 +16,72 @@ import {
 } from "@/hooks/use-ai";
 import { useCreateCase } from "@/hooks/use-cases";
 import { useVoiceInput } from "@/hooks/use-voice-input";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { LeaveGuard } from "@/components/citizen/leave-guard";
-import { useT } from "@/components/providers/locale-provider";
-import type { Severity } from "@/types";
+import { deskScene } from "@/lib/art/desk-scene";
 
 const STEPS = ["Describe", "Categorise", "Evidence", "Confirm"];
-const ACCEPT = "image/jpeg,image/png,image/webp,video/mp4";
+
+const IC = {
+  back: <path d="M14.5 5.5 8 12l6.5 6.5" />,
+  mic: <><rect x="9.3" y="3" width="5.4" height="10.4" rx="2.7" /><path d="M5.6 11a6.4 6.4 0 0 0 12.8 0M12 17.4V21" /></>,
+  cam: <><path d="M3.5 8.5h3.2l1.4-2.4h7.8l1.4 2.4h3.2v10a1 1 0 0 1-1 1h-15a1 1 0 0 1-1-1Z" /><circle cx="12" cy="13.2" r="3.6" /></>,
+  plus: <path d="M12 5v14M5 12h14" />,
+  chk2: <path d="M5 12.5 10 17.5 19 6.5" />,
+  pinmk: <><path d="M12 21s6.5-5.6 6.5-10.5a6.5 6.5 0 1 0-13 0C5.5 15.4 12 21 12 21Z" /><circle cx="12" cy="10.5" r="2.4" /></>,
+  clk: <><circle cx="12" cy="12" r="8.5" /><path d="M12 7.5V12l3 2" /></>,
+  drop: <path d="M12 3.6c2.9 3.6 5.4 6.5 5.4 9.4a5.4 5.4 0 0 1-10.8 0c0-2.9 2.5-5.8 5.4-9.4Z" />,
+  bolt: <path d="M13.4 3.2 6.2 13.4h5L10.6 20.8 17.8 10.6h-5l.6-7.4Z" />,
+  road: <path d="M7.6 3.6 4.6 20.4M16.4 3.6l3 16.8M12 4.2v2.6M12 10.6v2.6M12 16.8v3" />,
+  trash: <path d="M4.6 6.6h14.8M9.6 6.6V4.6h4.8v2M6.6 6.6l1 12a1.5 1.5 0 0 0 1.5 1.4h5.8a1.5 1.5 0 0 0 1.5-1.4l1-12" />,
+  lamp: <><path d="M12 20.4V9.2M12 9.2a3.4 3.4 0 0 0 3.4-3.4H8.6A3.4 3.4 0 0 0 12 9.2Z" /><path d="M8.2 20.4h7.6" /></>,
+  replay: <><path d="M20 12a8 8 0 1 1-2.6-5.9" /><path d="M20 4v5h-5" /></>,
+} as const;
+
+function Icon({ d, sw = 1.7 }: { d: keyof typeof IC; sw?: number }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
+      {IC[d]}
+    </svg>
+  );
+}
+
+// Department → the mockup's glyph.
+const DEPT_ICON: Record<string, keyof typeof IC> = {
+  WATER: "drop",
+  ROADS: "road",
+  SANITATION: "trash",
+  ELECTRICITY: "bolt",
+  PUBLIC_WORKS: "lamp",
+  HEALTH: "pinmk",
+  EDUCATION: "pinmk",
+  POLICE: "pinmk",
+};
+
+const LANGS = [
+  { code: "hi", label: "हिन्दी" },
+  { code: "en", label: "English" },
+  { code: "kn", label: "ಕನ್ನಡ" },
+  { code: "mr", label: "मराठी" },
+];
 
 export function IntakeWizard() {
   const router = useRouter();
   const params = useSearchParams();
   const user = useSession();
   const s = useIntakeStore();
-  const tr = useT();
   const prefWard = usePrefsStore((p) => p.wardCode);
 
-  // Avoid hydration mismatch from persisted store: render only after mount.
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  // Default the ward to the citizen's chosen/home ward (still editable here).
+  const [lang, setLang] = useState("en");
+  const [landmark, setLandmark] = useState("");
+  const [aiText, setAiText] = useState("");
+  const heroRef = useRef<HTMLDivElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const navigatingRef = useRef(false);
+
+  // Default the ward to the citizen's chosen/home ward.
   useEffect(() => {
     if (mounted && !s.wardCode) {
       const w = prefWard || user?.wardCode;
@@ -84,9 +89,6 @@ export function IntakeWizard() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mounted]);
-
-  // Once we navigate away on submit, stop the step→URL effect clobbering it.
-  const navigatingRef = useRef(false);
 
   // Sync initial step from URL once.
   const initedRef = useRef(false);
@@ -125,12 +127,8 @@ export function IntakeWizard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [s.body, wardForDupes]);
 
-  // ---- AI: draft / polish ----
+  // ---- AI: rephrase for the department ----
   const draft = useDraft();
-  const [showDiff, setShowDiff] = useState(false);
-  const [draftTitle, setDraftTitle] = useState("");
-  const [draftBody, setDraftBody] = useState("");
-
   function polish() {
     draft.mutate(s.body, {
       onSuccess: (d) => {
@@ -138,9 +136,8 @@ export function IntakeWizard() {
           toast.info("AI is paused — your text was kept as-is.");
           return;
         }
-        setDraftTitle(d.title);
-        setDraftBody(d.body);
-        setShowDiff(true);
+        setAiText(d.body);
+        if (!s.title.trim()) s.setField("title", d.title);
       },
       onError: (e) => toast.error(e.message),
     });
@@ -175,12 +172,9 @@ export function IntakeWizard() {
 
   // ---- evidence upload ----
   const [uploading, setUploading] = useState(false);
-  const fileRef = useRef<HTMLInputElement>(null);
-
   async function handleFiles(files: FileList | null) {
     if (!files) return;
-    const remaining = 5 - s.evidence.length;
-    const list = Array.from(files).slice(0, remaining);
+    const list = Array.from(files).slice(0, 5 - s.evidence.length);
     setUploading(true);
     try {
       for (const file of list) {
@@ -203,13 +197,42 @@ export function IntakeWizard() {
     }
   }
 
+  // ---- hero, repainted per step + theme ----
+  const dept = DEPARTMENTS.find((d) => d.code === s.departmentCode);
+  const paintHero = useCallback(() => {
+    const host = heroRef.current;
+    if (!host) return;
+    host.querySelector("svg")?.remove();
+    host.insertAdjacentHTML(
+      "afterbegin",
+      deskScene(s.step, {
+        dept: (dept?.code ?? "DEPT").slice(0, 8),
+        confidence: s.confidence ? Math.round(s.confidence * 100) : 0,
+        number: "READY TO FILE",
+      }),
+    );
+  }, [s.step, dept?.code, s.confidence]);
+
+  useEffect(() => {
+    paintHero();
+    const mo = new MutationObserver(paintHero);
+    mo.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+    return () => mo.disconnect();
+  }, [paintHero]);
+
   // ---- submit ----
   const createCase = useCreateCase();
   function submit() {
+    const body = landmark.trim()
+      ? `${s.body}\n\nLandmark: ${landmark.trim()}`
+      : s.body;
     createCase.mutate(
       {
         title: s.title || s.body.slice(0, 80),
-        body: s.body,
+        body,
         wardCode: s.wardCode,
         departmentCode: s.departmentCode,
         categoryId: s.categoryId,
@@ -232,6 +255,8 @@ export function IntakeWizard() {
     () => CATEGORIES.filter((c) => c.departmentCode === s.departmentCode),
     [s.departmentCode],
   );
+  const category = CATEGORIES.find((c) => c.id === s.categoryId);
+  const wardName = WARDS.find((w) => w.code === s.wardCode)?.name ?? s.wardCode;
 
   const canNext =
     (s.step === 1 && s.body.trim().length >= 30) ||
@@ -247,500 +272,466 @@ export function IntakeWizard() {
 
   function next() {
     if (s.step === 1) ensureTitle();
-    s.next();
+    if (s.step === 4) {
+      submit();
+      return;
+    }
+    s.setStep(s.step + 1);
+    window.scrollTo({ top: 0 });
+  }
+  function prev() {
+    if (s.step === 1) {
+      router.push("/");
+      return;
+    }
+    s.setStep(s.step - 1);
+    window.scrollTo({ top: 0 });
   }
 
-  if (!mounted) {
-    return (
-      <div className="mx-auto w-full max-w-[720px] space-y-4">
-        <Skeleton className="h-2 w-full" />
-        <Skeleton className="h-64 w-full" />
-      </div>
-    );
+  // Pick a department: choose it and its first category.
+  function pickDept(code: string) {
+    s.setField("departmentCode", code);
+    const first = CATEGORIES.find((c) => c.departmentCode === code);
+    s.setField("categoryId", first?.id ?? "");
   }
 
-  // Guard against losing an in-progress complaint on navigation.
-  const dirty =
-    !createCase.isPending &&
-    !navigatingRef.current &&
-    (s.title.trim() !== "" ||
-      s.body.trim() !== "" ||
-      s.evidence.length > 0 ||
-      s.step > 1);
+  if (!mounted) return null;
 
   return (
-    <div className="mx-auto w-full max-w-[720px]">
+    <div className="chome wizpage">
       <LeaveGuard
-        active={dirty}
-        onSaveDraft={() => toast.success(tr("leaveGuard.draftSaved"))}
-        onDiscard={() => {
-          s.reset();
-          toast.message(tr("leaveGuard.draftDiscarded"));
-        }}
+        active={
+          !navigatingRef.current &&
+          (s.body.trim().length > 0 || s.evidence.length > 0) &&
+          s.step > 1
+        }
+        onSaveDraft={() => toast.success("Draft kept — pick it up any time.")}
+        onDiscard={() => s.reset()}
       />
-      {/* stepper — mockup numbered/checked dots with labels */}
-      <div className="mk mb-6">
-        <div className="stepper">
-          {STEPS.map((label, i) => {
-            const n = i + 1;
-            const cls = n < s.step ? "done" : n === s.step ? "on" : "";
-            return (
-              <div key={label} className={`s ${cls}`}>
-                <i>{n < s.step ? "✓" : n}</i>
-                <b>{label}</b>
+      <div className="shell">
+        <header className="top">
+          <div className="row">
+            <button className="backbtn" onClick={prev} aria-label="Back">
+              <Icon d="back" sw={1.9} />
+            </button>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div className="greet" style={{ fontSize: "17px" }}>File a complaint</div>
+              <div className="ward">Step {s.step} of 4 · {STEPS[s.step - 1]}</div>
+            </div>
+          </div>
+          <div className="steps">
+            {STEPS.map((_, i) => (
+              <div key={i} className={`sg ${i + 1 < s.step ? "done" : ""} ${i + 1 <= s.step ? "on" : ""}`}>
+                <i />
               </div>
-            );
-          })}
+            ))}
+          </div>
+          <div className="steplbl">
+            <b>{STEPS[s.step - 1]}</b>
+            <span>{s.step < 4 ? `Next: ${STEPS[s.step]}` : "Last step"}</span>
+          </div>
+        </header>
+
+        <div className="hero" ref={heroRef}>
+          <button className="replay" onClick={paintHero} aria-label="Replay animation">
+            <Icon d="replay" sw={1.9} />
+          </button>
+          <div className="fade" />
         </div>
-      </div>
 
-      {/* ---------- Step 1: Describe ---------- */}
-      {s.step === 1 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-display text-xl">
-              What&rsquo;s the issue?
-            </CardTitle>
-            <CardDescription>
-              Describe it in your own words. We&rsquo;ll help clean it up.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="relative">
-              <Textarea
-                value={s.body}
-                onChange={(e) => s.setField("body", e.target.value)}
-                placeholder="What's the issue? Describe in your own words…"
-                rows={6}
-                maxLength={2000}
-                className="resize-none pr-12"
-              />
-              {voice.supported && (
-                <Button
-                  type="button"
-                  size="icon"
-                  variant={voice.listening ? "default" : "ghost"}
-                  className="absolute right-2 top-2"
-                  aria-label={voice.listening ? "Stop voice input" : "Start voice input"}
-                  onClick={voice.toggle}
-                >
-                  {voice.listening ? <MicOff /> : <Mic />}
-                </Button>
-              )}
-            </div>
+        <div className="wrap">
+          {/* ============ 1 · DESCRIBE ============ */}
+          <div className={`stepbody ${s.step === 1 ? "on" : ""}`}>
+            <div className="eyebrow">Step 1 · Describe</div>
+            <h1 className="dspl">Just say what&rsquo;s wrong</h1>
+            <p className="lede">
+              Speak in any of 18 languages. We transcribe it, route it, and{" "}
+              <b>keep your own words on the record</b> — the officer sees both.
+            </p>
 
-            <div className="flex items-center justify-between">
-              <span
-                className={`text-xs ${
-                  s.body.trim().length < 30
-                    ? "text-muted-foreground"
-                    : "text-success"
-                }`}
-              >
-                {s.body.length}/2000 · min 30
-              </span>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={polish}
-                disabled={draft.isPending || s.body.trim().length < 30}
-              >
-                {draft.isPending ? (
-                  <Loader2 className="animate-spin" />
-                ) : (
-                  <Sparkles />
-                )}
-                Polish my complaint
-              </Button>
-            </div>
-
-            {/* duplicate detection — reframed as a co-sign offer (mockup). */}
-            {dupes.length > 0 && (
-              <div className="mk">
-                <div
-                  className="card"
-                  style={{ borderColor: "var(--u-infoline)", marginBottom: 0 }}
-                >
-                  <div className="cb">
-                    <div style={{ display: "flex", gap: 10 }}>
-                      <div
-                        className="av"
-                        style={{
-                          background: "var(--u-infobg)",
-                          borderColor: "var(--u-infoline)",
-                          color: "var(--u-info)",
-                        }}
-                      >
-                        {dupes.length}
-                      </div>
-                      <div style={{ minWidth: 0 }}>
-                        <div className="t1" style={{ fontSize: "12.5px" }}>
-                          {dupes.length} neighbour{dupes.length > 1 ? "s" : ""} reported
-                          this already
-                        </div>
-                        <div
-                          className="t2"
-                          style={{ fontSize: "11px", lineHeight: 1.5, marginTop: 3 }}
-                        >
-                          Co-signing adds your voice to a live case instead of starting
-                          a new one.
-                        </div>
-                      </div>
-                    </div>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 11 }}>
-                      {dupes.map((d) => (
-                        <div key={d.caseId} style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                          <span
-                            className="t2 mono"
-                            style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
-                          >
-                            {d.title}
-                          </span>
-                          <button
-                            type="button"
-                            className="btn p"
-                            style={{ padding: "7px 11px" }}
-                            onClick={() => router.push(`/cases/${d.caseId}`)}
-                          >
-                            Co-sign
-                          </button>
-                        </div>
-                      ))}
+            {voice.supported && (
+              <>
+                <div className="miccta">
+                  <button
+                    className="micbtn"
+                    onClick={voice.toggle}
+                    aria-label={voice.listening ? "Stop recording" : "Hold to speak"}
+                  >
+                    <Icon d="mic" sw={1.8} />
+                  </button>
+                  <div>
+                    <div className="mt">{voice.listening ? "Listening…" : "Tap to speak"}</div>
+                    <div className="ms">
+                      Tap again when you&rsquo;re done. You can edit afterwards.
                     </div>
                   </div>
                 </div>
+                <div className="langs">
+                  {LANGS.map((l) => (
+                    <button
+                      key={l.code}
+                      className="lang"
+                      aria-pressed={lang === l.code}
+                      onClick={() => setLang(l.code)}
+                    >
+                      {l.label}
+                    </button>
+                  ))}
+                  <button className="lang" aria-pressed={false}>+14</button>
+                </div>
+              </>
+            )}
+
+            <div className="sh" style={{ marginTop: 26 }}>
+              <b>What you said</b>
+              <span>{s.body.length}/2000 · min 30</span>
+            </div>
+            <textarea
+              className="field"
+              rows={5}
+              maxLength={2000}
+              value={s.body}
+              onChange={(e) => s.setField("body", e.target.value)}
+              placeholder="Sewage water overflowing outside 27th Road since Tuesday, the whole lane smells…"
+            />
+
+            {aiText && (
+              <div className="aibox">
+                <div className="lbl2">Rephrased for the department</div>
+                <p>{aiText}</p>
+                <div className="sub2">
+                  Your original wording is kept on the case file and is what an RTI
+                  request would return.
+                </div>
               </div>
             )}
-          </CardContent>
-        </Card>
-      )}
 
-      {/* ---------- Step 2: Categorise ---------- */}
-      {s.step === 2 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-display text-xl">
-              Where does this go?
-            </CardTitle>
-            <CardDescription>
-              We&rsquo;ve suggested a category — adjust anything that&rsquo;s off.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-5">
-            {classify.isPending ? (
-              <div className="space-y-3">
-                <Skeleton className="h-10 w-full" />
-                <Skeleton className="h-10 w-full" />
-                <p className="text-muted-foreground text-sm">
-                  Classifying… you can also pick manually.
+            <button
+              className="btn s w"
+              style={{ marginTop: 12 }}
+              onClick={polish}
+              disabled={draft.isPending || s.body.trim().length < 30}
+            >
+              {draft.isPending ? "Rephrasing…" : "Rephrase for the department"}
+            </button>
+          </div>
+
+          {/* ============ 2 · CATEGORISE ============ */}
+          <div className={`stepbody ${s.step === 2 ? "on" : ""}`}>
+            <div className="eyebrow">Step 2 · Categorise</div>
+            <h1 className="dspl">
+              {dept ? `Sending it to ${humanizeCode(dept.code)}` : "Where should this go?"}
+            </h1>
+            <p className="lede">
+              We picked the department from what you said.{" "}
+              <b>Change it if we got it wrong</b> — a misrouted case loses days
+              before anyone notices.
+            </p>
+
+            {s.confidence !== null && dept && (
+              <div className="aibox" style={{ background: "var(--ok-bg)", borderColor: "var(--ok-line)" }}>
+                <div className="lbl2" style={{ color: "var(--ok)" }}>
+                  Suggested · {Math.round((s.confidence ?? 0) * 100)}% confident
+                </div>
+                <p>
+                  <b>{dept.name}</b>
+                  {category ? ` — ${category.name}.` : "."}
+                  {category ? ` Charter limit ${category.slaDays} days.` : ""}
                 </p>
               </div>
-            ) : null}
-
-            {s.confidence !== null && (
-              <Badge variant="secondary">
-                AI is {Math.round(s.confidence * 100)}% sure
-              </Badge>
+            )}
+            {classify.isPending && (
+              <div className="aibox">
+                <div className="lbl2">Classifying</div>
+                <p>Reading what you wrote to pick a department…</p>
+              </div>
             )}
 
-            <div className="space-y-2">
-              <Label>Department</Label>
-              <Select
-                value={s.departmentCode}
-                onValueChange={(v) => {
-                  s.setField("departmentCode", v);
-                  s.setField("categoryId", "");
-                }}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select department" />
-                </SelectTrigger>
-                <SelectContent>
-                  {DEPARTMENTS.map((d) => (
-                    <SelectItem key={d.code} value={d.code}>
-                      {d.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <div className="sh" style={{ marginTop: 24 }}>
+              <b>Or choose another</b>
+              <span>{DEPARTMENTS.length} departments</span>
+            </div>
+            <div className="catgrid">
+              {DEPARTMENTS.map((d) => (
+                <button
+                  key={d.code}
+                  className="catbtn"
+                  aria-pressed={s.departmentCode === d.code}
+                  onClick={() => pickDept(d.code)}
+                >
+                  <Icon d={DEPT_ICON[d.code] ?? "pinmk"} />
+                  {d.name}
+                </button>
+              ))}
             </div>
 
-            <div className="space-y-2">
-              <Label>Category</Label>
-              <Select
-                value={s.categoryId}
-                onValueChange={(v) => s.setField("categoryId", v)}
-                disabled={!s.departmentCode}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent>
+            {cats.length > 0 && (
+              <>
+                <div className="sh" style={{ marginTop: 24 }}>
+                  <b>Category</b>
+                  <span>{cats.length} in this department</span>
+                </div>
+                <div className="langs" style={{ marginTop: 12 }}>
                   {cats.map((c) => (
-                    <SelectItem key={c.id} value={c.id}>
+                    <button
+                      key={c.id}
+                      className="lang"
+                      aria-pressed={s.categoryId === c.id}
+                      onClick={() => s.setField("categoryId", c.id)}
+                    >
                       {c.name}
-                    </SelectItem>
+                    </button>
                   ))}
-                </SelectContent>
-              </Select>
-            </div>
+                </div>
+              </>
+            )}
 
-            <div className="space-y-2">
-              <Label>Severity</Label>
-              <div className="flex gap-2">
-                {(["LOW", "MEDIUM", "HIGH"] as Severity[]).map((sev) => (
-                  <Button
-                    key={sev}
-                    type="button"
-                    variant={s.severity === sev ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => s.setField("severity", sev)}
+            {dupes.length > 0 && (
+              <div className="dupe">
+                <div className="t4">
+                  {dupes.length} neighbour{dupes.length === 1 ? "" : "s"} already
+                  reported this
+                </div>
+                <div className="s5">
+                  {dupes[0].title} is open with the same department nearby. Adding
+                  your name to a live case is usually faster than starting a second
+                  one.
+                </div>
+                <div style={{ display: "flex", gap: 8, marginTop: 13 }}>
+                  <button
+                    className="btn p"
+                    style={{ flex: 1, padding: 12, fontSize: 13 }}
+                    onClick={() => router.push(`/cases/${dupes[0].caseId}`)}
                   >
-                    {sev[0] + sev.slice(1).toLowerCase()}
-                  </Button>
-                ))}
+                    Co-sign that case
+                  </button>
+                  <button
+                    className="btn s"
+                    style={{ flex: 1, padding: 12, fontSize: 13 }}
+                    onClick={() => setDupes([])}
+                  >
+                    File separately
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* ============ 3 · EVIDENCE ============ */}
+          <div className={`stepbody ${s.step === 3 ? "on" : ""}`}>
+            <div className="eyebrow">Step 3 · Evidence</div>
+            <h1 className="dspl">Where, and what it looks like</h1>
+            <p className="lede">
+              A ward and a couple of photos are enough. Cases with a photo are{" "}
+              <b>resolved faster</b> — the crew knows what to bring.
+            </p>
+
+            <div className="sh" style={{ marginTop: 22 }}>
+              <b>Location</b>
+              <span>Your ward</span>
+            </div>
+            <div className="maprow">
+              <svg className="mp" viewBox="0 0 360 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect width="360" height="130" fill="var(--surface-2)" />
+                <g stroke="var(--line-2)" strokeWidth="1.2">
+                  <path d="M0 44h360M0 92h360M74 0v130M196 0v130M292 0v130" />
+                </g>
+                <rect x="0" y="60" width="360" height="16" fill="var(--track)" />
+                <rect x="176" y="0" width="16" height="130" fill="var(--track)" />
+                <g fill="var(--track)" stroke="var(--line-2)" strokeWidth="1">
+                  <rect x="18" y="12" width="42" height="24" rx="2" />
+                  <rect x="98" y="10" width="60" height="26" rx="2" />
+                  <rect x="214" y="14" width="56" height="22" rx="2" />
+                  <rect x="26" y="100" width="34" height="20" rx="2" />
+                  <rect x="212" y="98" width="60" height="24" rx="2" />
+                  <rect x="306" y="16" width="38" height="24" rx="2" />
+                </g>
+                <g transform="translate(184 68)">
+                  <ellipse rx="15" ry="8" fill="var(--danger)" opacity=".18" />
+                  <path d="M0 0 L0 -20" stroke="var(--danger)" strokeWidth="2" />
+                  <circle cy="-26" r="8.5" fill="var(--danger)" />
+                  <circle cy="-26" r="3.2" fill="var(--surface)" />
+                </g>
+                <text x="196" y="112" fontFamily="var(--font-jetbrains), monospace" fontSize="9" fill="var(--muted)">
+                  {String(wardName).toUpperCase()}
+                </text>
+              </svg>
+              <div className="addr">
+                <span style={{ color: "var(--danger)", flex: "0 0 auto", width: 20, height: 20 }}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" style={{ width: 20, height: 20 }}>
+                    <path d="M12 21s6.5-5.6 6.5-10.5a6.5 6.5 0 1 0-13 0C5.5 15.4 12 21 12 21Z" />
+                    <circle cx="12" cy="10.5" r="2.4" />
+                  </svg>
+                </span>
+                <div>
+                  <div className="a1">{wardName}</div>
+                  <div className="a2">Ward {s.wardCode || "—"}</div>
+                </div>
+                <select
+                  className="adj"
+                  value={s.wardCode}
+                  onChange={(e) => s.setField("wardCode", e.target.value)}
+                  aria-label="Change ward"
+                >
+                  {WARDS.map((w) => (
+                    <option key={w.code} value={w.code}>{w.name}</option>
+                  ))}
+                </select>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label>
-                Ward <span className="text-danger">·</span>
-              </Label>
-              <Select
-                value={s.wardCode}
-                onValueChange={(v) => s.setField("wardCode", v)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select your ward" />
-                </SelectTrigger>
-                <SelectContent className="max-h-72">
-                  {WARDS.map((w) => (
-                    <SelectItem key={w.code} value={w.code}>
-                      {w.name} ({w.code})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <div className="sh" style={{ marginTop: 24 }}>
+              <b>Photos</b>
+              <span>{s.evidence.length} added</span>
             </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* ---------- Step 3: Evidence ---------- */}
-      {s.step === 3 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-display text-xl">Add evidence</CardTitle>
-            <CardDescription>
-              Optional — up to 5 photos or short videos (≤ 5 MB each).
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <button
-              type="button"
-              onClick={() => fileRef.current?.click()}
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={(e) => {
-                e.preventDefault();
-                handleFiles(e.dataTransfer.files);
-              }}
-              className="hover:border-brand flex w-full flex-col items-center gap-2 rounded-lg border border-dashed p-8 text-center transition-colors"
-            >
-              {uploading ? (
-                <Loader2 className="text-muted-foreground h-6 w-6 animate-spin" />
-              ) : (
-                <Upload className="text-muted-foreground h-6 w-6" />
-              )}
-              <span className="text-sm font-medium">
-                Tap to upload or drag files here
-              </span>
-              <span className="text-muted-foreground text-xs">
-                JPG, PNG, WebP or MP4
-              </span>
-            </button>
             <input
               ref={fileRef}
               type="file"
-              accept={ACCEPT}
+              accept="image/jpeg,image/png,image/webp,video/mp4"
               multiple
               hidden
-              onChange={(e) => handleFiles(e.target.files)}
+              onChange={(e) => {
+                handleFiles(e.target.files);
+                e.target.value = "";
+              }}
             />
-
-            {s.evidence.length > 0 && (
-              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
-                {s.evidence.map((e) => (
-                  <div
-                    key={e.url}
-                    className="group relative aspect-square overflow-hidden rounded-md border"
-                  >
-                    {e.kind === "photo" ? (
-                      <Image
-                        src={e.url}
-                        alt={e.filename}
-                        fill
-                        className="object-cover"
-                        sizes="120px"
-                      />
-                    ) : (
-                      <video src={e.url} className="h-full w-full object-cover" />
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => s.removeEvidence(e.url)}
-                      className="bg-background/90 absolute right-1 top-1 rounded-full p-1 shadow"
-                      aria-label={`Remove ${e.filename}`}
-                    >
-                      <X className="h-3.5 w-3.5" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      )}
-
-      {/* ---------- Step 4: Confirm ---------- */}
-      {s.step === 4 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-display text-xl">
-              Review &amp; file
-            </CardTitle>
-            <CardDescription>Check the details, then file.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Row label="Title" onEdit={() => s.setStep(1)}>
-              {s.title || "—"}
-            </Row>
-            <Row label="Description" onEdit={() => s.setStep(1)}>
-              {s.body}
-            </Row>
-            <Row label="Department" onEdit={() => s.setStep(2)}>
-              {humanizeCode(s.departmentCode)} ·{" "}
-              {CATEGORIES.find((c) => c.id === s.categoryId)?.name ?? "—"}
-            </Row>
-            <Row label="Severity" onEdit={() => s.setStep(2)}>
-              {s.severity[0] + s.severity.slice(1).toLowerCase()}
-            </Row>
-            <Row label="Ward" onEdit={() => s.setStep(2)}>
-              {WARDS.find((w) => w.code === s.wardCode)?.name ?? "—"} ({s.wardCode})
-            </Row>
-            <Row label="Evidence" onEdit={() => s.setStep(3)}>
-              {s.evidence.length
-                ? `${s.evidence.length} file(s)`
-                : "No evidence attached"}
-            </Row>
-
-            <div className="flex items-center justify-between rounded-md border p-3">
-              <div>
-                <p className="text-sm font-medium">Show on public feed</p>
-                <p className="text-muted-foreground text-xs">
-                  Anonymised — your name is never shown.
-                </p>
-              </div>
-              <Switch
-                checked={s.isPublic}
-                onCheckedChange={(v) => s.setField("isPublic", v)}
-              />
+            <div className="shots">
+              {s.evidence.map((ev) => (
+                <div key={ev.url} className="shot">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={ev.url} alt={ev.filename} />
+                  <span className="ok"><Icon d="chk2" sw={2.4} /></span>
+                </div>
+              ))}
+              {s.evidence.length < 5 && (
+                <button
+                  className="shot add"
+                  onClick={() => fileRef.current?.click()}
+                  disabled={uploading}
+                  aria-label="Add a photo"
+                >
+                  <Icon d={uploading ? "cam" : "plus"} sw={2.2} />
+                </button>
+              )}
             </div>
-          </CardContent>
-        </Card>
-      )}
 
-      {/* ---------- footer nav ---------- */}
-      <div className="mt-6 flex items-center justify-between">
-        <Button
-          type="button"
-          variant="ghost"
-          onClick={s.prev}
-          disabled={s.step === 1}
-        >
-          <ChevronLeft />
-          Back
-        </Button>
-        {s.step < 4 ? (
-          <Button type="button" onClick={next} disabled={!canNext}>
-            Next
-            <ChevronRight />
-          </Button>
-        ) : (
-          <Button
-            type="button"
-            onClick={submit}
-            disabled={createCase.isPending}
-          >
-            {createCase.isPending ? <Loader2 className="animate-spin" /> : <Check />}
-            File complaint
-          </Button>
-        )}
-      </div>
-
-      {/* polish diff dialog */}
-      <Dialog open={showDiff} onOpenChange={setShowDiff}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Polished version</DialogTitle>
-            <DialogDescription>
-              We kept your facts and tidied the wording.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-1">
-              <p className="text-muted-foreground text-xs font-semibold uppercase">
-                Yours
-              </p>
-              <p className="text-sm">{s.body}</p>
+            <div className="sh" style={{ marginTop: 24 }}>
+              <b>Landmark</b>
+              <span>Optional</span>
             </div>
-            <div className="bg-brand-soft space-y-1 rounded-md p-2">
-              <p className="text-brand text-xs font-semibold uppercase">AI</p>
-              <p className="text-sm font-medium">{draftTitle}</p>
-              <p className="text-sm">{draftBody}</p>
+            <input
+              className="field"
+              value={landmark}
+              onChange={(e) => setLandmark(e.target.value)}
+              placeholder="Opposite the park gate, next to the bus stop…"
+            />
+            <div className="aibox" style={{ background: "var(--surface-2)", borderColor: "var(--line)" }}>
+              <div className="sub2" style={{ marginTop: 0 }}>
+                A landmark helps when the ward alone is not enough. Crews find the
+                site faster.
+              </div>
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowDiff(false)}>
-              Keep mine
-            </Button>
-            <Button
-              onClick={() => {
-                s.setField("title", draftTitle);
-                s.setField("body", draftBody);
-                setShowDiff(false);
-                toast.success("Using the polished version.");
-              }}
-            >
-              Use AI version
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </div>
-  );
-}
 
-function Row({
-  label,
-  onEdit,
-  children,
-}: {
-  label: string;
-  onEdit: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="flex items-start justify-between gap-4 border-b pb-3 last:border-0">
-      <div className="min-w-0">
-        <p className="text-muted-foreground text-xs font-semibold uppercase">
-          {label}
-        </p>
-        <p className="mt-0.5 break-words text-sm">{children}</p>
+          {/* ============ 4 · CONFIRM ============ */}
+          <div className={`stepbody ${s.step === 4 ? "on" : ""}`}>
+            <div className="eyebrow">Step 4 · Confirm</div>
+            <h1 className="dspl">Ready to file</h1>
+            <p className="lede">
+              Once submitted you get an acknowledgement number, a named officer,
+              and a clock that <b>escalates on its own</b> if it runs out.
+            </p>
+
+            <div className="sh" style={{ marginTop: 22 }}>
+              <b>Summary</b>
+              <span>Check before filing</span>
+            </div>
+            <div className="sumrow">
+              <div className="k2">Problem</div>
+              <div className="v4">{aiText || s.body}</div>
+            </div>
+            <div className="sumrow">
+              <div className="k2">Where</div>
+              <div className="v4">
+                <b>{wardName}</b>
+                <br />
+                Ward {s.wardCode}
+                {landmark ? ` · ${landmark}` : ""}
+              </div>
+            </div>
+            <div className="sumrow">
+              <div className="k2">Department</div>
+              <div className="v4">
+                <b>{dept?.name ?? "—"}</b>
+                <br />
+                {category ? `${category.name} · charter limit ${category.slaDays} days` : "—"}
+              </div>
+            </div>
+            <div className="sumrow">
+              <div className="k2">Evidence</div>
+              <div className="v4">
+                {s.evidence.length} photo{s.evidence.length === 1 ? "" : "s"}
+              </div>
+            </div>
+            {aiText && (
+              <div className="sumrow">
+                <div className="k2">In your words</div>
+                <div className="v4" style={{ color: "var(--muted)" }}>{s.body}</div>
+              </div>
+            )}
+
+            <div className="promise">
+              <div className="t5">What happens next</div>
+              <div className="s6">
+                {dept?.name ?? "The department"} has{" "}
+                <b>{category?.slaDays ?? 7} days</b>. You&rsquo;ll see a named
+                officer on the case as soon as it is assigned. If the charter
+                limit lapses, it escalates to the ward lead automatically — you
+                don&rsquo;t have to ask.
+              </div>
+            </div>
+
+            <div className="toggle">
+              <div style={{ flex: 1 }}>
+                <div className="tt">Make this public</div>
+                <div className="ts">
+                  Neighbours can co-sign it. Your complaint is shown anonymised;
+                  your phone number never is.
+                </div>
+              </div>
+              <button
+                className="tg"
+                role="switch"
+                aria-checked={s.isPublic}
+                aria-label="Make this public"
+                onClick={() => s.setField("isPublic", !s.isPublic)}
+              />
+            </div>
+          </div>
+        </div>
       </div>
-      <Button type="button" variant="link" size="sm" onClick={onEdit}>
-        Edit
-      </Button>
+
+      <div className="wizbar">
+        <button
+          className="btn s"
+          style={{ flex: 1, visibility: s.step === 1 ? "hidden" : "visible" }}
+          onClick={prev}
+        >
+          Back
+        </button>
+        <button
+          className="btn p"
+          style={{ flex: 2 }}
+          onClick={next}
+          disabled={(s.step < 4 && !canNext) || createCase.isPending}
+        >
+          {createCase.isPending
+            ? "Filing…"
+            : s.step === 4
+              ? "File this complaint"
+              : "Continue"}
+        </button>
+      </div>
     </div>
   );
 }

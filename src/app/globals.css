@@ -2,6 +2,7 @@
 @import "../styles/themes.css";
 @import "../styles/mockup.css";
 @import "../styles/citizen-home.css";
+@import "../styles/citizen-wizard.css";
 
 @tailwind base;
 @tailwind components;
