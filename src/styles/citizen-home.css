@@ -410,3 +410,68 @@
 }
 .chome .endcard .t2 { font-size: 13.5px; font-weight: 600; }
 .chome .endcard .s3 { font-size: 11.5px; color: var(--muted); margin-top: 6px; line-height: 1.55; }
+
+/* ---------- case detail (samadhan-case-mobile.html) ---------- */
+.chome .seg { animation: ch-popIn .46s cubic-bezier(.22,1,.36,1) both; }
+.chome .gate { animation: ch-popIn .5s cubic-bezier(.22,1,.36,1) both; }
+.chome .limitgate { animation: ch-popIn .6s cubic-bezier(.22,1,.36,1) both; }
+.chome .backbtn {
+  width: 44px; height: 44px; border-radius: var(--r-sm); border: 1px solid var(--line-2);
+  background: var(--surface); display: grid; place-items: center; flex: 0 0 auto; cursor: pointer; padding: 0;
+}
+.chome .backbtn svg { width: 18px; height: 18px; color: var(--ink); }
+.chome .who2 {
+  display: flex; align-items: center; gap: 12px; background: var(--surface-2);
+  border: 1px solid var(--line); border-radius: var(--r); padding: 13px; margin-top: 15px;
+}
+.chome .who2 .nm { font-size: 14px; font-weight: 600; }
+.chome .who2 .rl { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+.chome .who2 .call {
+  margin-left: auto; flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px;
+  background: var(--ok-bg); border: 1px solid var(--ok-line); color: var(--ok); border-radius: var(--r-sm);
+  padding: 11px 14px; font: inherit; font-size: 12.5px; font-weight: 600; min-height: 44px;
+  cursor: pointer; text-decoration: none;
+}
+.chome .who2 .call svg { width: 15px; height: 15px; }
+.chome .jr { position: relative; padding-left: 30px; margin-top: 16px; }
+.chome .jr::before {
+  content: ""; position: absolute; left: 9px; top: 8px; bottom: 22px; width: 2px; background: var(--line-2);
+}
+.chome .jn { position: relative; padding-bottom: 18px; }
+.chome .jn .d {
+  position: absolute; left: -30px; top: 1px; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--surface); border: 2px solid var(--line-2); display: grid; place-items: center;
+}
+.chome .jn .d svg { width: 11px; height: 11px; }
+.chome .jn.done .d { background: var(--ok); border-color: var(--ok); color: var(--surface); }
+.chome .jn.live .d { background: var(--warn); border-color: var(--warn); color: var(--surface); box-shadow: 0 0 0 5px var(--warn-bg); }
+.chome .jn.next .d { border-style: dashed; border-color: var(--danger); color: var(--danger); }
+.chome .jn .w { font-family: var(--font-jetbrains), monospace; font-size: 9.5px; color: var(--faint); letter-spacing: .03em; }
+.chome .jn .w em {
+  font-style: normal; background: var(--track); color: var(--ink); padding: 2px 6px;
+  border-radius: 5px; margin-left: 7px; font-weight: 500;
+}
+.chome .jn .h2 { font-size: 14px; font-weight: 600; margin-top: 4px; letter-spacing: -.01em; }
+.chome .jn .p2 { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+.chome .jn.pend { opacity: .5; }
+.chome .esc {
+  background: var(--danger-bg); border: 1px solid var(--danger-line); border-radius: var(--r);
+  padding: 14px; margin-top: 16px;
+}
+.chome .esc .t3 { font-size: 13.5px; font-weight: 600; color: var(--danger); }
+.chome .esc .s4 { font-size: 11.5px; color: var(--muted); margin-top: 5px; line-height: 1.55; }
+.chome .photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+.chome .photos .ph {
+  aspect-ratio: 1; border-radius: var(--r-sm); background: var(--surface-2); border: 1px solid var(--line);
+  display: grid; place-items: center; color: var(--faint); overflow: hidden;
+}
+.chome .photos .ph svg { width: 20px; height: 20px; }
+.chome .photos .ph img { width: 100%; height: 100%; object-fit: cover; }
+.chome .sticky {
+  position: fixed; left: 0; right: 0; bottom: calc(64px + env(safe-area-inset-bottom)); z-index: 45;
+  max-width: 480px; margin: 0 auto; padding: 11px 20px;
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  border-top: 1px solid var(--line); display: flex; gap: 9px;
+}
+.chome.casepage { padding-bottom: calc(140px + env(safe-area-inset-bottom)); }

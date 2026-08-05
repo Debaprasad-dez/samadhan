@@ -1,6 +1,6 @@
 // Minimal service worker (§12.6). Caches the app shell + static assets; API is
 // never cached. Navigations are network-first with a cache fallback (offline).
-const CACHE = "samadhan-v1";
+const CACHE = "samadhan-v2";
 
 self.addEventListener("install", () => {
   self.skipWaiting();
@@ -38,17 +38,27 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  if (url.pathname.startsWith("/_next/") || url.pathname.startsWith("/icons/")) {
-    event.respondWith(
-      caches.match(req).then(
-        (m) =>
-          m ||
-          fetch(req).then((res) => {
+  // Cache-first only for immutable, content-hashed build output and icons.
+  // Everything else under /_next/ (dev chunks, HMR, /_next/data, the build
+  // manifest) must stay network-first: caching it serves a stale module graph
+  // against a fresh runtime, which breaks lazy chunks.
+  const immutable =
+    url.pathname.startsWith("/_next/static/") ||
+    url.pathname.startsWith("/icons/");
+  if (!immutable) return;
+
+  event.respondWith(
+    caches.match(req).then(
+      (m) =>
+        m ||
+        fetch(req).then((res) => {
+          // Never cache errors — a cached 404 poisons the app until purged.
+          if (res.ok) {
             const copy = res.clone();
             caches.open(CACHE).then((c) => c.put(req, copy));
-            return res;
-          }),
-      ),
-    );
-  }
+          }
+          return res;
+        }),
+    ),
+  );
 });
