@@ -11,11 +11,13 @@
 
 .chome .steps { display: flex; gap: 6px; margin-top: 12px; }
 .chome .steps .sg { flex: 1; height: 4px; border-radius: 2px; background: var(--track); overflow: hidden; }
+/* Fill scales rather than animating width: same 0→100% sweep, composited. */
 .chome .steps .sg i {
-  display: block; height: 100%; width: 0; background: var(--brand);
-  transition: width .5s cubic-bezier(.22, 1, .36, 1);
+  display: block; height: 100%; width: 100%; background: var(--brand);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .5s cubic-bezier(.22, 1, .36, 1);
 }
-.chome .steps .sg.on i, .chome .steps .sg.done i { width: 100%; }
+.chome .steps .sg.on i, .chome .steps .sg.done i { transform: scaleX(1); }
 .chome .steplbl {
   display: flex; justify-content: space-between; margin-top: 8px;
   font-family: var(--font-jetbrains), monospace; font-size: 9px; letter-spacing: .11em;
