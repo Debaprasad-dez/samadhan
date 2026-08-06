@@ -1,12 +1,13 @@
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
-import { nanoid } from "nanoid";
 import { getCurrentUser } from "@/lib/auth";
+import { db } from "@/lib/db";
 import { ok, fail } from "@/lib/api";
 
 export const runtime = "nodejs";
 
-const MAX_BYTES = 5 * 1024 * 1024; // 5 MB (§5.1.3)
+// Photos arrive compressed to ~100 KB by the browser (see lib/compress-image).
+// The ceiling is generous headroom for that, and for short clips. It stays
+// under the 4.5 MB request-body limit serverless hosts impose.
+const MAX_BYTES = 4 * 1024 * 1024;
 const ALLOWED: Record<string, "photo" | "video"> = {
   "image/jpeg": "photo",
   "image/png": "photo",
@@ -31,23 +32,27 @@ export async function POST(req: Request) {
   if (file.size > MAX_BYTES) {
     return fail(
       "VALIDATION",
-      `That file is ${(file.size / 1024 / 1024).toFixed(1)} MB. Limit is 5 MB.`,
+      `That file is ${(file.size / 1024 / 1024).toFixed(1)} MB. Limit is 4 MB.`,
       400,
     );
   }
 
-  const buf = Buffer.from(await file.arrayBuffer());
-  const ext =
-    file.name.split(".").pop()?.toLowerCase() ?? (kind === "video" ? "mp4" : "jpg");
-  const name = `${nanoid(12)}.${ext}`;
-  const dir = path.join(process.cwd(), "public", "uploads");
-  await mkdir(dir, { recursive: true });
-  await writeFile(path.join(dir, name), buf);
+  const bytes = Buffer.from(await file.arrayBuffer());
+  const row = await db.upload.create({
+    data: {
+      ownerId: user.id,
+      mime: file.type,
+      filename: file.name,
+      sizeBytes: bytes.byteLength,
+      bytes,
+    },
+    select: { id: true },
+  });
 
   return ok({
-    url: `/uploads/${name}`,
+    url: `/api/files/${row.id}`,
     filename: file.name,
-    sizeBytes: file.size,
+    sizeBytes: bytes.byteLength,
     kind,
   });
 }

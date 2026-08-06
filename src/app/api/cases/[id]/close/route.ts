@@ -26,6 +26,15 @@ export async function POST(
   if (!parsed.success) return failValidation(parsed.error.flatten());
   const { closureNote, beforeEvidenceId, afterEvidenceUrl } = parsed.data;
 
+  // Only accept paths our own upload route produced (/uploads/ is legacy).
+  if (
+    afterEvidenceUrl &&
+    !afterEvidenceUrl.startsWith("/api/files/") &&
+    !afterEvidenceUrl.startsWith("/uploads/")
+  ) {
+    return fail("VALIDATION", "Unsupported file location.", 400);
+  }
+
   const c = await db.case.findUnique({
     where: { id },
     select: {

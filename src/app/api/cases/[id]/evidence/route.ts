@@ -21,8 +21,8 @@ export async function POST(
   if (!url || !kind || !filename) {
     return fail("VALIDATION", "url, kind and filename are required.", 400);
   }
-  // Only accept paths our own upload route produced.
-  if (!url.startsWith("/uploads/")) {
+  // Only accept paths our own upload route produced (/uploads/ is legacy).
+  if (!url.startsWith("/api/files/") && !url.startsWith("/uploads/")) {
     return fail("VALIDATION", "Unsupported file location.", 400);
   }
 

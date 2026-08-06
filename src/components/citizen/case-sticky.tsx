@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { compressImage } from "@/lib/compress-image";
 
 /** The case-detail action bar: add a photo, or pull an escalation forward. */
 export function CaseSticky({
@@ -20,13 +21,14 @@ export function CaseSticky({
   const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
 
-  async function addPhoto(file: File) {
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error("Files must be under 5 MB.");
-      return;
-    }
+  async function addPhoto(original: File) {
     setBusy(true);
     try {
+      const file = await compressImage(original);
+      if (file.size > 4 * 1024 * 1024) {
+        toast.error("Files must be under 4 MB.");
+        return;
+      }
       const fd = new FormData();
       fd.append("file", file);
       const up = await fetch("/api/upload", { method: "POST", body: fd });

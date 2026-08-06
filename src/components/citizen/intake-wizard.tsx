@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { WARDS, DEPARTMENTS, CATEGORIES } from "@/lib/seed-data";
 import { humanizeCode } from "@/lib/utils";
+import { compressImage } from "@/lib/compress-image";
 import { useIntakeStore } from "@/store/intake";
 import { usePrefsStore } from "@/store/prefs";
 import { useSession } from "@/hooks/use-session";
@@ -177,9 +178,10 @@ export function IntakeWizard() {
     const list = Array.from(files).slice(0, 5 - s.evidence.length);
     setUploading(true);
     try {
-      for (const file of list) {
-        if (file.size > 5 * 1024 * 1024) {
-          toast.error(`${file.name} is larger than 5 MB.`);
+      for (const original of list) {
+        const file = await compressImage(original);
+        if (file.size > 4 * 1024 * 1024) {
+          toast.error(`${original.name} is larger than 4 MB.`);
           continue;
         }
         const fd = new FormData();

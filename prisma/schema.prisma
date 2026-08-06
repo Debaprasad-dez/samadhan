@@ -123,10 +123,25 @@ model CaseEvent {
   @@index([caseId, createdAt])
 }
 
+/// An uploaded file. Bytes live in the database because the app runs on a
+/// serverless host with a read-only filesystem. Photos are compressed to
+/// ~100 KB in the browser before they get here.
+model Upload {
+  id        String   @id @default(cuid())
+  ownerId   String // uploader's user id (audit only, no relation)
+  mime      String
+  filename  String
+  sizeBytes Int
+  bytes     Bytes
+  createdAt DateTime @default(now())
+
+  @@index([ownerId, createdAt])
+}
+
 model Evidence {
   id            String    @id @default(cuid())
   caseId        String
-  url           String // local /uploads/ path
+  url           String // /api/files/<uploadId>, or a legacy /uploads/ path
   kind          String // 'photo' | 'video'
   filename      String
   sizeBytes     Int
