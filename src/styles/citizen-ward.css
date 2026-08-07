@@ -1,0 +1,148 @@
+/* =============================================================================
+   Ward explorer — verbatim port of
+   samadhan-3d-ward-map/samadhan-ward-3d.html. Scoped under `.chome` so it
+   shares the citizen palettes, type scale and choreography.
+
+   The mockup's segmented control is `.seg`; here it is `.segx` because
+   `.chome .seg` already belongs to the case-detail journey road (an SVG
+   group animation). Same rules, different name — the rendered UI is identical.
+   ============================================================================= */
+
+/* ---------- 3D stage ---------- */
+.chome .stage3d {
+  position: relative; height: 70vh; min-height: 380px; overflow: hidden;
+  background: linear-gradient(to bottom, var(--h1), var(--h2) 52%, var(--h3));
+  touch-action: none; -webkit-tap-highlight-color: transparent;
+}
+.chome .stage3d canvas { display: block; width: 100%; height: 100%; cursor: grab; }
+.chome .stage3d canvas:active { cursor: grabbing; }
+.chome .stage3d .fade {
+  position: absolute; left: 0; right: 0; bottom: -1px; height: 64px; pointer-events: none;
+  background: linear-gradient(to bottom, transparent, var(--bg) 94%);
+}
+.chome .hudwrap { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.chome .hud {
+  position: absolute; left: 0; top: 0; will-change: transform; pointer-events: none;
+  background: var(--ink); color: var(--bg); font-family: var(--font-jetbrains), monospace;
+  font-size: 10.5px; letter-spacing: .06em; padding: 7px 12px; border-radius: 9px;
+  white-space: nowrap; opacity: 0;
+}
+.chome .hud::after {
+  content: ""; position: absolute; left: 50%; bottom: -4px; width: 9px; height: 9px;
+  background: var(--ink); transform: translateX(-50%) rotate(45deg);
+}
+.chome .stagetools {
+  position: absolute; right: 12px; top: 12px; display: flex; flex-direction: column; gap: 8px; z-index: 4;
+}
+.chome .tbtn {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--hline) 26%, transparent);
+  background: color-mix(in srgb, var(--surface) 76%, transparent);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  display: grid; place-items: center; color: var(--ink); cursor: pointer; padding: 0;
+}
+.chome .tbtn svg { width: 18px; height: 18px; }
+.chome .dragHint {
+  position: absolute; left: 50%; transform: translateX(-50%); bottom: 24px; pointer-events: none;
+  font-family: var(--font-jetbrains), monospace; font-size: 9.5px; letter-spacing: .12em;
+  text-transform: uppercase; white-space: nowrap; color: var(--ink);
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  padding: 8px 14px; border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--hline) 20%, transparent);
+  transition: opacity .3s;
+}
+.chome .stage3d.touched .dragHint { opacity: 0; }
+
+/* ---------- config ---------- */
+.chome .cfg { margin-top: 18px; }
+.chome .cfg .cl {
+  font-family: var(--font-jetbrains), monospace; font-size: 9px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--faint); margin-bottom: 8px;
+}
+.chome .segx { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.chome .segx::-webkit-scrollbar { display: none; }
+.chome .segx button {
+  flex: 0 0 auto; border: 1px solid var(--line-2); border-radius: 999px; padding: 10px 14px;
+  font: inherit; font-size: 12px; font-weight: 500; background: var(--surface); color: var(--ink);
+  min-height: 44px; cursor: pointer; white-space: nowrap;
+}
+.chome .segx button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.chome .legend3 { display: flex; align-items: center; gap: 10px; margin-top: 14px; }
+.chome .legend3 .sc { display: flex; flex: 1; height: 10px; border-radius: 5px; overflow: hidden; }
+.chome .legend3 .sc i { flex: 1; display: block; }
+.chome .legend3 .e {
+  font-family: var(--font-jetbrains), monospace; font-size: 9px; color: var(--faint); flex: 0 0 auto;
+}
+
+/* ---------- slide-up sheet ---------- */
+.chome .sheet {
+  position: fixed; left: 0; right: 0; z-index: 55; max-width: 480px; margin: 0 auto;
+  bottom: calc(64px + env(safe-area-inset-bottom));
+  background: var(--bg); border: 1px solid var(--line); border-bottom: 0;
+  border-radius: 22px 22px 0 0; box-shadow: 0 -20px 46px -22px rgba(0, 0, 0, .42);
+  height: 58vh; display: flex; flex-direction: column;
+  transform: translateY(104%); transition: transform .46s cubic-bezier(.22, 1, .36, 1);
+  will-change: transform;
+}
+.chome .sheet.open { transform: translateY(0); }
+.chome .sheetbar {
+  flex: 0 0 auto; padding: 10px 14px 4px; display: flex; align-items: center;
+  justify-content: center; position: relative;
+}
+.chome .sheetbar .grab { width: 42px; height: 5px; border-radius: 3px; background: var(--line-2); display: block; }
+.chome .sclose {
+  position: absolute; right: 8px; top: 2px; width: 44px; height: 44px; border: 0; background: none;
+  display: grid; place-items: center; color: var(--muted); cursor: pointer; padding: 0;
+}
+.chome .sclose svg { width: 19px; height: 19px; }
+.chome .sheetbody { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0 20px 22px; }
+.chome .peek {
+  position: fixed; left: 0; right: 0; z-index: 54; max-width: 480px; margin: 0 auto;
+  bottom: calc(74px + env(safe-area-inset-bottom)); display: flex; justify-content: center;
+  pointer-events: none; opacity: 0; transition: opacity .3s;
+}
+.chome .peek.on { opacity: 1; }
+.chome .peek button {
+  pointer-events: auto; border: 1px solid var(--line-2); background: var(--surface);
+  color: var(--ink); border-radius: 999px; padding: 11px 18px; font: inherit; font-size: 12.5px;
+  font-weight: 600; min-height: 44px; cursor: pointer; box-shadow: var(--sh);
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.chome .peek button svg { width: 15px; height: 15px; color: var(--brand); }
+
+/* ---------- detail rows ---------- */
+.chome .wardhd { display: flex; align-items: flex-start; gap: 12px; margin-top: 4px; }
+.chome .wardhd .wn {
+  font-family: var(--f-dis); font-weight: var(--dis-w); letter-spacing: var(--dis-ls);
+  font-size: 27px; line-height: 1.08;
+}
+.chome .wardhd .wz { font-size: 12px; color: var(--muted); margin-top: 5px; }
+.chome .drow {
+  display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line);
+}
+.chome .drow:last-child { border-bottom: 0; }
+.chome .drow .ic2 {
+  width: 36px; height: 36px; border-radius: var(--r-sm); background: var(--surface-2);
+  border: 1px solid var(--line); display: grid; place-items: center; flex: 0 0 auto;
+}
+.chome .drow .ic2 svg { width: 17px; height: 17px; color: var(--brand); }
+.chome .drow .mn2 { flex: 1; min-width: 0; }
+.chome .drow .n2 { font-size: 14px; font-weight: 600; }
+.chome .drow .s7 { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+.chome .drow .r2 { text-align: right; flex: 0 0 auto; width: 70px; }
+.chome .drow .r2 b { font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.chome .drow .r2 span { display: block; font-size: 10.5px; color: var(--muted); margin-top: 2px; }
+.chome .drow .rk {
+  font-family: var(--font-jetbrains), monospace; font-size: 11px; color: var(--faint);
+  width: 18px; flex: 0 0 auto;
+}
+.chome .rankbox {
+  background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--r);
+  padding: 16px; margin-top: 14px;
+}
+.chome .rankbox .rv { font-size: 29px; font-weight: 600; letter-spacing: -.035em; line-height: 1; }
+.chome .rankbox .rv small { font-size: 15px; color: var(--muted); font-weight: 500; letter-spacing: 0; }
+.chome .fadein { animation: ch-revealUp .38s cubic-bezier(.22, 1, .36, 1) both; }
+
+.chome.wardpage { padding-bottom: calc(80px + env(safe-area-inset-bottom)); }

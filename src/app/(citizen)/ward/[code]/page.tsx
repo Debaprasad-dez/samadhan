@@ -1,9 +1,27 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getWardStats } from "@/lib/ward-stats";
+import { getCurrentUser } from "@/lib/auth";
 import { WARDS } from "@/lib/seed-data";
-import { db } from "@/lib/db";
-import { WardGrid } from "@/components/public/ward-grid";
-import { Card, CardContent } from "@/components/ui/card";
+import { getWardExplorer } from "@/lib/ward-explorer";
+import { WardExplorer } from "@/components/citizen/ward-explorer";
+
+const IC = {
+  back: <path d="M14.5 5.5 8 12l6.5 6.5" />,
+  bell: <><path d="M6 10a6 6 0 1 1 12 0c0 4 1.5 5.5 1.5 5.5h-15S6 14 6 10Z" /><path d="M10 19a2 2 0 0 0 4 0" /></>,
+  home: <path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-9.5Z" />,
+  feed: <><rect x="3.5" y="4.5" width="17" height="15" rx="2" /><path d="M7 9h6M7 13h10M7 16h7" /></>,
+  plus: <path d="M12 5v14M5 12h14" />,
+  list: <path d="M9 6.5h11M9 12h11M9 17.5h11M4.5 6.5h.01M4.5 12h.01M4.5 17.5h.01" />,
+  user: <><circle cx="12" cy="8.5" r="3.8" /><path d="M4.8 20.2a7.4 7.4 0 0 1 14.4 0" /></>,
+} as const;
+
+function Icon({ d, sw = 1.7 }: { d: keyof typeof IC; sw?: number }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
+      {IC[d]}
+    </svg>
+  );
+}
 
 export default async function WardPage({
   params,
@@ -13,141 +31,40 @@ export default async function WardPage({
   const { code } = await params;
   if (!WARDS.some((w) => w.code === code)) notFound();
 
-  const wards = await getWardStats();
-  const stat = wards.find((w) => w.code === code);
-  if (!stat) notFound();
-
-  const resolved = await db.case.findMany({
-    where: {
-      wardCode: code,
-      assignedToId: { not: null },
-      status: { in: ["RESOLVED", "CLOSED"] },
-    },
-    select: { assignedToId: true },
-  });
-  const counts = new Map<string, number>();
-  for (const c of resolved) {
-    const id = c.assignedToId as string;
-    counts.set(id, (counts.get(id) ?? 0) + 1);
-  }
-  const topIds = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3);
-  const officers = await db.user.findMany({
-    where: { id: { in: topIds.map((t) => t[0]) } },
-    select: { id: true, name: true },
-  });
-  const topOfficers = topIds.map(([id, count]) => ({
-    name: officers.find((o) => o.id === id)?.name ?? "—",
-    count,
-  }));
+  const user = await getCurrentUser();
+  const wards = await getWardExplorer(user?.wardCode);
+  const total = wards.reduce((a, w) => a + w.open, 0);
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-3xl font-semibold">
-          {stat.name}{" "}
-          <span className="text-muted-foreground font-mono text-lg">
-            ({stat.code})
-          </span>
-        </h1>
-        <p className="text-muted-foreground text-sm">
-          {stat.zone} · ward accountability
-        </p>
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
-        <section className="space-y-3">
-          <p className="text-muted-foreground text-sm">
-            Mumbai wards — deeper teal = higher resolution score. Tap to
-            explore.
-          </p>
-          <WardGrid wards={wards} selected={stat.code} />
-          {/* Legend + denominator (spec §3) — single-hue scale, n always shown. */}
-          <div className="text-muted-foreground flex items-center gap-2 text-xs">
-            <span>Low</span>
-            <span className="flex gap-0.5">
-              {[0, 0.25, 0.5, 0.75, 1].map((v) => (
-                <span
-                  key={v}
-                  className="h-2.5 w-4 rounded-sm"
-                  style={{ background: `hsl(162 ${22 + v * 48}% ${92 - v * 55}%)` }}
-                />
-              ))}
-            </span>
-            <span>High</span>
-            <span className="ml-auto font-mono">
-              n={wards.reduce((a, w) => a + w.total, 0)} complaints
-            </span>
+    <div className="chome wardpage">
+      <div className="shell">
+        <header className="top">
+          <div className="row">
+            <Link href="/feed" className="backbtn" aria-label="Back">
+              <Icon d="back" sw={1.9} />
+            </Link>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div className="greet" style={{ fontSize: "17px" }}>Ward explorer</div>
+              <div className="ward">MCGM · {wards.length} wards · drag to rotate</div>
+            </div>
+            <Link href="/notifications" className="bell" aria-label="Notifications">
+              <Icon d="bell" />
+            </Link>
           </div>
-        </section>
+        </header>
 
-        <aside className="space-y-4">
-          {stat.total === 0 ? (
-            <Card>
-              <CardContent className="p-8 text-center">
-                <p className="font-medium">All quiet here</p>
-                <p className="text-muted-foreground text-sm">
-                  File the first complaint for this ward.
-                </p>
-              </CardContent>
-            </Card>
-          ) : (
-            <>
-              <div className="grid grid-cols-3 gap-3">
-                <Stat label="Complaints" value={String(stat.total)} />
-                <Stat label="Resolved" value={String(stat.resolved)} />
-                <Stat label="On time" value={`${stat.resolvedOnTimePct}%`} />
-              </div>
-
-              <Card>
-                <CardContent className="space-y-2 p-4">
-                  <p className="text-sm font-semibold">Top categories</p>
-                  {stat.topCategories.map((c) => (
-                    <div
-                      key={c.name}
-                      className="text-muted-foreground flex justify-between text-sm"
-                    >
-                      <span>{c.name}</span>
-                      <span>{c.count}</span>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="space-y-2 p-4">
-                  <p className="text-sm font-semibold">Top officers</p>
-                  {topOfficers.length === 0 ? (
-                    <p className="text-muted-foreground text-sm">
-                      No resolutions yet.
-                    </p>
-                  ) : (
-                    topOfficers.map((o) => (
-                      <div
-                        key={o.name}
-                        className="text-muted-foreground flex justify-between text-sm"
-                      >
-                        <span>{o.name}</span>
-                        <span>{o.count} resolved</span>
-                      </div>
-                    ))
-                  )}
-                </CardContent>
-              </Card>
-            </>
-          )}
-        </aside>
+        <WardExplorer wards={wards} initial={code.toLowerCase()} total={total} />
       </div>
-    </div>
-  );
-}
 
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <Card>
-      <CardContent className="p-4">
-        <p className="text-muted-foreground text-xs">{label}</p>
-        <p className="font-display mt-0.5 text-2xl font-semibold">{value}</p>
-      </CardContent>
-    </Card>
+      <nav className="nav">
+        <Link href="/" className="nb"><Icon d="home" /><b>Home</b></Link>
+        <Link href="/feed" className="nb on"><Icon d="feed" /><b>Feed</b></Link>
+        <Link href="/file" className="nb fab" aria-label="File a complaint">
+          <div className="f"><Icon d="plus" sw={2.2} /></div>
+        </Link>
+        <Link href="/cases" className="nb"><Icon d="list" /><b>Cases</b></Link>
+        <Link href="/profile" className="nb"><Icon d="user" /><b>Profile</b></Link>
+      </nav>
+    </div>
   );
 }
