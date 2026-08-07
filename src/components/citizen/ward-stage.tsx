@@ -84,8 +84,10 @@ export function WardStage({
       const colourT = (w: ExplorerWard) =>
         COLOUR_BY === "sla" ? slaBad(w) : span01(w, COLOUR_BY);
 
-      const cssVar = (n: string) =>
-        getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+      // The citizen palettes are scoped to `[data-theme] .chome`, not to the
+      // root element, so the variables have to be read from inside that
+      // subtree — the stage inherits them.
+      const cssVar = (n: string) => getComputedStyle(stage).getPropertyValue(n).trim();
       let PAL: Record<string, THREE.Color> = {};
       const readPalette = () => {
         const c = (n: string) => new T.Color(cssVar(n) || "#888");

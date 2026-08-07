@@ -75,13 +75,18 @@
   font-family: var(--font-jetbrains), monospace; font-size: 9px; color: var(--faint); flex: 0 0 auto;
 }
 
-/* ---------- slide-up sheet ---------- */
+/* ---------- slide-up sheet ----------
+   The sheet passes *behind* the bottom nav (which owns z-index 50), so it can
+   run to the bottom of the screen and stand taller than the mockup's 58vh
+   without the nav being swallowed. The body pads itself past the nav so the
+   last row is never trapped underneath. ---------- */
+.chome { --navh: calc(64px + env(safe-area-inset-bottom)); }
 .chome .sheet {
-  position: fixed; left: 0; right: 0; z-index: 55; max-width: 480px; margin: 0 auto;
-  bottom: calc(64px + env(safe-area-inset-bottom));
+  position: fixed; left: 0; right: 0; z-index: 45; max-width: 480px; margin: 0 auto;
+  bottom: 0;
   background: var(--bg); border: 1px solid var(--line); border-bottom: 0;
   border-radius: 22px 22px 0 0; box-shadow: 0 -20px 46px -22px rgba(0, 0, 0, .42);
-  height: 58vh; display: flex; flex-direction: column;
+  height: calc(74vh + var(--navh)); display: flex; flex-direction: column;
   transform: translateY(104%); transition: transform .46s cubic-bezier(.22, 1, .36, 1);
   will-change: transform;
 }
@@ -96,9 +101,12 @@
   display: grid; place-items: center; color: var(--muted); cursor: pointer; padding: 0;
 }
 .chome .sclose svg { width: 19px; height: 19px; }
-.chome .sheetbody { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0 20px 22px; }
+.chome .sheetbody {
+  flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  padding: 0 20px calc(22px + var(--navh));
+}
 .chome .peek {
-  position: fixed; left: 0; right: 0; z-index: 54; max-width: 480px; margin: 0 auto;
+  position: fixed; left: 0; right: 0; z-index: 44; max-width: 480px; margin: 0 auto;
   bottom: calc(74px + env(safe-area-inset-bottom)); display: flex; justify-content: center;
   pointer-events: none; opacity: 0; transition: opacity .3s;
 }
