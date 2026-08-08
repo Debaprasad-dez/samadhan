@@ -87,56 +87,11 @@ export function CitizenShell({
         </div>
       </header>
 
+      {/* The mobile bottom nav is mounted once in the citizen layout, so it
+          survives navigation instead of remounting per page. */}
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 pb-28 pt-6 md:px-6 md:pb-10">
         {children}
       </main>
-
-      {/* mobile bottom nav (§6.3.1, §7.8) — raised centre File action */}
-      <nav
-        className="bg-surface/95 border-border fixed inset-x-0 bottom-0 z-20 flex h-16 items-end justify-around border-t px-1 pb-1.5 backdrop-blur-md md:hidden"
-        aria-label="Primary mobile"
-      >
-        {NAV.map((n) => {
-          const Icon = n.icon;
-          const active = isActive(n.href);
-
-          if (n.primary) {
-            return (
-              <Link
-                key={n.href}
-                href={n.href}
-                aria-label={t(n.label)}
-                className="text-brand-foreground ring-surface -mt-7 flex h-14 w-14 flex-col items-center justify-center rounded-full ring-4 transition-all duration-150 active:translate-y-0.5"
-                style={{
-                  background:
-                    "radial-gradient(120% 120% at 50% 14%, hsl(var(--brand)) 0%, hsl(var(--brand-hover)) 100%)",
-                  boxShadow:
-                    "0 10px 22px -6px hsl(var(--brand) / 0.55), 0 4px 8px -2px rgba(0,0,0,0.28), inset 0 2px 1px rgba(255,255,255,0.5), inset 0 -3px 5px rgba(0,0,0,0.22)",
-                }}
-              >
-                <Icon className="h-6 w-6 drop-shadow-[0_1px_1px_rgba(0,0,0,0.35)]" />
-              </Link>
-            );
-          }
-
-          return (
-            <Link
-              key={n.href}
-              href={n.href}
-              className={cn(
-                "relative flex min-w-[44px] flex-col items-center gap-0.5 pb-1 pt-2 text-[11px]",
-                active ? "text-brand" : "text-muted-foreground",
-              )}
-            >
-              {active && (
-                <span className="bg-brand absolute top-0.5 h-1 w-1 rounded-full" />
-              )}
-              <Icon className="h-5 w-5" />
-              <span>{t(n.label)}</span>
-            </Link>
-          );
-        })}
-      </nav>
     </div>
   );
 }

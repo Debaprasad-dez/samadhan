@@ -13,11 +13,6 @@ import { LogoutButton } from "@/components/shared/logout-button";
 // Inline icons — the mockup's symbols.
 const IC = {
   bell: <><path d="M6 10a6 6 0 1 1 12 0c0 4 1.5 5.5 1.5 5.5h-15S6 14 6 10Z" /><path d="M10 19a2 2 0 0 0 4 0" /></>,
-  plus: <path d="M12 5v14M5 12h14" />,
-  home: <path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-9.5Z" />,
-  feed: <><rect x="3.5" y="4.5" width="17" height="15" rx="2" /><path d="M7 9h6M7 13h10M7 16h7" /></>,
-  list: <path d="M9 6.5h11M9 12h11M9 17.5h11M4.5 6.5h.01M4.5 12h.01M4.5 17.5h.01" />,
-  user: <><circle cx="12" cy="8.5" r="3.8" /><path d="M4.8 20.2a7.4 7.4 0 0 1 14.4 0" /></>,
   // badge glyphs
   star: <path d="m12 3.5 2.7 5.6 6.1.85-4.4 4.3 1.05 6.1L12 17.5l-5.45 2.85 1.05-6.1-4.4-4.3 6.1-.85L12 3.5Z" />,
   chk2: <path d="M5 12.5 10 17.5 19 6.5" />,
@@ -230,15 +225,6 @@ export default async function ProfilePage() {
         </div>
       </div>
 
-      <nav className="nav">
-        <Link href="/" className="nb"><Icon d="home" /><b>Home</b></Link>
-        <Link href="/feed" className="nb"><Icon d="feed" /><b>Feed</b></Link>
-        <Link href="/file" className="nb fab" aria-label="File a complaint">
-          <div className="f"><Icon d="plus" sw={2.2} /></div>
-        </Link>
-        <Link href="/cases" className="nb"><Icon d="list" /><b>Cases</b></Link>
-        <Link href="/profile" className="nb on"><Icon d="user" /><b>Profile</b></Link>
-      </nav>
     </div>
   );
 }

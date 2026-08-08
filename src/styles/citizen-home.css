@@ -244,6 +244,21 @@
 }
 .chome .nb.fab .f svg { width: 23px; height: 23px; }
 
+/* The nav is mounted once in the citizen layout, outside any page. This
+   carrier inherits the theme palette from `[data-theme] .chome` without
+   bringing the page-sized background and min-height along with it. */
+.chome.navonly {
+  min-height: 0; padding-bottom: 0; background: none; overflow: visible;
+}
+/* Slides away as you read down a page, returns as soon as you scroll back.
+   Transform only, so it never reflows the page under it. */
+.chome .nav { transition: transform .3s cubic-bezier(.22, 1, .36, 1); will-change: transform; }
+.chome .nav.down { transform: translateY(115%); }
+@media (prefers-reduced-motion: reduce) {
+  .chome .nav { transition: none; }
+  .chome .nav.down { transform: none; }
+}
+
 /* ============================================================
    CINEMATIC CHOREOGRAPHY — a staged build, then a settle into
    ambient. Nothing loops until the sequence lands.
