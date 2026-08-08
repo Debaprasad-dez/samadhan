@@ -74,7 +74,12 @@
   font-feature-settings: "tnum" 1;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
-  padding-bottom: calc(74px + env(safe-area-inset-bottom));
+  /* The floating nav's footprint, declared once. Anything that has to sit
+     clear of the bar measures from --nav-space rather than guessing. */
+  --nav-inset: 12px;
+  --nav-h: 66px; /* 8px pad + 48px target + 8px pad + 1px border each side */
+  --nav-space: calc(var(--nav-h) + var(--nav-inset) + env(safe-area-inset-bottom));
+  padding-bottom: calc(var(--nav-space) + 14px);
   min-height: 100dvh;
 }
 .chome .shell { max-width: 480px; margin: 0 auto; position: relative; }
@@ -222,12 +227,22 @@
 }
 
 /* ---------- bottom nav ---------- */
+/* A dock, detached from the edge. Content passes underneath it, so the blur is
+   doing real work here rather than dressing the surface. The corner radius is
+   the theme's own --r-lg, which keeps Steel tight and Nilgiri soft. */
 .chome .nav {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; max-width: 480px; margin: 0 auto;
-  background: color-mix(in srgb, var(--surface) 92%, transparent);
-  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
-  border-top: 1px solid var(--line); display: grid; grid-template-columns: repeat(5, 1fr);
-  padding: 8px 0 calc(8px + env(safe-area-inset-bottom)); align-items: end;
+  position: fixed; z-index: 50;
+  left: var(--nav-inset); right: var(--nav-inset);
+  bottom: calc(var(--nav-inset) + env(safe-area-inset-bottom));
+  max-width: calc(480px - 2 * var(--nav-inset)); margin: 0 auto;
+  display: grid; grid-template-columns: repeat(5, 1fr); align-items: end;
+  padding: 8px 0;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: var(--sh), 0 20px 44px -22px rgba(0, 0, 0, .42);
 }
 .chome .nb {
   text-align: center; color: var(--faint); -webkit-tap-highlight-color: transparent;
@@ -251,12 +266,22 @@
   min-height: 0; padding-bottom: 0; background: none; overflow: visible;
 }
 /* Slides away as you read down a page, returns as soon as you scroll back.
-   Transform only, so it never reflows the page under it. */
-.chome .nav { transition: transform .3s cubic-bezier(.22, 1, .36, 1); will-change: transform; }
-.chome .nav.down { transform: translateY(115%); }
+   The travel clears the bar, its inset, the safe area and the raised centre
+   action, so nothing clips the screen edge on the way out. Opacity trails the
+   slide slightly, which reads as receding rather than dropping. */
+.chome .nav {
+  transition: transform .34s cubic-bezier(.22, 1, .36, 1), opacity .24s ease-out;
+  will-change: transform, opacity;
+}
+.chome .nav.down {
+  transform: translateY(
+    calc(100% + var(--nav-inset) + env(safe-area-inset-bottom) + 28px)
+  );
+  opacity: 0;
+}
 @media (prefers-reduced-motion: reduce) {
   .chome .nav { transition: none; }
-  .chome .nav.down { transform: none; }
+  .chome .nav.down { transform: none; opacity: 1; }
 }
 
 /* ============================================================
@@ -483,10 +508,10 @@
 .chome .photos .ph svg { width: 20px; height: 20px; }
 .chome .photos .ph img { width: 100%; height: 100%; object-fit: cover; }
 .chome .sticky {
-  position: fixed; left: 0; right: 0; bottom: calc(64px + env(safe-area-inset-bottom)); z-index: 45;
+  position: fixed; left: 0; right: 0; bottom: calc(var(--nav-space) + 10px); z-index: 45;
   max-width: 480px; margin: 0 auto; padding: 11px 20px;
   background: color-mix(in srgb, var(--surface) 94%, transparent);
   -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
   border-top: 1px solid var(--line); display: flex; gap: 9px;
 }
-.chome.casepage { padding-bottom: calc(140px + env(safe-area-inset-bottom)); }
+.chome.casepage { padding-bottom: calc(var(--nav-space) + 86px); }
