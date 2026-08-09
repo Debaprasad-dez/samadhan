@@ -7,7 +7,6 @@ import { CATEGORIES, WARDS } from "@/lib/seed-data";
 import { initials } from "@/lib/utils";
 import { ridgeline, streakEmblem, heatCells } from "@/lib/art/ward-island";
 import { HomeHero } from "@/components/citizen/home-hero";
-import { HomeThemeChips } from "@/components/citizen/home-theme-chips";
 import { HomeReveal } from "@/components/citizen/home-reveal";
 import { VoiceMicButton } from "@/components/citizen/voice-capture";
 
@@ -110,7 +109,6 @@ export default async function CitizenHome() {
               {unread > 0 && <b>{unread}</b>}
             </Link>
           </div>
-          <HomeThemeChips />
         </header>
 
         <HomeHero pct={pct} />

@@ -2,6 +2,8 @@ import { requireRole } from "@/lib/auth";
 import { touchStreak } from "@/lib/streak";
 import { CitizenShell } from "@/components/shared/citizen-shell";
 import { BottomNav } from "@/components/citizen/bottom-nav";
+import { SwipeNav } from "@/components/citizen/swipe-nav";
+import { Choreography } from "@/components/citizen/choreography";
 
 export default async function CitizenLayout({
   children,
@@ -15,8 +17,10 @@ export default async function CitizenLayout({
   // it — it stays on screen while the next page loads.
   return (
     <>
+      <Choreography />
       <CitizenShell user={user}>{children}</CitizenShell>
       <BottomNav />
+      <SwipeNav />
     </>
   );
 }

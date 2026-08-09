@@ -35,7 +35,6 @@ const IC = {
   road: <path d="M7.6 3.6 4.6 20.4M16.4 3.6l3 16.8M12 4.2v2.6M12 10.6v2.6M12 16.8v3" />,
   trash: <path d="M4.6 6.6h14.8M9.6 6.6V4.6h4.8v2M6.6 6.6l1 12a1.5 1.5 0 0 0 1.5 1.4h5.8a1.5 1.5 0 0 0 1.5-1.4l1-12" />,
   lamp: <><path d="M12 20.4V9.2M12 9.2a3.4 3.4 0 0 0 3.4-3.4H8.6A3.4 3.4 0 0 0 12 9.2Z" /><path d="M8.2 20.4h7.6" /></>,
-  replay: <><path d="M20 12a8 8 0 1 1-2.6-5.9" /><path d="M20 4v5h-5" /></>,
 } as const;
 
 function Icon({ d, sw = 1.7 }: { d: keyof typeof IC; sw?: number }) {
@@ -335,9 +334,6 @@ export function IntakeWizard() {
         </header>
 
         <div className="hero" ref={heroRef}>
-          <button className="replay" onClick={paintHero} aria-label="Replay animation">
-            <Icon d="replay" sw={1.9} />
-          </button>
           <div className="fade" />
         </div>
 

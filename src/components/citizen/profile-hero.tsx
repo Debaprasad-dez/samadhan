@@ -6,7 +6,7 @@ import { plinth } from "@/lib/art/plinth";
 /**
  * The citizen's plinth: their building on a round disc, ringed by a gold tier
  * arc, with one planted marker per confirmed fix and a tall pin per still-open
- * case. Repaints on theme switch; the replay button re-runs the build.
+ * case. Repaints on theme switch.
  */
 export function ProfileHero({
   fixes,
@@ -38,12 +38,6 @@ export function ProfileHero({
 
   return (
     <div className="hero" ref={ref}>
-      <button className="replay" onClick={paint} aria-label="Replay animation">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M20 12a8 8 0 1 1-2.6-5.9" />
-          <path d="M20 4v5h-5" />
-        </svg>
-      </button>
       <div className="fade" />
     </div>
   );

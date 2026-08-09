@@ -507,6 +507,36 @@
   }
 }
 
+/* A sideways swipe between tabs arrives from the side it came from, so the tab
+   bar reads as one strip the thumb is dragging along rather than a set of
+   unrelated screens. Set by SwipeNav for the arriving page only. */
+[data-nav="fwd"] .page-enter {
+  animation: page-enter-fwd 0.28s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+[data-nav="back"] .page-enter {
+  animation: page-enter-back 0.28s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+@keyframes page-enter-fwd {
+  from {
+    opacity: 0;
+    transform: translateX(26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes page-enter-back {
+  from {
+    opacity: 0;
+    transform: translateX(-26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 /* Theme-switch circular reveal (View Transitions API, driven by ThemeToggle).
    Kill the default cross-fade; the new theme snapshot sits on top and is clipped
    by a circle that grows from the toggle button (animated in JS), wiping the new

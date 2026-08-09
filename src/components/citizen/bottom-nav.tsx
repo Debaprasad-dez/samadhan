@@ -27,6 +27,36 @@ const NAV = [
   { href: "/profile", label: "Profile", icon: "user" },
 ] as const;
 
+/**
+ * Tabs replace rather than push, so the back gesture unwinds to where the
+ * session began instead of retracing every sideways step — the same contract
+ * SwipeNav honours.
+ */
+function Tab({
+  href,
+  label,
+  icon,
+  active,
+}: {
+  href: string;
+  label: string;
+  icon: keyof typeof IC;
+  active: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      replace
+      className={`nb${active ? " on" : ""}`}
+      aria-current={active ? "page" : undefined}
+      onClick={() => navigator.vibrate?.(8)}
+    >
+      <Icon d={icon} />
+      <b>{label}</b>
+    </Link>
+  );
+}
+
 /** How far you must move before the bar reacts, so a thumb resting still. */
 const JITTER = 6;
 /** The bar stays put near the top of a page — hiding there reads as a glitch. */
@@ -79,19 +109,14 @@ export function BottomNav() {
     <div className="chome navonly">
       <nav className={`nav${hidden ? " down" : ""}`} aria-label="Primary">
         {NAV.slice(0, 2).map((n) => (
-          <Link key={n.href} href={n.href} className={`nb${isActive(n.href) ? " on" : ""}`}>
-            <Icon d={n.icon} />
-            <b>{n.label}</b>
-          </Link>
+          <Tab key={n.href} {...n} active={isActive(n.href)} />
         ))}
+        {/* Filing is a task, not a tab: it pushes, so back returns you here. */}
         <Link href="/file" className="nb fab" aria-label="File a complaint">
           <div className="f"><Icon d="plus" sw={2.2} /></div>
         </Link>
         {NAV.slice(2).map((n) => (
-          <Link key={n.href} href={n.href} className={`nb${isActive(n.href) ? " on" : ""}`}>
-            <Icon d={n.icon} />
-            <b>{n.label}</b>
-          </Link>
+          <Tab key={n.href} {...n} active={isActive(n.href)} />
         ))}
       </nav>
     </div>

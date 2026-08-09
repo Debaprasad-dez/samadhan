@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useT } from "@/components/providers/locale-provider";
+import { clearChoreography } from "@/components/citizen/choreography";
 import { cn } from "@/lib/utils";
 
 export function LogoutButton({
@@ -24,6 +25,8 @@ export function LogoutButton({
     setLoading(true);
     try {
       await fetch("/api/auth/logout", { method: "POST" });
+      // The next person at this device gets the full opening sequence.
+      clearChoreography();
       router.push("/login");
       router.refresh();
     } finally {

@@ -5,7 +5,7 @@ import { island } from "@/lib/art/ward-island";
 
 /**
  * The isometric ward island. Repainted whenever the theme changes so each theme
- * gets its own cinematic entrance, and on demand via the replay button.
+ * gets its own cinematic entrance.
  * `pct` of the windows are lit — the share of complaints resolved this month.
  */
 export function HomeHero({ pct }: { pct: number }) {
@@ -31,12 +31,6 @@ export function HomeHero({ pct }: { pct: number }) {
 
   return (
     <div className="hero" ref={ref}>
-      <button className="replay" onClick={paint} aria-label="Replay animation">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M20 12a8 8 0 1 1-2.6-5.9" />
-          <path d="M20 4v5h-5" />
-        </svg>
-      </button>
       <div className="fade" />
     </div>
   );
