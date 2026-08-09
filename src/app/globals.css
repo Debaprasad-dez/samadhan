@@ -495,6 +495,15 @@
    (e.g. the officer inbox tabs). Reduced-motion is handled by the global rule. */
 .page-enter {
   animation: page-enter 0.24s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  /* The sideways variants below translate the page in from off-screen. Without
+     clipping, that overhang widens the document mid-transition — a strip of
+     empty space on one edge, and a fixed nav that measures against the wider
+     box and visibly changes width.
+     `clip` rather than `hidden`: `hidden` would force overflow-y to compute to
+     `auto`, making this a scroll container and swallowing the page's own
+     vertical scrolling. `clip` pairs legally with `visible` and creates no
+     scroll container. */
+  overflow-x: clip;
 }
 @keyframes page-enter {
   from {
@@ -510,10 +519,16 @@
 /* A sideways swipe between tabs arrives from the side it came from, so the tab
    bar reads as one strip the thumb is dragging along rather than a set of
    unrelated screens. Set by SwipeNav for the arriving page only. */
-[data-nav="fwd"] .page-enter {
+/* The frame holds still and clips; the page slides inside it. An element
+   cannot clip its own transform, so the travel belongs to the child. */
+[data-nav="fwd"] .page-enter,
+[data-nav="back"] .page-enter {
+  animation: none;
+}
+[data-nav="fwd"] .page-enter > * {
   animation: page-enter-fwd 0.28s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
-[data-nav="back"] .page-enter {
+[data-nav="back"] .page-enter > * {
   animation: page-enter-back 0.28s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 @keyframes page-enter-fwd {
