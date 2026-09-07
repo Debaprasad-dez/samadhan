@@ -17,10 +17,9 @@ export function themeNoFlashScript(
   const modeExpr = forcedMode
     ? `'${forcedMode}'`
     : `(function(){var m=localStorage.getItem('${mk}')||'light';return m==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):m;})()`;
-  // Stored theme selection, or the role default. Logged-out pages force the
-  // default so login/role-switch always render in bright Bharat Dawn light.
-  const themeExpr = forcedMode
-    ? `'${defaultTheme}'`
-    : `(localStorage.getItem('${tk}')||'${defaultTheme}')`;
+  // Stored theme selection, or the role default. This applies on logged-out
+  // pages too: sign-in carries its own theme row, so a returning visitor sees
+  // the palette they chose. Only the light/dark axis is pinned there.
+  const themeExpr = `(localStorage.getItem('${tk}')||'${defaultTheme}')`;
   return `(function(){try{var rm=${modeExpr};var t=${themeExpr};var e=document.documentElement;e.setAttribute('data-theme',t);e.setAttribute('data-mode',rm);}catch(e){}})();`;
 }

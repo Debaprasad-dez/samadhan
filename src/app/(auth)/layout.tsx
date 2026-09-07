@@ -2,11 +2,13 @@
 
 import { useEffect } from "react";
 
-// Login + persona/role-switch always render in the bright Bharat Dawn light
-// theme, regardless of the global light/dark toggle or auth state. Pins the
-// <html> attributes on mount and restores them on unmount — this covers the
-// edge case of a logged-in dark-mode user visiting /role-switch. Logged-out
-// visits are already correct pre-paint via the root layout's forcedMode="light".
+// Sign-in and persona switch carry their own theme row, so the theme is the
+// visitor's to choose here — the same four palettes the app uses, applied
+// before paint by the root layout's no-flash script.
+//
+// The light/dark axis stays pinned: mode is a signed-in preference, and these
+// screens have no toggle to explain it. Restored on unmount so a signed-in
+// dark-mode visitor returns to their own mode after /role-switch.
 export default function AuthLayout({
   children,
 }: {
@@ -14,12 +16,9 @@ export default function AuthLayout({
 }) {
   useEffect(() => {
     const el = document.documentElement;
-    const prevTheme = el.getAttribute("data-theme");
     const prevMode = el.getAttribute("data-mode");
-    el.setAttribute("data-theme", "bharat-dawn");
     el.setAttribute("data-mode", "light");
     return () => {
-      if (prevTheme) el.setAttribute("data-theme", prevTheme);
       if (prevMode) el.setAttribute("data-mode", prevMode);
     };
   }, []);
