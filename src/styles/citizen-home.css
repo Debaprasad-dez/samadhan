@@ -320,11 +320,11 @@
    the infinite ambient loops — twinkle, sway, lamp glow, the pin's ping —
    resume at a different phase and keep running. One rule, no parallel
    stylesheet, and the scene still breathes on a revisit. */
-.chome.settled *,
-.chome.settled *::before,
-.chome.settled *::after { animation-delay: -60s !important; }
-.chome.settled .reveal { opacity: 1; }
-.chome.settled .heat i { opacity: var(--o, 1); transform: none; }
+[data-settled] .chome *,
+[data-settled] .chome *::before,
+[data-settled] .chome *::after { animation-delay: -60s !important; }
+[data-settled] .chome .reveal { opacity: 1; }
+[data-settled] .chome .heat i { opacity: var(--o, 1); transform: none; }
 
 @media (prefers-reduced-motion: reduce) {
   .chome *, .chome *::before, .chome *::after {

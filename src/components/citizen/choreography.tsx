@@ -33,22 +33,27 @@ export function clearChoreography() {
  * and then stops asking for attention. Marking the page settled leaves the
  * ambient loops running; only the build-in is skipped.
  *
- * The class lands in a layout effect, which React runs before any hero's
- * paint effect, so a revisited page never flashes its entrance first.
+ * The mark goes on <html>, not on the page's own root. This component lives in
+ * the layout, which can commit before the page subtree finishes hydrating, so
+ * writing a class onto a node React is about to hydrate would be reported as a
+ * mismatch it cannot patch. <html> is outside that reconciliation — the same
+ * element, and the same reason, the no-flash theme script writes to.
+ *
+ * It lands in a layout effect, which React runs before any hero's paint
+ * effect, so a revisited page never flashes its entrance first.
  */
 export function Choreography() {
   const pathname = usePathname();
 
   useLayoutEffect(() => {
-    const root = document.querySelector(".chome");
-    if (!root) return;
+    const root = document.documentElement;
     const page = screen(pathname);
     const seen = played();
     if (seen.has(page)) {
-      root.classList.add("settled");
+      root.dataset.settled = "";
       return;
     }
-    root.classList.remove("settled");
+    delete root.dataset.settled;
     seen.add(page);
     try {
       sessionStorage.setItem(KEY, JSON.stringify([...seen]));

@@ -73,7 +73,16 @@ export default async function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-dvh bg-background text-foreground font-sans antialiased">
+      {/* suppressHydrationWarning: extensions (Grammarly, ColorZilla, password
+          managers, dark-mode add-ons) stamp their own attributes onto <body>
+          before React hydrates, which React reports as an attribute mismatch it
+          cannot patch. The guard covers this element's own attributes only, so
+          a genuine mismatch anywhere inside still surfaces. Same reason <html>
+          above carries it. */}
+      <body
+        suppressHydrationWarning
+        className="min-h-dvh bg-background text-foreground font-sans antialiased"
+      >
         <ThemeProvider
           role={role}
           defaultTheme={defaultTheme}
