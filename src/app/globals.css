@@ -6,6 +6,7 @@
 @import "../styles/citizen-ward.css";
 @import "../styles/citizen-notifications.css";
 @import "../styles/citizen-login.css";
+@import "../styles/citizen-skeleton.css";
 
 @tailwind base;
 @tailwind components;

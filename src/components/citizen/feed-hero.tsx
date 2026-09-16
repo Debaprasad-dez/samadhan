@@ -28,7 +28,7 @@ export function FeedHero({ items }: { items: NearItem[] }) {
   }, [paint]);
 
   return (
-    <div className="hero" ref={ref}>
+    <div className="hero ph" ref={ref} style={{ aspectRatio: "430 / 306" }}>
       <div className="fade" />
     </div>
   );

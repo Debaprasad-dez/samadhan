@@ -44,9 +44,9 @@ export default async function RootLayout({
   // staff start on Civic Steel, everyone else on Bharat Dawn.
   const defaultTheme =
     role === "officer" || role === "admin" ? "civic-steel" : "bharat-dawn";
-  // Light/dark is a signed-in feature: logged-out pages (login, etc.) always
-  // render in light mode regardless of stored preference or OS setting.
-  const forcedMode: "light" | "dark" | undefined = user ? undefined : "light";
+  // Citizens and signed-out visitors see the `.chome` palettes, which are fixed
+  // per theme, so their light/dark follows the theme. Staff choose it freely.
+  const modeFollowsTheme = !user || role === "citizen";
 
   // RTL for Urdu (spec §5): set dir on <html> so text and logical properties
   // mirror. Everything else defaults to ltr.
@@ -69,7 +69,7 @@ export default async function RootLayout({
         <script
           suppressHydrationWarning
           dangerouslySetInnerHTML={{
-            __html: themeNoFlashScript(role, defaultTheme, forcedMode),
+            __html: themeNoFlashScript(role, defaultTheme, modeFollowsTheme),
           }}
         />
       </head>
@@ -86,7 +86,7 @@ export default async function RootLayout({
         <ThemeProvider
           role={role}
           defaultTheme={defaultTheme}
-          forcedMode={forcedMode}
+          modeFollowsTheme={modeFollowsTheme}
         >
           <QueryProvider>
             <SessionProvider user={user}>

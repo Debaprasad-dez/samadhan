@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { getIronSession, type IronSession, type SessionOptions } from "iron-session";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -36,8 +37,15 @@ export async function getSession(): Promise<IronSession<SessionData>> {
   return getIronSession<SessionData>(cookieStore, sessionOptions);
 }
 
-/** Resolve the current user from session + DB, or null. Safe to call anywhere server-side. */
-export async function getCurrentUser(): Promise<SessionUser | null> {
+/**
+ * Resolve the current user from session + DB, or null. Safe to call anywhere
+ * server-side.
+ *
+ * Memoised per request: the layout, the page and each of the page's streamed
+ * data sections all ask for the user, and without this every one of them was a
+ * separate database round trip.
+ */
+export const getCurrentUser = cache(async (): Promise<SessionUser | null> => {
   const session = await getSession();
   if (!session.userId) return null;
 
@@ -53,7 +61,7 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
     reputation: user.reputation,
     language: user.language,
   };
-}
+});
 
 /** For layouts/pages: redirect unauthenticated → /login, wrong-role → /role-switch. */
 export async function requireRole(roles: Role[]): Promise<SessionUser> {

@@ -310,7 +310,9 @@
 .chome .pin { animation: ch-dropIn .74s cubic-bezier(.22,1,.36,1) both; }
 .chome .pinring { transform-box: fill-box; transform-origin: 50% 50%; opacity: 0; animation: ch-ping 3.4s ease-out infinite; }
 
-.chome .reveal { opacity: 0; }
+/* Visible by default. HomeReveal marks only below-the-fold blocks `.pending`,
+   so the static shell is on screen from the first paint. */
+.chome .reveal.pending { opacity: 0; }
 .chome .reveal.in { animation: ch-revealUp .62s cubic-bezier(.22,1,.36,1) both; }
 .chome .heat i.in { animation: ch-cellIn .42s cubic-bezier(.22,1,.36,1) both; }
 
@@ -331,7 +333,7 @@
     animation-duration: .01ms !important; animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
   }
-  .chome .reveal { opacity: 1; }
+  .chome .reveal, .chome .reveal.pending { opacity: 1; }
   .chome .win, .chome .star, .chome .lampglow, .chome .heat i { opacity: var(--o, 1) !important; }
   .chome .trk i { transition: none; }
 }

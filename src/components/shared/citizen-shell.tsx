@@ -6,7 +6,6 @@ import { Home, Newspaper, PlusCircle, FileText, User } from "lucide-react";
 import { cn, initials } from "@/lib/utils";
 import { useT } from "@/components/providers/locale-provider";
 import { Brand } from "@/components/shared/brand";
-import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { AmbientLamp } from "@/components/shared/ambient-lamp";
 import { NotificationBell } from "@/components/shared/notification-bell";
 import type { SessionUser } from "@/types";
@@ -73,7 +72,6 @@ export function CitizenShell({
         <div className="flex items-center gap-1">
           <AmbientLamp className="hidden sm:inline-flex" />
           <NotificationBell />
-          <ThemeToggle />
           <span className="text-muted-foreground hidden text-sm sm:inline">
             {user.name}
           </span>

@@ -43,11 +43,11 @@ export function SwipeNav() {
     const index = TABS.indexOf(pathname as (typeof TABS)[number]);
     if (index === -1) return; // detail screens and the wizard sit outside the flow
 
-    // Warm both neighbours so the swipe lands on a rendered page, not a spinner.
-    for (const step of [-1, 1]) {
-      const near = TABS[index + step];
-      if (near) router.prefetch(near);
-    }
+    // No router.prefetch here. The bottom nav's links are always on screen, so
+    // Next already prefetches every tab's loading shell — cheap, and instant to
+    // paint. router.prefetch() defaults to a FULL prefetch (the whole page and
+    // its queries); calling it replaced that instant entry with a slow request
+    // still in flight, and a tap had to wait on it.
 
     let x = 0,
       y = 0,

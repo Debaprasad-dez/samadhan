@@ -1,0 +1,44 @@
+/* =============================================================================
+   Skeletons for the citizen app.
+
+   Every colour here is a `.chome` token, never a Tailwind one. The two systems
+   disagree about light and dark (Civic Steel's `.chome` palette is always
+   light; its Tailwind palette follows data-mode), so a placeholder painted from
+   Tailwind tokens can come out black on a light page. Drawing from the same
+   tokens as the page makes that impossible.
+
+   Placeholders reuse the real containers (.case, .crow, .post, .stats…), so a
+   skeleton row is exactly the height of the row that replaces it.
+   ============================================================================= */
+
+/* A bar standing in for text. Height tracks the surrounding font size, so the
+   same class fits a 26px stat and an 11px caption. */
+.chome .skel {
+  display: block; border-radius: 6px; background: var(--track);
+  height: .78em; margin: .2em 0;
+  animation: ch-skPulse 1.3s ease-in-out infinite;
+}
+/* Inline, for a single value sitting inside real copy: "{pct}% of complaints". */
+.chome .skel.inl {
+  display: inline-block; vertical-align: -.06em; height: .8em; width: 2.2ch; margin: 0 .1em;
+}
+@keyframes ch-skPulse { 0%, 100% { opacity: .55 } 50% { opacity: 1 } }
+/* Match each type role's line box, so a value landing never nudges the row. */
+.chome .sv .skel { height: 1em; margin: 0; }
+.chome .dspl .skel { height: .9em; margin: .08em 0; }
+.chome .greet .skel { height: .9em; margin: .12em 0; }
+
+/* The hero's sky, at the scene's exact aspect ratio. The real SVG opens by
+   fading this same gradient in, so the scene reads as building on top of it. */
+.chome .hero.ph {
+  background: linear-gradient(to bottom, var(--h1), var(--h2) 52%, var(--h3));
+}
+
+/* Data arriving into a skeleton's place cross-fades rather than popping. */
+.chome .slot { animation: ch-slotIn .16s ease-out both; }
+@keyframes ch-slotIn { from { opacity: 0 } to { opacity: 1 } }
+
+@media (prefers-reduced-motion: reduce) {
+  .chome .skel { animation: none; opacity: .8; }
+  .chome .slot { animation: none; }
+}

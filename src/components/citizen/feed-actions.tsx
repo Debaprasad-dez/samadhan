@@ -11,10 +11,34 @@ const SORTS = [
   { k: "done", label: "Resolved" },
 ];
 
+/** The sort in effect, read from the URL so the loading shell and the page agree. */
+function useSort(): string {
+  return useSearchParams().get("sort") ?? "near";
+}
+
+const HEADING: Record<string, [string, string]> = {
+  near: ["Near you", "Sorted by distance"],
+  hot: ["Most co-signed", "Sorted by support"],
+  new: ["Newest", "Newest first"],
+  done: ["Resolved", "Recently resolved"],
+};
+
+/** The feed section's title and caption for the current sort. */
+export function FeedSortHeading() {
+  const [title, caption] = HEADING[useSort()] ?? HEADING.near;
+  return (
+    <div className="sh">
+      <b>{title}</b>
+      <span>{caption}</span>
+    </div>
+  );
+}
+
 /** Feed sort chips — reflected in the URL so the server re-queries. */
-export function FeedSort({ active }: { active: string }) {
+export function FeedSort() {
   const router = useRouter();
   const params = useSearchParams();
+  const active = useSort();
 
   function pick(k: string) {
     const p = new URLSearchParams(params.toString());

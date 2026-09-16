@@ -30,7 +30,9 @@ export function HomeHero({ pct }: { pct: number }) {
   }, [paint]);
 
   return (
-    <div className="hero" ref={ref}>
+    // Sized before the SVG paints, and on the same sky as its placeholder, so
+    // the scene arriving never moves the page or flashes a flat block.
+    <div className="hero ph" ref={ref} style={{ aspectRatio: "430 / 310" }}>
       <div className="fade" />
     </div>
   );

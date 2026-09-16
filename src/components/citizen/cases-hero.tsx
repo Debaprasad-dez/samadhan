@@ -28,7 +28,7 @@ export function CasesHero({ cases }: { cases: YardCase[] }) {
   }, [paint]);
 
   return (
-    <div className="hero" ref={ref}>
+    <div className="hero ph" ref={ref} style={{ aspectRatio: "430 / 306" }}>
       <div className="fade" />
     </div>
   );

@@ -28,7 +28,7 @@ export function NotifHero({ needs, updates }: { needs: number; updates: number }
   }, [paint]);
 
   return (
-    <div className="hero" ref={ref}>
+    <div className="hero ph" ref={ref} style={{ aspectRatio: "430 / 300" }}>
       <div className="fade" />
     </div>
   );

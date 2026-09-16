@@ -1,0 +1,287 @@
+import Link from "next/link";
+import { db } from "@/lib/db";
+import { CATEGORIES } from "@/lib/seed-data";
+import { initials } from "@/lib/utils";
+import type { SessionUser } from "@/types";
+import { FeedHero } from "@/components/citizen/feed-hero";
+import { FeedSort, FeedSortHeading, PostActions } from "@/components/citizen/feed-actions";
+import { HomeReveal } from "@/components/citizen/home-reveal";
+import { Slot } from "@/components/citizen/slot";
+import { CitizenTop, HeroPlaceholder, Sk, SkIn } from "@/components/citizen/skeletons";
+import { WardHeatmapLink, WardName } from "@/components/citizen/session-bits";
+import type { NearItem } from "@/lib/art/radius-map";
+
+const IC = {
+  clk: <><circle cx="12" cy="12" r="8.5" /><path d="M12 7.5V12l3 2" /></>,
+  up: <path d="M12 19V5M6 11l6-6 6 6" />,
+  chk2: <path d="M5 12.5 10 17.5 19 6.5" />,
+} as const;
+
+function Icon({ d, sw = 1.7 }: { d: keyof typeof IC; sw?: number }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
+      {IC[d]}
+    </svg>
+  );
+}
+
+const WORDS = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"];
+
+/** Stable hash → the pseudo-geo used for the radius map and distance labels.
+ *  The data model has no coordinates, so a case's position on the disc is
+ *  derived deterministically from its id: same case, same spot, every render. */
+function hash(str: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h >>> 0) / 4294967296;
+}
+
+const AV_TONES = ["var(--brand)", "var(--ok)", "var(--warn)", "var(--danger)"];
+const OPEN_STATES = ["OPEN", "ACKNOWLEDGED", "IN_PROGRESS", "AWAITING_INFO", "ESCALATED"];
+
+/** Everything on the feed that has to come from the database, in one round. */
+export async function loadFeed(user: SessionUser, sort: string) {
+  const wardCode = user.wardCode ?? "";
+  const wantResolved = sort === "done";
+
+  const [rows, unread, closedCount, openCount, myCosigns] = await Promise.all([
+    db.case.findMany({
+      where: {
+        wardCode,
+        isPublic: true,
+        status: wantResolved ? { in: ["RESOLVED", "CLOSED"] } : { in: OPEN_STATES },
+      },
+      orderBy: sort === "new" ? { createdAt: "desc" } : { slaDueAt: "asc" },
+      take: 24,
+      select: {
+        id: true, number: true, title: true, body: true, status: true, categoryId: true,
+        createdAt: true, slaDueAt: true, filedById: true,
+        _count: { select: { upvotes: true, cosigns: true } },
+        cosigns: { take: 3, select: { user: { select: { name: true } } } },
+        upvotes: { where: { userId: user.id }, select: { id: true } },
+      },
+    }),
+    db.notification.count({ where: { userId: user.id, readAt: null } }),
+    db.case.count({ where: { wardCode, status: { in: ["RESOLVED", "CLOSED"] } } }),
+    db.case.count({ where: { wardCode, status: { in: OPEN_STATES } } }),
+    db.cosign.findMany({ where: { userId: user.id }, select: { caseId: true } }),
+  ]);
+
+  const now = Date.now();
+  // Give every case a stable position on the disc + a metre distance.
+  const withGeo = rows.map((c) => {
+    const r = 0.15 + hash(c.id) * 0.8;
+    const t = hash(c.id + "b") * Math.PI * 2 - Math.PI;
+    const over = c.slaDueAt.getTime() < now;
+    const limitDays = Math.max(1, Math.round((c.slaDueAt.getTime() - c.createdAt.getTime()) / 86_400_000));
+    const dayOf = Math.min(limitDays, Math.max(1, Math.ceil((now - c.createdAt.getTime()) / 86_400_000)));
+    return {
+      c,
+      r,
+      t,
+      metres: Math.round((r * 500) / 10) * 10,
+      over,
+      limitDays,
+      dayOf,
+      overDays: Math.max(0, Math.round((now - c.slaDueAt.getTime()) / 86_400_000)),
+    };
+  });
+
+  // "Near you" is the default; most-co-signed re-sorts by support.
+  const sorted =
+    sort === "hot"
+      ? [...withGeo].sort((a, b) => b.c._count.cosigns - a.c._count.cosigns)
+      : sort === "near"
+        ? [...withGeo].sort((a, b) => a.metres - b.metres)
+        : withGeo;
+
+  const yard: NearItem[] = withGeo.slice(0, 6).map((x) => ({
+    id: x.c.number,
+    r: x.r,
+    t: x.t,
+    co: x.c._count.cosigns,
+    st: x.over ? "over" : x.dayOf / x.limitDays > 0.6 ? "warn" : "ok",
+  }));
+
+  return {
+    userId: user.id,
+    now,
+    unread,
+    closedCount,
+    openCount,
+    posts: sorted.slice(0, 8),
+    needSupport: withGeo.filter((x) => x.c._count.cosigns < 5).length,
+    cosignedIds: new Set(myCosigns.map((c) => c.caseId)),
+    yard,
+    headline: openCount === 0 ? "All quiet nearby" : `${WORDS[openCount] ?? openCount} nearby`,
+  };
+}
+
+export type FeedData = Awaited<ReturnType<typeof loadFeed>>;
+
+function PostsSkeleton({ n = 3 }: { n?: number }) {
+  return (
+    <div aria-busy aria-label="Loading">
+      {Array.from({ length: n }).map((_, i) => (
+        <div key={i} className="post">
+          <div className="hd">
+            <div style={{ flex: 1 }}>
+              <div className="t"><Sk w="70%" /></div>
+              <div className="m"><Sk w="52%" /></div>
+            </div>
+          </div>
+          <p className="q"><Sk w="100%" /><Sk w="78%" /></p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/** The ward feed. Rendered from loading.tsx with `data={null}` — see Slot. */
+export function FeedView({ data }: { data: Promise<FeedData> | null }) {
+  return (
+    <div className="chome">
+      <HomeReveal />
+      <div className="shell">
+        <CitizenTop
+          title="Ward feed"
+          sub={<><WardName /> · <Slot data={data} fallback={<SkIn />}>{(d) => d.openCount}</Slot> open within 500 m</>}
+          unread={<Slot data={data} fallback={null}>{(d) => d.unread > 0 && <b>{d.unread}</b>}</Slot>}
+        />
+
+        <Slot data={data} fallback={<HeroPlaceholder h={306} />}>
+          {(d) => <FeedHero items={d.yard} />}
+        </Slot>
+
+        <div className="wrap">
+          <div className="reveal" data-d="0">
+            <div className="eyebrow">
+              Within 500 m · <Slot data={data} fallback={<SkIn w="1ch" />}>{(d) => d.posts.length}</Slot> shown
+            </div>
+            <h1 className="dspl"><Slot data={data} fallback={<Sk w="58%" />}>{(d) => d.headline}</Slot></h1>
+            <p className="lede">
+              Each stack on the map is one chip per four neighbours who{" "}
+              <b>co-signed</b> a case. Co-signed cases close faster — so adding
+              your name is usually worth more than filing again.
+            </p>
+          </div>
+
+          <div className="stats reveal" data-d="1">
+            <div>
+              <div className="sk">Open nearby</div>
+              <div className="sv"><Slot data={data} fallback={<Sk w="2ch" />}>{(d) => d.openCount}</Slot></div>
+              <div className="sd">within 500 m</div>
+            </div>
+            <div>
+              <div className="sk">Need support</div>
+              <div className="sv"><Slot data={data} fallback={<Sk w="2ch" />}>{(d) => d.needSupport}</Slot></div>
+              <div className="sd">under 5 co-signs</div>
+            </div>
+            <div>
+              <div className="sk">Closed</div>
+              <div className="sv"><Slot data={data} fallback={<Sk w="2ch" />}>{(d) => d.closedCount}</Slot></div>
+              <div className="sd">all time</div>
+            </div>
+          </div>
+
+          <div className="reveal" data-d="2">
+            <FeedSort />
+          </div>
+
+          <section className="reveal" data-d="0">
+            <FeedSortHeading />
+            <Slot data={data} fallback={<PostsSkeleton n={3} />}>
+              {(d) =>
+                d.posts.length === 0 ? (
+                  <div className="post">
+                    <div className="t">Nothing here yet</div>
+                    <p className="q">No public cases in your ward for this filter.</p>
+                  </div>
+                ) : (
+                  d.posts.map(({ c, metres, over, limitDays, dayOf, overDays }) => {
+                    const cat = CATEGORIES.find((x) => x.id === c.categoryId)?.name ?? "—";
+                    const resolved = c.status === "RESOLVED" || c.status === "CLOSED";
+                    const extra = resolved
+                      ? `closed in ${Math.max(1, Math.round((d.now - c.createdAt.getTime()) / 86_400_000))}d`
+                      : over
+                        ? `${overDays} day${overDays === 1 ? "" : "s"} over limit`
+                        : `day ${dayOf} of ${limitDays}`;
+                    const others = Math.max(0, c._count.cosigns - c.cosigns.length);
+                    return (
+                      <div key={c.id} className="post slot">
+                        <div className="hd">
+                          <div>
+                            <Link href={`/cases/${c.id}`} style={{ color: "inherit", textDecoration: "none" }}>
+                              <div className="t">{c.title}</div>
+                            </Link>
+                            <div className="m">
+                              {cat} · <b>{metres} m</b> away · {extra}
+                            </div>
+                          </div>
+                          <span className={`pill ${resolved ? "ok" : over ? "dg" : "wn"}`}>
+                            <Icon d={resolved ? "chk2" : over ? "up" : "clk"} sw={resolved ? 2.4 : over ? 2.3 : 1.9} />
+                            {resolved ? "Resolved" : over ? "Escalated" : "In progress"}
+                          </span>
+                        </div>
+
+                        <p className="q">&ldquo;{c.body.slice(0, 140).trim()}&rdquo;</p>
+
+                        {c._count.cosigns > 0 && (
+                          <div className="faces">
+                            <div className="stackav">
+                              {c.cosigns.map((cs, i) => (
+                                <i key={i} style={{ background: AV_TONES[i % AV_TONES.length] }}>
+                                  {initials(cs.user.name)}
+                                </i>
+                              ))}
+                              {others > 0 && <i style={{ background: "var(--muted)" }}>+{others}</i>}
+                            </div>
+                            <span className="cnt">
+                              <b>{c._count.cosigns}</b> neighbour
+                              {c._count.cosigns === 1 ? "" : "s"} co-signed
+                              {c._count.cosigns < 5 && <> · <b>needs support</b></>}
+                            </span>
+                          </div>
+                        )}
+
+                        <PostActions
+                          caseId={c.id}
+                          upvotes={c._count.upvotes}
+                          viewerUpvoted={c.upvotes.length > 0}
+                          isOwn={c.filedById === d.userId}
+                          viewerCosigned={d.cosignedIds.has(c.id)}
+                        />
+                      </div>
+                    );
+                  })
+                )
+              }
+            </Slot>
+          </section>
+
+          <section className="reveal" data-d="0">
+            <div className="endcard">
+              <span style={{ color: "var(--muted)", display: "inline-block", width: 22, height: 22 }}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" style={{ width: 22, height: 22 }}>
+                  <path d="M12 21s6.5-5.6 6.5-10.5a6.5 6.5 0 1 0-13 0C5.5 15.4 12 21 12 21Z" />
+                  <circle cx="12" cy="10.5" r="2.4" />
+                </svg>
+              </span>
+              <div className="t2" style={{ marginTop: 9 }}>That&rsquo;s everything within 500 m</div>
+              <div className="s3">
+                Widen the radius to see the rest of Ward <WardName />, or switch to
+                the heatmap for the whole picture.
+              </div>
+              <WardHeatmapLink className="btn s" style={{ marginTop: 14, width: "100%" }}>
+                See the ward heatmap
+              </WardHeatmapLink>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  );
+}

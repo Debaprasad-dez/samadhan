@@ -8,6 +8,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { modeForTheme } from "@/lib/theme-noflash";
 
 // Two-axis theming (design spec): user-selected theme × light/dark mode.
 export const THEMES = [
@@ -94,16 +95,16 @@ export function ThemeProvider({
   children,
   role = "citizen",
   defaultTheme = "bharat-dawn",
-  forcedMode,
+  modeFollowsTheme = false,
 }: {
   children: ReactNode;
   /** Per-role storage namespace. */
   role?: string;
   /** Fallback theme when nothing is stored yet (role default). */
   defaultTheme?: ThemeName;
-  /** When set, the light/dark mode is pinned and the toggle is disabled
-   *  (logged-out pages: login always renders in light mode). */
-  forcedMode?: ResolvedMode;
+  /** Citizens and signed-out visitors: light/dark is derived from the theme
+   *  (see modeForTheme) and the toggle is inert. Staff choose it freely. */
+  modeFollowsTheme?: boolean;
 }) {
   const THEME_KEY = themeStorageKey(role);
   const MODE_KEY = modeStorageKey(role);
@@ -111,21 +112,21 @@ export function ThemeProvider({
   const [theme, setThemeState] = useState<ThemeName>(defaultTheme);
   const [mode, setModeState] = useState<Mode>("light");
   const [resolvedMode, setResolvedMode] = useState<ResolvedMode>(
-    forcedMode ?? "light",
+    modeFollowsTheme ? modeForTheme(defaultTheme) : "light",
   );
 
-  const effectiveMode: Mode = forcedMode ?? mode;
+  const effectiveMode: Mode = modeFollowsTheme ? modeForTheme(theme) : mode;
 
   // Hydrate theme + mode from storage (the no-flash script already set the
   // attributes pre-paint, so this only syncs React state).
   useEffect(() => {
     const t = localStorage.getItem(THEME_KEY);
     if (isOffered(t)) setThemeState(t);
-    if (!forcedMode) {
+    if (!modeFollowsTheme) {
       const m = localStorage.getItem(MODE_KEY);
       if (m === "light" || m === "dark" || m === "system") setModeState(m);
     }
-  }, [THEME_KEY, MODE_KEY, forcedMode]);
+  }, [THEME_KEY, MODE_KEY, modeFollowsTheme]);
 
   const apply = useCallback((t: ThemeName, m: Mode) => {
     const rm: ResolvedMode = m === "system" ? systemMode() : m;
@@ -139,14 +140,14 @@ export function ThemeProvider({
     apply(theme, effectiveMode);
   }, [theme, effectiveMode, apply]);
 
-  // Follow system changes while in "system" mode (skip when the mode is pinned).
+  // Follow system changes while in "system" mode (never when mode follows theme).
   useEffect(() => {
-    if (forcedMode || mode !== "system") return;
+    if (modeFollowsTheme || mode !== "system") return;
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     const handler = () => apply(theme, "system");
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
-  }, [mode, theme, apply, forcedMode]);
+  }, [mode, theme, apply, modeFollowsTheme]);
 
   const setTheme = useCallback(
     (t: ThemeName) => {
@@ -158,11 +159,11 @@ export function ThemeProvider({
 
   const setMode = useCallback(
     (m: Mode) => {
-      if (forcedMode) return; // mode pinned (logged out) — ignore toggle
+      if (modeFollowsTheme) return; // mode is the theme's, not a separate choice
       setModeState(m);
       localStorage.setItem(MODE_KEY, m);
     },
-    [MODE_KEY, forcedMode],
+    [MODE_KEY, modeFollowsTheme],
   );
 
   return (

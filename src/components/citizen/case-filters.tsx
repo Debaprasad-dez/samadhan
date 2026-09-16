@@ -12,7 +12,8 @@ export function CaseFilters({
   counts,
   children,
 }: {
-  counts: Record<Filter, number>;
+  /** Rendered nodes rather than numbers, so each count can stream in on its own. */
+  counts: Record<Filter, ReactNode>;
   children: ReactNode;
 }) {
   const [filter, setFilter] = useState<Filter>("active");
