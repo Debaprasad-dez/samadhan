@@ -3,7 +3,7 @@
 import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
 import { useSession } from "@/hooks/use-session";
-import { WARDS } from "@/lib/seed-data";
+import { WARDS, wardLabel } from "@/lib/seed-data";
 import { initials } from "@/lib/utils";
 
 /*
@@ -31,7 +31,8 @@ export function WardName() {
 }
 
 export function WardCode() {
-  return <>{useSession()?.wardCode ?? "—"}</>;
+  const code = useSession()?.wardCode;
+  return <>{code ? wardLabel(code) : "—"}</>;
 }
 
 export function WardHeatmapLink({

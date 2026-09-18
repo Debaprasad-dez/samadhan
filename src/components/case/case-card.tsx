@@ -6,6 +6,7 @@ import { CategoryIcon } from "@/components/art/category-icon";
 import { CardArtwork } from "@/components/art/card-artwork";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatRelative, humanizeCode } from "@/lib/utils";
+import { wardLabel } from "@/lib/seed-data";
 import type { CaseListItem } from "@/hooks/use-cases";
 
 export function CaseCard({ c }: { c: CaseListItem }) {
@@ -46,7 +47,7 @@ export function CaseCard({ c }: { c: CaseListItem }) {
                 <CategoryIcon department={c.departmentCode} className="h-3.5 w-3.5" />
                 {humanizeCode(c.departmentCode)}
               </span>
-              <span>Ward {c.wardCode}</span>
+              <span>Ward {wardLabel(c.wardCode)}</span>
               <span className="inline-flex items-center gap-1">
                 <ThumbsUp className="h-3 w-3" />
                 {c._count.upvotes}

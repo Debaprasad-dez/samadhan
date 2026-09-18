@@ -1,8 +1,13 @@
-// Static reference data for Samadhan (Mumbai single-city seed).
+// Static reference data for Samadhan (Agartala, Tripura single-city seed).
 // Consumed by prisma/seed.ts and at runtime (ward picker, category lists, classifier).
 //
-// Ward codes follow the strict §8.2 Zod format /^[A-Z]{1,3}\d{0,2}$/ (e.g. "KE"),
-// rather than the illustrative "K-EAST" from §8.4.
+// Agartala Municipal Corporation has 51 wards run from four zonal offices
+// (North, East, South, Central). Localities and zones are real; the pairing of
+// a locality with a ward number is illustrative — AMC publishes no
+// machine-readable ward-to-locality list. Coordinates are approximate.
+//
+// Ward codes follow the strict §8.2 Zod format /^[A-Z]{1,3}\d{0,2}$/: "W01"
+// to "W51". Show them to people through wardLabel().
 
 export interface WardSeed {
   code: string;
@@ -31,32 +36,63 @@ export interface BadgeSeed {
   iconKey: string;
 }
 
-// 24 MCGM wards (§13 Phase 0.7).
+// The 51 AMC wards, numbered zone by zone.
 export const WARDS: WardSeed[] = [
-  { code: "A", name: "Colaba & Fort", zone: "City", centerLat: 18.9067, centerLng: 72.8147 },
-  { code: "B", name: "Sandhurst Road", zone: "City", centerLat: 18.9543, centerLng: 72.8355 },
-  { code: "C", name: "Marine Lines", zone: "City", centerLat: 18.9501, centerLng: 72.8237 },
-  { code: "D", name: "Grant Road", zone: "City", centerLat: 18.9627, centerLng: 72.8089 },
-  { code: "E", name: "Byculla", zone: "City", centerLat: 18.9783, centerLng: 72.8331 },
-  { code: "FS", name: "Parel", zone: "City", centerLat: 18.9981, centerLng: 72.8403 },
-  { code: "FN", name: "Matunga", zone: "City", centerLat: 19.0276, centerLng: 72.8562 },
-  { code: "GS", name: "Worli", zone: "City", centerLat: 19.0096, centerLng: 72.8175 },
-  { code: "GN", name: "Dadar", zone: "City", centerLat: 19.0176, centerLng: 72.8479 },
-  { code: "HE", name: "Bandra East", zone: "Western Suburbs", centerLat: 19.0607, centerLng: 72.8466 },
-  { code: "HW", name: "Bandra West", zone: "Western Suburbs", centerLat: 19.0596, centerLng: 72.8295 },
-  { code: "KE", name: "Andheri East", zone: "Western Suburbs", centerLat: 19.1136, centerLng: 72.8697 },
-  { code: "KW", name: "Andheri West", zone: "Western Suburbs", centerLat: 19.1294, centerLng: 72.8273 },
-  { code: "L", name: "Kurla", zone: "Eastern Suburbs", centerLat: 19.0726, centerLng: 72.8845 },
-  { code: "ME", name: "Govandi", zone: "Eastern Suburbs", centerLat: 19.0509, centerLng: 72.9209 },
-  { code: "MW", name: "Chembur", zone: "Eastern Suburbs", centerLat: 19.0625, centerLng: 72.8997 },
-  { code: "N", name: "Ghatkopar", zone: "Eastern Suburbs", centerLat: 19.0863, centerLng: 72.9081 },
-  { code: "PS", name: "Goregaon", zone: "Western Suburbs", centerLat: 19.1644, centerLng: 72.8493 },
-  { code: "PN", name: "Malad", zone: "Western Suburbs", centerLat: 19.1872, centerLng: 72.8484 },
-  { code: "RS", name: "Kandivali", zone: "Western Suburbs", centerLat: 19.2095, centerLng: 72.8526 },
-  { code: "RC", name: "Borivali", zone: "Western Suburbs", centerLat: 19.2307, centerLng: 72.8567 },
-  { code: "RN", name: "Dahisar", zone: "Western Suburbs", centerLat: 19.2496, centerLng: 72.8606 },
-  { code: "S", name: "Bhandup", zone: "Eastern Suburbs", centerLat: 19.1426, centerLng: 72.9367 },
-  { code: "T", name: "Mulund", zone: "Eastern Suburbs", centerLat: 19.1722, centerLng: 72.9568 },
+  // North Zone
+  { code: "W01", name: "Barjala", zone: "North Zone", centerLat: 23.8660, centerLng: 91.2690 },
+  { code: "W02", name: "Chandinamura", zone: "North Zone", centerLat: 23.8730, centerLng: 91.2760 },
+  { code: "W03", name: "Lichubagan", zone: "North Zone", centerLat: 23.8700, centerLng: 91.2850 },
+  { code: "W04", name: "Nandannagar", zone: "North Zone", centerLat: 23.8790, centerLng: 91.2960 },
+  { code: "W05", name: "Chanmari", zone: "North Zone", centerLat: 23.8620, centerLng: 91.2930 },
+  { code: "W06", name: "Indranagar", zone: "North Zone", centerLat: 23.8570, centerLng: 91.3040 },
+  { code: "W07", name: "Abhoynagar", zone: "North Zone", centerLat: 23.8500, centerLng: 91.2990 },
+  { code: "W08", name: "Kunjaban", zone: "North Zone", centerLat: 23.8530, centerLng: 91.2880 },
+  { code: "W09", name: "Gurkhabasti", zone: "North Zone", centerLat: 23.8470, centerLng: 91.2860 },
+  { code: "W10", name: "Radhanagar", zone: "North Zone", centerLat: 23.8490, centerLng: 91.2790 },
+  { code: "W11", name: "Bhati Abhoynagar", zone: "North Zone", centerLat: 23.8430, centerLng: 91.3010 },
+  { code: "W12", name: "Jaynagar", zone: "North Zone", centerLat: 23.8420, centerLng: 91.2790 },
+  { code: "W13", name: "Paschim Jaynagar", zone: "North Zone", centerLat: 23.8430, centerLng: 91.2730 },
+  // East Zone
+  { code: "W14", name: "Shibnagar", zone: "East Zone", centerLat: 23.8420, centerLng: 91.2920 },
+  { code: "W15", name: "Paschim Shibnagar", zone: "East Zone", centerLat: 23.8400, centerLng: 91.2880 },
+  { code: "W16", name: "Dhaleswar", zone: "East Zone", centerLat: 23.8370, centerLng: 91.2990 },
+  { code: "W17", name: "Ashram Chowmuhani", zone: "East Zone", centerLat: 23.8330, centerLng: 91.2990 },
+  { code: "W18", name: "Kashipur", zone: "East Zone", centerLat: 23.8330, centerLng: 91.3150 },
+  { code: "W19", name: "Khayerpur", zone: "East Zone", centerLat: 23.8360, centerLng: 91.3280 },
+  { code: "W20", name: "Chandrapur", zone: "East Zone", centerLat: 23.8420, centerLng: 91.3180 },
+  { code: "W21", name: "Uttar Jogendranagar", zone: "East Zone", centerLat: 23.8290, centerLng: 91.3060 },
+  { code: "W22", name: "Jogendranagar", zone: "East Zone", centerLat: 23.8240, centerLng: 91.3040 },
+  { code: "W23", name: "Purba Jogendranagar", zone: "East Zone", centerLat: 23.8220, centerLng: 91.3130 },
+  { code: "W24", name: "Aralia", zone: "East Zone", centerLat: 23.8160, centerLng: 91.3170 },
+  { code: "W25", name: "Durga Chowmuhani", zone: "East Zone", centerLat: 23.8330, centerLng: 91.2930 },
+  // Central Zone
+  { code: "W26", name: "Palace Compound", zone: "Central Zone", centerLat: 23.8364, centerLng: 91.2830 },
+  { code: "W27", name: "Banamalipur", zone: "Central Zone", centerLat: 23.8300, centerLng: 91.2870 },
+  { code: "W28", name: "Dimsagar", zone: "Central Zone", centerLat: 23.8310, centerLng: 91.2820 },
+  { code: "W29", name: "Town Pratapgarh", zone: "Central Zone", centerLat: 23.8230, centerLng: 91.2720 },
+  { code: "W30", name: "Krishnanagar", zone: "Central Zone", centerLat: 23.8390, centerLng: 91.2780 },
+  { code: "W31", name: "Paschim Krishnanagar", zone: "Central Zone", centerLat: 23.8390, centerLng: 91.2730 },
+  { code: "W32", name: "Ramnagar", zone: "Central Zone", centerLat: 23.8350, centerLng: 91.2690 },
+  { code: "W33", name: "Rajnagar", zone: "Central Zone", centerLat: 23.8310, centerLng: 91.2660 },
+  { code: "W34", name: "Ranjitnagar", zone: "Central Zone", centerLat: 23.8270, centerLng: 91.2650 },
+  { code: "W35", name: "Melarmath", zone: "Central Zone", centerLat: 23.8340, centerLng: 91.2850 },
+  { code: "W36", name: "Battala", zone: "Central Zone", centerLat: 23.8285, centerLng: 91.2785 },
+  { code: "W37", name: "Maharajganj Bazar", zone: "Central Zone", centerLat: 23.8300, centerLng: 91.2800 },
+  { code: "W38", name: "Motor Stand", zone: "Central Zone", centerLat: 23.8260, centerLng: 91.2830 },
+  { code: "W39", name: "Shantipara", zone: "Central Zone", centerLat: 23.8200, centerLng: 91.2770 },
+  // South Zone
+  { code: "W40", name: "Nagerjala", zone: "South Zone", centerLat: 23.8220, centerLng: 91.2850 },
+  { code: "W41", name: "Bhattapukur", zone: "South Zone", centerLat: 23.8170, centerLng: 91.2820 },
+  { code: "W42", name: "Dashamighat", zone: "South Zone", centerLat: 23.8190, centerLng: 91.2950 },
+  { code: "W43", name: "Bardowali", zone: "South Zone", centerLat: 23.8150, centerLng: 91.2680 },
+  { code: "W44", name: "Paschim Pratapgarh", zone: "South Zone", centerLat: 23.8190, centerLng: 91.2680 },
+  { code: "W45", name: "Purba Pratapgarh", zone: "South Zone", centerLat: 23.8180, centerLng: 91.2740 },
+  { code: "W46", name: "Arundhutinagar", zone: "South Zone", centerLat: 23.8070, centerLng: 91.2760 },
+  { code: "W47", name: "Rajlaxminagar", zone: "South Zone", centerLat: 23.8030, centerLng: 91.2700 },
+  { code: "W48", name: "Badharghat", zone: "South Zone", centerLat: 23.8000, centerLng: 91.2820 },
+  { code: "W49", name: "Dakshin Badharghat", zone: "South Zone", centerLat: 23.7930, centerLng: 91.2830 },
+  { code: "W50", name: "Siddhi Ashram", zone: "South Zone", centerLat: 23.7980, centerLng: 91.2710 },
+  { code: "W51", name: "Madhya Pratapgarh", zone: "South Zone", centerLat: 23.8130, centerLng: 91.2720 },
 ];
 
 // 8 departments (§5.4.2).
@@ -135,6 +171,10 @@ export const BADGES: BadgeSeed[] = [
   { id: "district-voice", name: "District Voice", description: "Filed in 3 different categories", iconKey: "git-fork" },
   { id: "civic-patron", name: "Civic Patron", description: "Reached the Civic Patron tier", iconKey: "crown" },
 ];
+
+/** "W07" → "7": the number people say. Codes outside the W-series pass through. */
+export const wardLabel = (code: string): string =>
+  /^W\d+$/.test(code) ? String(Number(code.slice(1))) : code;
 
 // Lookup helpers.
 export const categoriesByDept = (deptCode: string): CategorySeed[] =>

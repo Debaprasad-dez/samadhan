@@ -37,6 +37,7 @@ const LANG_NAMES: Record<string, string> = {
   sd: "Sindhi",
   mni: "Manipuri",
   brx: "Bodo",
+  trp: "Kokborok",
 };
 
 export async function POST(req: NextRequest) {

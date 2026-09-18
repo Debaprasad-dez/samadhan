@@ -68,6 +68,9 @@ export const useIntakeStore = create<IntakeState>()(
     }),
     {
       name: "samadhan.intake.draft", // §5.1.1
+      // v1: wards moved from Mumbai codes to Agartala's W01–W51; drop a saved old one.
+      version: 1,
+      migrate: (saved) => ({ ...(saved as IntakeState), wardCode: "" }),
     },
   ),
 );

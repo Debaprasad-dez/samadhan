@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { requireRole } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { CATEGORIES, WARDS } from "@/lib/seed-data";
+import { CATEGORIES, WARDS, wardLabel } from "@/lib/seed-data";
 import { humanizeCode, formatIST } from "@/lib/utils";
 import { getDict, translate } from "@/lib/i18n";
 import { StatusBadge, SeverityChip } from "@/components/case/status-badge";
@@ -91,7 +91,7 @@ export default async function OfficerCaseView({
             <Badge variant="outline">{humanizeCode(c.departmentCode)}</Badge>
             <Badge variant="outline">{category}</Badge>
             <Badge variant="outline">
-              {ward} ({c.wardCode})
+              {ward} (Ward {wardLabel(c.wardCode)})
             </Badge>
             {c.escalated && (
               <Badge className="bg-danger-soft text-danger">

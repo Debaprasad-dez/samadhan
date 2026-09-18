@@ -45,7 +45,8 @@ export const dictionaries: Record<string, unknown> = {
 export type Locale = string;
 export type Dict = typeof en;
 
-// The 22 languages of the Eighth Schedule of the Constitution of India + English.
+// The 22 languages of the Eighth Schedule of the Constitution of India + English,
+// plus Kokborok, co-official with Bengali in Tripura (no dictionary yet: English fallback).
 // `native` is the endonym (own script); `english` the English name.
 export type LocaleInfo = { code: string; native: string; english: string };
 export const LOCALES: LocaleInfo[] = [
@@ -72,6 +73,7 @@ export const LOCALES: LocaleInfo[] = [
   { code: "mni", native: "ꯃꯩꯇꯩꯂꯣꯟ", english: "Manipuri" },
   { code: "brx", native: "बर'", english: "Bodo" },
   { code: "sa", native: "संस्कृतम्", english: "Sanskrit" },
+  { code: "trp", native: "Kokborok", english: "Kokborok" },
 ];
 
 // Right-to-left scripts among the set (for dir handling).

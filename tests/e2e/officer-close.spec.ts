@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test("officer opens a case from the inbox and closes it", async ({ page }) => {
   // Sign in as the demo officer.
   await page.goto("/role-switch");
-  await page.getByRole("button", { name: /Rajesh Kumar/ }).click();
+  await page.getByRole("button", { name: /Bikash Debbarma/ }).click();
   await page.waitForURL("/inbox");
 
   await expect(page.getByRole("heading", { name: "Inbox" })).toBeVisible();

@@ -34,10 +34,10 @@ export const RoleSwitchInput = z.object({
     "citizen",
     "officer",
     "admin",
-    // Empty, interlinked trio (same ward KE) for the live multi-user demo.
-    "aarav",
-    "zara",
-    "vivek",
+    // Empty, interlinked trio (same ward W25) for the live multi-user demo.
+    "rohan",
+    "tania",
+    "sanjib",
   ]),
 });
 export type RoleSwitchInput = z.infer<typeof RoleSwitchInput>;

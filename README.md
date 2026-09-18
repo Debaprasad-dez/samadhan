@@ -50,11 +50,11 @@ pnpm dev                     # → http://localhost:3000
 Use `/login`, or the one-click switcher at `/role-switch`
 (gated by `NEXT_PUBLIC_DEMO_MODE=true`).
 
-| Persona | Role    | Credentials                                        |
-| ------- | ------- | -------------------------------------------------- |
-| Priya   | Citizen | phone `+919999900001`, OTP `123456`                |
-| Rajesh  | Officer | `rajesh@mcgm.gov.in` / `Officer@123!demo`          |
-| Anita   | Admin   | `anita@mcgm.gov.in` / `Admin@123!demo`             |
+| Persona                | Role    | Credentials                                       |
+| ---------------------- | ------- | ------------------------------------------------- |
+| Ankita (Saha)          | Citizen | phone `+919999900001`, OTP `123456`               |
+| Bikash (Debbarma)      | Officer | `bikash@amc.tripura.gov.in` / `Officer@123!demo`  |
+| Sharmila (Chakraborty) | Admin   | `sharmila@amc.tripura.gov.in` / `Admin@123!demo`  |
 
 Citizen login uses a **mock OTP** — any registered phone with code `123456`.
 A new phone number registers a fresh citizen on first login.
@@ -78,9 +78,13 @@ A new phone number registers a fresh citizen on first login.
 
 ## Seed data
 
-24 Mumbai wards · 8 departments · 40 categories (with SLA days) · 9 badges ·
-10 officers · 21 citizens (incl. demo personas) · 200 complaints with full event
-timelines, upvotes, co-signs, and quality scores.
+Agartala, Tripura: 51 AMC wards in four zones (real localities; the
+ward-number pairing is illustrative) · 8 departments · 40 categories (with SLA days) · 9 badges ·
+10 officers · 21 citizens (incl. demo personas) · 420 complaints with full event
+timelines, upvotes, co-signs, and quality scores. Complaint text follows
+issues reported in the Tripura press: Smart City drain works, waterlogging,
+TSECL smart-meter bills and outages, iron in tap water, dead traffic signals,
+footpath encroachment, dengue.
 
 ## Notes / intentional deviations from the PRD
 

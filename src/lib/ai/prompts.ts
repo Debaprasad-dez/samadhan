@@ -118,7 +118,7 @@ export const rtiDrafter = {
 - Body: ${i.body}
 - Days since filing: ${i.daysSince}
 
-Draft a formal RTI letter to the Public Information Officer of the ${i.department}, Mumbai. Include the standard sections (To, Subject, Body, Specific Information Sought, Declaration, Signature placeholder). Output:
+Draft a formal RTI letter to the Public Information Officer of the ${i.department}, Agartala Municipal Corporation, Agartala, Tripura. Include the standard sections (To, Subject, Body, Specific Information Sought, Declaration, Signature placeholder). Output:
 { "draft": "<full text>" }`,
 };
 
@@ -132,7 +132,7 @@ export const trendDigest = {
     wardBreaches: string;
     clusters: string;
   }) =>
-    `Period: last ${i.periodDays} days, Mumbai.
+    `Period: last ${i.periodDays} days, Agartala (Tripura).
 Top categories by volume:
 ${i.categories}
 

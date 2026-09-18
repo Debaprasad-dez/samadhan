@@ -12,9 +12,9 @@ type PersonaKey =
   | "citizen"
   | "officer"
   | "admin"
-  | "aarav"
-  | "zara"
-  | "vivek";
+  | "rohan"
+  | "tania"
+  | "sanjib";
 
 interface Persona {
   key: PersonaKey;
@@ -33,23 +33,23 @@ const ADMIN_LANDING = "Lands on the accountability overview";
 const PERSONAS: Persona[] = [
   {
     key: "citizen",
-    name: "Priya Sharma",
+    name: "Ankita Saha",
     role: "Citizen",
-    blurb: "File and track complaints in Bandra West.",
+    blurb: "File and track complaints in Ramnagar.",
     landing: CITIZEN_LANDING,
     icon: User,
   },
   {
     key: "officer",
-    name: "Rajesh Kumar",
+    name: "Bikash Debbarma",
     role: "Sanitation Officer",
-    blurb: "Work a prioritised queue in Andheri East.",
+    blurb: "Work a prioritised queue in Durga Chowmuhani.",
     landing: OFFICER_LANDING,
     icon: Wrench,
   },
   {
     key: "admin",
-    name: "Anita Desai",
+    name: "Sharmila Chakraborty",
     role: "District Magistrate",
     blurb: "See systemic issues and accountability.",
     landing: ADMIN_LANDING,
@@ -57,30 +57,30 @@ const PERSONAS: Persona[] = [
   },
 ];
 
-// Fresh, interlinked accounts (all ward KE) for demoing a live multi-user flow:
+// Fresh, interlinked accounts (all ward W25, Durga Chowmuhani) for demoing a live multi-user flow:
 // the two citizens file/co-sign, the officer resolves — updates ripple across
 // everyone's screens on refetch.
 const DEMO_PERSONAS: Persona[] = [
   {
-    key: "aarav",
-    name: "Aarav Sharma",
-    role: "Citizen · Andheri East",
+    key: "rohan",
+    name: "Rohan Deb",
+    role: "Citizen · Durga Chowmuhani",
     blurb: "Fresh account. File a complaint to kick off the flow.",
     landing: CITIZEN_LANDING,
     icon: User,
   },
   {
-    key: "zara",
-    name: "Zara Khan",
-    role: "Citizen · Andheri East",
-    blurb: "Same ward — co-sign and upvote Aarav's complaint live.",
+    key: "tania",
+    name: "Tania Reang",
+    role: "Citizen · Durga Chowmuhani",
+    blurb: "Same ward — co-sign and upvote Rohan's complaint live.",
     landing: CITIZEN_LANDING,
     icon: User,
   },
   {
-    key: "vivek",
-    name: "Vivek Nair",
-    role: "Sanitation Officer · Andheri East",
+    key: "sanjib",
+    name: "Sanjib Sinha",
+    role: "Sanitation Officer · Durga Chowmuhani",
     blurb: "Picks up their complaints and resolves them in real time.",
     landing: OFFICER_LANDING,
     icon: Wrench,

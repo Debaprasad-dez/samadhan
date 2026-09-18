@@ -322,9 +322,11 @@
    the infinite ambient loops — twinkle, sway, lamp glow, the pin's ping —
    resume at a different phase and keep running. One rule, no parallel
    stylesheet, and the scene still breathes on a revisit. */
-[data-settled] .chome *,
-[data-settled] .chome *::before,
-[data-settled] .chome *::after { animation-delay: -60s !important; }
+[data-settled] .chome *:not(.ghost *),
+[data-settled] .chome *:not(.ghost *)::before,
+[data-settled] .chome *:not(.ghost *)::after { animation-delay: -60s !important; }
+/* A ghost loader is excluded: its rebuild loop IS the animation, and freezing
+   every build-in at its last frame would leave it flickering between stills. */
 [data-settled] .chome .reveal { opacity: 1; }
 [data-settled] .chome .heat i { opacity: var(--o, 1); transform: none; }
 

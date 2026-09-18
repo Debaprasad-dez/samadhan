@@ -8,8 +8,9 @@ import { HomeHero } from "@/components/citizen/home-hero";
 import { HomeReveal } from "@/components/citizen/home-reveal";
 import { VoiceMicButton } from "@/components/citizen/voice-capture";
 import { Slot } from "@/components/citizen/slot";
-import { CitizenTop, HeroPlaceholder, CaseRowsSkeleton, Sk, SkIn } from "@/components/citizen/skeletons";
-import { FirstName, Initials, WardName } from "@/components/citizen/session-bits";
+import { CitizenTop, CaseRowsSkeleton, Sk, SkIn } from "@/components/citizen/skeletons";
+import { GhostHero } from "@/components/citizen/ghost-hero";
+import { FirstName, Initials, WardCode, WardName } from "@/components/citizen/session-bits";
 
 // Inline icon set — the mockup's symbols, drawn directly.
 const IC = {
@@ -121,17 +122,17 @@ export function HomeView({ data }: { data: Promise<HomeData> | null }) {
       <div className="shell">
         <CitizenTop
           title={<>नमस्ते, <FirstName /></>}
-          sub={<>Ward <WardName /></>}
+          sub={<>Ward <WardCode /> · <WardName /></>}
           unread={<Slot data={data} fallback={null}>{(d) => d.unread > 0 && <b>{d.unread}</b>}</Slot>}
         />
 
-        <Slot data={data} fallback={<HeroPlaceholder h={310} />}>
+        <Slot data={data} fallback={<GhostHero kind="island" />}>
           {(d) => <HomeHero pct={d.pct} />}
         </Slot>
 
         <div className="wrap">
           <div className="reveal" data-d="0">
-            <div className="eyebrow">Ward <WardName /> · {month}</div>
+            <div className="eyebrow">Ward <WardCode /> · <WardName /> · {month}</div>
             <h1 className="dspl">Raise your voice</h1>
             <p className="lede">
               <b><Slot data={data} fallback={<SkIn />}>{(d) => <>{d.pct}%</>}</Slot></b> of

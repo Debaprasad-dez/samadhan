@@ -157,7 +157,7 @@ export function LoginCard() {
             <input
               type="email"
               autoComplete="email"
-              placeholder="name@mcgm.gov.in"
+              placeholder="name@amc.tripura.gov.in"
               aria-label="Work email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

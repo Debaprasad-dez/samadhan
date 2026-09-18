@@ -119,7 +119,7 @@ export function SidebarShell({
           ))}
         </nav>
         <div className="text-muted-foreground border-t p-4 text-xs">
-          Samadhan v1.0 · Mumbai
+          Samadhan v1.0 · Agartala
         </div>
       </aside>
 

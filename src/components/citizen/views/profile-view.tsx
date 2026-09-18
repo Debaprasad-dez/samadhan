@@ -9,7 +9,8 @@ import { ThemeCards } from "@/components/citizen/theme-cards";
 import { HomeReveal } from "@/components/citizen/home-reveal";
 import { LogoutButton } from "@/components/shared/logout-button";
 import { Slot } from "@/components/citizen/slot";
-import { CitizenTop, HeroPlaceholder, Sk, SkIn } from "@/components/citizen/skeletons";
+import { CitizenTop, Sk, SkIn } from "@/components/citizen/skeletons";
+import { GhostHero } from "@/components/citizen/ghost-hero";
 import { FullName, WardCode } from "@/components/citizen/session-bits";
 
 // Inline icons — the mockup's symbols.
@@ -115,7 +116,7 @@ export function ProfileView({ data }: { data: Promise<ProfileData> | null }) {
           unread={<Slot data={data} fallback={null}>{(d) => d.unread > 0 && <b>{d.unread}</b>}</Slot>}
         />
 
-        <Slot data={data} fallback={<HeroPlaceholder h={310} />}>
+        <Slot data={data} fallback={<GhostHero kind="plinth" />}>
           {(d) => <ProfileHero fixes={d.fixes} tier={d.tierPct} active={d.active} />}
         </Slot>
 

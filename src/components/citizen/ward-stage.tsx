@@ -8,7 +8,7 @@ export type HeightBy = "open" | "breach" | "med";
 export type ColourBy = "sla" | "med" | "open";
 
 /**
- * The 24-ward block: one prism per ward, height and colour bound to separate
+ * The ward block: one prism per ward (51 for Agartala), height and colour bound to separate
  * measures so the two questions stay legible apart.
  *
  * Flat isometric shading to match the SVG pages — no lights, no shadows. Each
@@ -17,9 +17,7 @@ export type ColourBy = "sla" | "med" | "open";
  * BoxGeometry face order is +x, -x, +y, -y, +z, -z.
  */
 const FACE = [0.72, 0.55, 1.0, 0.4, 0.87, 0.5];
-const COLS = 6,
-  ROWS = 4,
-  PITCH = 1.0,
+const PITCH = 1.0,
   SIZE = 0.86,
   OUT = 0.032; // world-space outline thickness
 
@@ -32,12 +30,15 @@ export function WardStage({
   colourBy,
   selected,
   onSelect,
+  ghost = false,
 }: {
   wards: ExplorerWard[];
   heightBy: HeightBy;
   colourBy: ColourBy;
   selected: string;
   onSelect: (id: string) => void;
+  /** Loading state: made-up wards drawn faint, prisms breathing instead of data. */
+  ghost?: boolean;
 }) {
   const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -128,6 +129,12 @@ export function WardStage({
       const mkFaces = (base: THREE.Color) =>
         FACE.map((k) => new T.MeshBasicMaterial({ color: shade(base, k) }));
 
+      /* grid: about 3:2 like the city block — 24 wards → 6×4, 51 → 9×6 */
+      const COLS = Math.ceil(Math.sqrt(wards.length * 1.5));
+      const ROWS = Math.ceil(wards.length / COLS);
+      // The camera was framed for 6×4; widen it by how much further the grid reaches.
+      const FIT = Math.hypot(COLS + 0.5, ROWS + 0.5) / Math.hypot(6.5, 4.5);
+
       /* slab */
       const slabGeo = new T.BoxGeometry(COLS * PITCH + 0.5, 0.42, ROWS * PITCH + 0.5);
       const slabMats = mkFaces(PAL.ground);
@@ -187,6 +194,9 @@ export function WardStage({
         new T.SphereGeometry(0.13, 18, 14),
         new T.MeshBasicMaterial({ color: PAL.brand }),
       );
+      // Only a real "your ward" gets the marker; otherwise it would sit half
+      // sunk in the middle of the slab (always the case for the ghost block).
+      dot.visible = mineIdx >= 0;
       root.add(dot);
 
       type Cell = (typeof cells)[number];
@@ -220,8 +230,8 @@ export function WardStage({
           h = stage.clientHeight;
         renderer.setSize(w, h, false);
         const a = w / h;
-        const needW = 4.62,
-          needH = 4.05;
+        const needW = 4.62 * FIT,
+          needH = 4.05 * FIT;
         const s = Math.max(needH, needW / a) / zoom;
         camera.left = -s * a;
         camera.right = s * a;
@@ -358,7 +368,9 @@ export function WardStage({
           const p = Math.max(0, Math.min(1, (el - 0.35 - o.delay) / 0.55));
           o.grow += ((p < 1 ? 1 - Math.pow(1 - p, 3) : 1) - o.grow) * 0.35;
           const lift = o.w.id === sel ? 0.34 : 0;
-          const sy = Math.max(0.001, o.h * o.grow);
+          // A ghost has no real heights, so each prism breathes on its own phase.
+          const hh = ghost ? 0.35 + (0.5 + 0.5 * Math.sin(el * 1.25 + o.delay * 11)) * 2.8 : o.h;
+          const sy = Math.max(0.001, hh * o.grow);
           o.mesh.scale.y = sy;
           o.mesh.position.y = sy / 2 + lift;
           o.edge.scale.y = sy;
@@ -436,7 +448,7 @@ export function WardStage({
     // The scene is built once for a given ward set; later intent flows
     // through `api` rather than a rebuild.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [wards]);
+  }, [wards, ghost]);
 
   useEffect(() => {
     api.current?.setConfig(heightBy, colourBy);
@@ -450,7 +462,7 @@ export function WardStage({
   }, []);
 
   return (
-    <div className="stage3d" ref={stageRef} onPointerDown={touch}>
+    <div className={`stage3d${ghost ? " ghost" : ""}`} ref={stageRef} onPointerDown={touch}>
       <canvas ref={canvasRef} />
       <div className="hudwrap">
         <div className="hud" ref={hudRef} />

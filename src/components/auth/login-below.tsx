@@ -16,7 +16,7 @@ const Arrow = () => (
 );
 
 /** The languages this corporation's wards actually run on; the rest are one tap away. */
-const LEAD = ["en", "hi", "mr", "kn"];
+const LEAD = ["en", "bn", "trp", "hi"];
 const LANG_KEY = "samadhan-lang";
 
 /** Mockup order, which also wraps the chips two and two. */
@@ -92,7 +92,7 @@ export function LoginBelow() {
       </div>
 
       <p className="foot">
-        A public service of the Municipal Corporation
+        A public service of Agartala Municipal Corporation
         <br />
         Complaint data is published at ward level. Personal details are not.
       </p>

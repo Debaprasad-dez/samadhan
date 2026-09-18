@@ -7,13 +7,13 @@ import type { Role } from "@/types";
 // Demo persona switcher (§4.4). Gated behind NEXT_PUBLIC_DEMO_MODE.
 const PERSONA = {
   citizen: { kind: "phone", value: "+919999900001" },
-  officer: { kind: "email", value: "rajesh@mcgm.gov.in" },
-  admin: { kind: "email", value: "anita@mcgm.gov.in" },
-  // Empty demo trio — all ward KE, officer covers SANITATION so the citizens'
+  officer: { kind: "email", value: "bikash@amc.tripura.gov.in" },
+  admin: { kind: "email", value: "sharmila@amc.tripura.gov.in" },
+  // Empty demo trio — all ward W25, officer covers SANITATION so the citizens'
   // complaints land in his inbox for the live multi-user flow.
-  aarav: { kind: "phone", value: "+919999900010" },
-  zara: { kind: "phone", value: "+919999900011" },
-  vivek: { kind: "email", value: "vivek@mcgm.gov.in" },
+  rohan: { kind: "phone", value: "+919999900010" },
+  tania: { kind: "phone", value: "+919999900011" },
+  sanjib: { kind: "email", value: "sanjib@amc.tripura.gov.in" },
 } as const;
 
 export async function POST(req: Request) {

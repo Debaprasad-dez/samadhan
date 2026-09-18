@@ -1,13 +1,13 @@
 import { db } from "@/lib/db";
-import { WARDS, DEPARTMENTS, CATEGORIES } from "@/lib/seed-data";
+import { WARDS, DEPARTMENTS, CATEGORIES, wardLabel } from "@/lib/seed-data";
 
 /**
- * The 24-ward dataset behind the 3D explorer. Every figure is measured from
+ * The 51-ward dataset behind the 3D explorer. Every figure is measured from
  * real cases: height and colour on the block, the department table, and the
  * ranking are all derived here so the client only draws.
  */
 export interface ExplorerDept {
-  /** Display name, e.g. "BMC · Sanitation". */
+  /** Display name, e.g. "AMC · Sanitation". */
   name: string;
   /** Icon key the client knows how to draw. */
   icon: string;
@@ -20,16 +20,16 @@ export interface ExplorerDept {
 export interface ExplorerWard {
   id: string; // lowercase code — stable key for the 3D scene
   code: string;
-  /** "K/E" — the ward's charter name. */
+  /** "32" — the ward number. */
   name: string;
-  /** "Andheri East, Western Suburbs". */
+  /** "Ramnagar, Central Zone". */
   zone: string;
   open: number;
   /** Share of settled cases closed within the charter limit, 0–100. */
   sla: number;
   /** Median days to close. */
   med: number;
-  /** 1 = best of 24, ranked on sla. */
+  /** 1 = best of 51, ranked on sla. */
   rank: number;
   mine?: boolean;
   depts: ExplorerDept[];
@@ -48,22 +48,17 @@ const DEPT_ICON: Record<string, string> = {
   PUBLIC_WORKS: "works",
 };
 
-/** The body that answers for each department, as the charter names it. */
-const DEPT_BODY: Record<string, string> = {
-  ELECTRICITY: "BEST",
-  SANITATION: "BMC",
-  WATER: "BWSSB",
-  ROADS: "BMC",
-  HEALTH: "BMC",
-  EDUCATION: "BMC",
-  POLICE: "MPD",
-  PUBLIC_WORKS: "PWD",
+/** Each department under the Agartala body that answers for it. */
+const DEPT_NAME: Record<string, string> = {
+  ELECTRICITY: "TSECL · Electricity",
+  SANITATION: "AMC · Sanitation",
+  WATER: "PWD (DWS) · Drinking Water",
+  ROADS: "PWD · Roads",
+  HEALTH: "AMC · Public Health",
+  EDUCATION: "School Education",
+  POLICE: "West Tripura Police",
+  PUBLIC_WORKS: "AMC · Public Works",
 };
-
-/** "KE" → "K/E"; single-letter codes are left alone. */
-export function wardLabel(code: string): string {
-  return code.length === 2 ? `${code[0]}/${code[1]}` : code;
-}
 
 const median = (xs: number[]) =>
   xs.length === 0 ? 0 : [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)];
@@ -91,10 +86,8 @@ export async function getWardExplorer(myWard?: string | null): Promise<ExplorerW
   });
 
   const catName = (id: string) => CATEGORIES.find((c) => c.id === id)?.name ?? "—";
-  const deptName = (code: string) => {
-    const label = DEPARTMENTS.find((d) => d.code === code)?.name ?? code;
-    return `${DEPT_BODY[code] ?? "BMC"} · ${label}`;
-  };
+  const deptName = (code: string) =>
+    DEPT_NAME[code] ?? `AMC · ${DEPARTMENTS.find((d) => d.code === code)?.name ?? code}`;
 
   const rows = WARDS.map((w) => {
     const mine = cases.filter((c) => c.wardCode === w.code);

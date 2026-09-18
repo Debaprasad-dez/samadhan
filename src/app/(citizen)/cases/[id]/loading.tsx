@@ -1,6 +1,7 @@
-import { ChomeSkeleton } from "@/components/citizen/skeletons";
+import { CaseView } from "@/components/citizen/views/case-view";
 
-// Without this, a case would borrow the Cases list's loading shell.
+// The same view with no data: static copy in place, the journey road
+// assembling itself in the hero, skeletons in every slot.
 export default function Loading() {
-  return <ChomeSkeleton />;
+  return <CaseView data={null} />;
 }

@@ -7,8 +7,10 @@ import { FeedHero } from "@/components/citizen/feed-hero";
 import { FeedSort, FeedSortHeading, PostActions } from "@/components/citizen/feed-actions";
 import { HomeReveal } from "@/components/citizen/home-reveal";
 import { Slot } from "@/components/citizen/slot";
-import { CitizenTop, HeroPlaceholder, Sk, SkIn } from "@/components/citizen/skeletons";
-import { WardHeatmapLink, WardName } from "@/components/citizen/session-bits";
+import { CitizenTop, Sk, SkIn } from "@/components/citizen/skeletons";
+import { GhostHero } from "@/components/citizen/ghost-hero";
+import { WarmThree } from "@/components/citizen/warm-three";
+import { WardCode, WardHeatmapLink, WardName } from "@/components/citizen/session-bits";
 import type { NearItem } from "@/lib/art/radius-map";
 
 const IC = {
@@ -145,6 +147,7 @@ export function FeedView({ data }: { data: Promise<FeedData> | null }) {
   return (
     <div className="chome">
       <HomeReveal />
+      <WarmThree />
       <div className="shell">
         <CitizenTop
           title="Ward feed"
@@ -152,7 +155,7 @@ export function FeedView({ data }: { data: Promise<FeedData> | null }) {
           unread={<Slot data={data} fallback={null}>{(d) => d.unread > 0 && <b>{d.unread}</b>}</Slot>}
         />
 
-        <Slot data={data} fallback={<HeroPlaceholder h={306} />}>
+        <Slot data={data} fallback={<GhostHero kind="radius" />}>
           {(d) => <FeedHero items={d.yard} />}
         </Slot>
 
@@ -272,7 +275,7 @@ export function FeedView({ data }: { data: Promise<FeedData> | null }) {
               </span>
               <div className="t2" style={{ marginTop: 9 }}>That&rsquo;s everything within 500 m</div>
               <div className="s3">
-                Widen the radius to see the rest of Ward <WardName />, or switch to
+                Widen the radius to see the rest of Ward <WardCode />, or switch to
                 the heatmap for the whole picture.
               </div>
               <WardHeatmapLink className="btn s" style={{ marginTop: 14, width: "100%" }}>

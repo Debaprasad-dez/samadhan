@@ -23,6 +23,11 @@ export const usePrefsStore = create<PrefsState>()(
       toggleNotify: (key) =>
         set((s) => ({ notify: { ...s.notify, [key]: !s.notify[key] } })),
     }),
-    { name: "samadhan.prefs" },
+    {
+      name: "samadhan.prefs",
+      // v1: wards moved from Mumbai codes to Agartala's W01–W51; drop a saved old one.
+      version: 1,
+      migrate: (saved) => ({ ...(saved as PrefsState), wardCode: "" }),
+    },
   ),
 );

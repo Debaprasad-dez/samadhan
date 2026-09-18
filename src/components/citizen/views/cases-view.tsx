@@ -7,8 +7,9 @@ import { CaseFilters } from "@/components/citizen/case-filters";
 import { ConfirmFix } from "@/components/citizen/confirm-fix";
 import { HomeReveal } from "@/components/citizen/home-reveal";
 import { Slot } from "@/components/citizen/slot";
-import { CaseRowsSkeleton, CitizenTop, HeroPlaceholder, Sk, SkIn } from "@/components/citizen/skeletons";
-import { WardName } from "@/components/citizen/session-bits";
+import { CaseRowsSkeleton, CitizenTop, Sk, SkIn } from "@/components/citizen/skeletons";
+import { GhostHero } from "@/components/citizen/ghost-hero";
+import { WardCode, WardName } from "@/components/citizen/session-bits";
 import type { YardCase } from "@/lib/art/limit-yard";
 
 const IC = {
@@ -93,7 +94,7 @@ export function CasesView({ data }: { data: Promise<CasesData> | null }) {
           title="Your cases"
           sub={
             <>
-              Ward <WardName /> ·{" "}
+              Ward <WardCode /> · <WardName /> ·{" "}
               <Slot data={data} fallback={<SkIn w="4em" />}>
                 {(d) => <>{d.active.length} open{d.pastLimit > 0 ? `, ${d.pastLimit} past its limit` : ""}</>}
               </Slot>
@@ -102,7 +103,7 @@ export function CasesView({ data }: { data: Promise<CasesData> | null }) {
           unread={<Slot data={data} fallback={null}>{(d) => d.unread > 0 && <b>{d.unread}</b>}</Slot>}
         />
 
-        <Slot data={data} fallback={<HeroPlaceholder h={306} />}>
+        <Slot data={data} fallback={<GhostHero kind="yard" />}>
           {(d) => <CasesHero cases={d.yard} />}
         </Slot>
 

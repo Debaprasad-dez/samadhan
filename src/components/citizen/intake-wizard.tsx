@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { WARDS, DEPARTMENTS, CATEGORIES } from "@/lib/seed-data";
+import { WARDS, DEPARTMENTS, CATEGORIES, wardLabel } from "@/lib/seed-data";
 import { humanizeCode } from "@/lib/utils";
 import { compressImage } from "@/lib/compress-image";
 import { useIntakeStore } from "@/store/intake";
@@ -58,10 +58,10 @@ const DEPT_ICON: Record<string, keyof typeof IC> = {
 };
 
 const LANGS = [
-  { code: "hi", label: "हिन्दी" },
+  { code: "bn", label: "বাংলা" },
   { code: "en", label: "English" },
-  { code: "kn", label: "ಕನ್ನಡ" },
-  { code: "mr", label: "मराठी" },
+  { code: "trp", label: "Kokborok" },
+  { code: "hi", label: "हिन्दी" },
 ];
 
 export function IntakeWizard() {
@@ -563,7 +563,7 @@ export function IntakeWizard() {
                 </span>
                 <div>
                   <div className="a1">{wardName}</div>
-                  <div className="a2">Ward {s.wardCode || "—"}</div>
+                  <div className="a2">Ward {s.wardCode ? wardLabel(s.wardCode) : "—"}</div>
                 </div>
                 <select
                   className="adj"
@@ -572,7 +572,7 @@ export function IntakeWizard() {
                   aria-label="Change ward"
                 >
                   {WARDS.map((w) => (
-                    <option key={w.code} value={w.code}>{w.name}</option>
+                    <option key={w.code} value={w.code}>{wardLabel(w.code)} · {w.name}</option>
                   ))}
                 </select>
               </div>
@@ -653,7 +653,7 @@ export function IntakeWizard() {
               <div className="v4">
                 <b>{wardName}</b>
                 <br />
-                Ward {s.wardCode}
+                Ward {wardLabel(s.wardCode)}
                 {landmark ? ` · ${landmark}` : ""}
               </div>
             </div>

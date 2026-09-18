@@ -6,6 +6,7 @@ import { ThumbsUp } from "lucide-react";
 import { toast } from "sonner";
 import { StatusBadge } from "@/components/case/status-badge";
 import { cn, humanizeCode } from "@/lib/utils";
+import { wardLabel } from "@/lib/seed-data";
 import type { CaseStatus } from "@/types";
 
 export interface FeedItem {
@@ -62,7 +63,7 @@ export function FeedCard({ item }: { item: FeedItem }) {
                 {item.categoryName}
               </div>
               <div className="t2">
-                {humanizeCode(item.departmentCode)} · Ward {item.wardCode}
+                {humanizeCode(item.departmentCode)} · Ward {wardLabel(item.wardCode)}
               </div>
             </Link>
             <StatusBadge status={item.status} />

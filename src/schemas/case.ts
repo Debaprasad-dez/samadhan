@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-// Ward codes per §8.2 strict format (e.g. "A", "FS", "KE").
+// Ward codes per §8.2 strict format (e.g. "W32" for AMC ward 32).
 const wardCode = z.string().regex(/^[A-Z]{1,3}\d{0,2}$/);
 
 export const CreateCaseInput = z.object({

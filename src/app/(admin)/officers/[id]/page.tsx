@@ -3,6 +3,7 @@ import Link from "next/link";
 import { requireRole } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { humanizeCode, formatRelative } from "@/lib/utils";
+import { wardLabel } from "@/lib/seed-data";
 import { StatusBadge } from "@/components/case/status-badge";
 import { PrintButton } from "@/components/admin/print-button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -70,7 +71,7 @@ export default async function OfficerDetail({
         <div>
           <h1 className="font-display text-2xl font-semibold">{officer.name}</h1>
           <p className="text-muted-foreground text-sm">
-            {humanizeCode(officer.departmentCode ?? "")} · Ward {officer.wardCode}
+            {humanizeCode(officer.departmentCode ?? "")} · Ward {officer.wardCode ? wardLabel(officer.wardCode) : "—"}
           </p>
         </div>
         <PrintButton label="Publish quarterly report" />

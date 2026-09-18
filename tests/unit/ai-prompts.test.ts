@@ -26,10 +26,10 @@ describe("prompt builders", () => {
   });
 
   it("classifier embeds title/body/ward and severity rule", () => {
-    const u = classifier.user("Pothole", "big hole", "KE");
+    const u = classifier.user("Pothole", "big hole", "W32");
     expect(u).toContain("Pothole");
     expect(u).toContain("big hole");
-    expect(u).toContain("KE");
+    expect(u).toContain("W32");
     expect(u).toContain("HIGH");
     expect(classifier.version).toBe("classify.v1");
   });

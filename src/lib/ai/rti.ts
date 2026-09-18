@@ -15,8 +15,8 @@ function fallbackLetter(i: RtiInput): string {
   return `To,
 The Public Information Officer,
 ${i.department} Department,
-Municipal Corporation of Greater Mumbai (MCGM),
-Mumbai.
+Agartala Municipal Corporation (AMC),
+Agartala, Tripura.
 
 Subject: Request for information under the Right to Information Act, 2005 — Complaint ${i.number}
 

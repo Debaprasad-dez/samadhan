@@ -13,7 +13,7 @@ async function selectOption(
 test("citizen files a complaint end to end", async ({ page }) => {
   // Sign in as the demo citizen.
   await page.goto("/role-switch");
-  await page.getByRole("button", { name: /Priya Sharma/ }).click();
+  await page.getByRole("button", { name: /Ankita Saha/ }).click();
   await page.waitForURL("/");
 
   // Step 1 — describe.
@@ -31,7 +31,7 @@ test("citizen files a complaint end to end", async ({ page }) => {
   const combos = page.getByRole("combobox");
   await selectOption(combos.nth(0), /Sanitation/, page);
   await selectOption(combos.nth(1), /Garbage collection/, page);
-  await selectOption(combos.last(), /Bandra West/, page);
+  await selectOption(combos.last(), /Ramnagar/, page);
   await page.getByRole("button", { name: "Next" }).click();
 
   // Step 3 — evidence (skip).

@@ -7,7 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { WARDS } from "@/lib/seed-data";
+import { WARDS, wardLabel } from "@/lib/seed-data";
 import { usePrefsStore } from "@/store/prefs";
 import { cn } from "@/lib/utils";
 
@@ -43,7 +43,7 @@ export function WardSelector({ initialWard }: { initialWard?: string }) {
           }}
         >
           <MapPin className="h-3 w-3" />
-          {name ? `Ward ${code}` : "Pick ward"}
+          {name ? `Ward ${wardLabel(code)}` : "Pick ward"}
           <ChevronDown className="h-3 w-3 opacity-70" />
         </button>
       </PopoverTrigger>

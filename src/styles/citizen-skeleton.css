@@ -12,17 +12,37 @@
    ============================================================================= */
 
 /* A bar standing in for text. Height tracks the surrounding font size, so the
-   same class fits a 26px stat and an 11px caption. */
+   same class fits a 26px stat and an 11px caption.
+
+   Tinted from the ink rather than --track: --track sits a hair off the page
+   background (Civic Steel: #EEF0F4 on #F6F7F9) and all but vanished. Ink at a
+   low mix reads as a bar on every palette, light or dark. */
 .chome .skel {
-  display: block; border-radius: 6px; background: var(--track);
+  display: block; position: relative; overflow: hidden;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--ink) 10%, transparent);
   height: .78em; margin: .2em 0;
-  animation: ch-skPulse 1.3s ease-in-out infinite;
 }
+/* The moving sheen that says "arriving" rather than "empty". Transform only,
+   so it stays on the compositor however many bars are on screen. */
+.chome .skel::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--surface) 65%, transparent) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  animation: ch-skSheen 1.35s cubic-bezier(.4, 0, .2, 1) infinite;
+}
+@keyframes ch-skSheen { to { transform: translateX(100%) } }
+
 /* Inline, for a single value sitting inside real copy: "{pct}% of complaints". */
 .chome .skel.inl {
   display: inline-block; vertical-align: -.06em; height: .8em; width: 2.2ch; margin: 0 .1em;
 }
-@keyframes ch-skPulse { 0%, 100% { opacity: .55 } 50% { opacity: 1 } }
+
 /* Match each type role's line box, so a value landing never nudges the row. */
 .chome .sv .skel { height: 1em; margin: 0; }
 .chome .dspl .skel { height: .9em; margin: .08em 0; }
@@ -34,11 +54,20 @@
   background: linear-gradient(to bottom, var(--h1), var(--h2) 52%, var(--h3));
 }
 
+/* Ghost loader: the real scene, faint and desaturated, so its made-up values
+   read as "assembling" and never as data. The 3D ward stage gets the same
+   treatment on its canvas. */
+.chome .hero.ghost svg,
+.chome .stage3d.ghost canvas {
+  opacity: .5;
+  filter: saturate(.3);
+}
+
 /* Data arriving into a skeleton's place cross-fades rather than popping. */
 .chome .slot { animation: ch-slotIn .16s ease-out both; }
 @keyframes ch-slotIn { from { opacity: 0 } to { opacity: 1 } }
 
 @media (prefers-reduced-motion: reduce) {
-  .chome .skel { animation: none; opacity: .8; }
+  .chome .skel::after { animation: none; transform: none; opacity: 0; }
   .chome .slot { animation: none; }
 }

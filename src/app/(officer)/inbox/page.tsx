@@ -40,6 +40,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { cn, humanizeCode, formatRelative } from "@/lib/utils";
+import { wardLabel } from "@/lib/seed-data";
 import { useT } from "@/components/providers/locale-provider";
 import type { CaseStatus } from "@/types";
 
@@ -239,7 +240,7 @@ export default function OfficerInbox() {
                         </p>
                         <p className="text-muted-foreground mt-1 flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-sm">
                           <span className="inline-flex items-center gap-1">
-                            <MapPin className="h-3.5 w-3.5" /> {c.wardCode}
+                            <MapPin className="h-3.5 w-3.5" /> Ward {wardLabel(c.wardCode)}
                           </span>
                           <span className="text-border-strong">|</span>
                           <span className="inline-flex items-center gap-1">

@@ -3,6 +3,28 @@
 import { useEffect, useState } from "react";
 import { WardStage, type HeightBy, type ColourBy } from "@/components/citizen/ward-stage";
 import type { ExplorerWard } from "@/lib/ward-explorer";
+import { WARDS } from "@/lib/seed-data";
+
+/**
+ * Stand-in wards for the loading state: the real ward codes with fixed made-up
+ * values, so the ghost block has the true shape of the city and never renders
+ * differently between server and client.
+ */
+const GHOST_WARDS: ExplorerWard[] = WARDS.map((w, i) => {
+  const f = Math.abs(Math.sin((i + 1) * 12.9898)) % 1;
+  return {
+    id: w.code.toLowerCase(),
+    code: w.code,
+    name: "",
+    zone: "",
+    open: 3 + Math.round(f * 9),
+    sla: 40 + Math.round(f * 50),
+    med: Math.round((1 + f * 6) * 10) / 10,
+    rank: i + 1,
+    depts: [],
+    cells: [],
+  };
+});
 
 const IC = {
   down: <path d="M5.5 9.5 12 16l6.5-6.5" />,
@@ -78,9 +100,10 @@ export function WardExplorer({
   initial,
   total,
 }: {
-  wards: ExplorerWard[];
+  /** null while loading: the stage runs in ghost mode and the sheet waits. */
+  wards: ExplorerWard[] | null;
   initial: string;
-  total: number;
+  total?: number;
 }) {
   const [sel, setSel] = useState(initial);
   const [heightBy, setHeightBy] = useState<HeightBy>("open");
@@ -90,14 +113,16 @@ export function WardExplorer({
   // sheet's first arrival there is nothing to peek back at.
   const [peek, setPeek] = useState(false);
 
-  const w = wards.find((x) => x.id === sel) ?? wards[0];
+  const live = wards ?? GHOST_WARDS;
+  const w = live.find((x) => x.id === sel) ?? live[0];
 
   // The sheet arrives on its own once the block has finished building, the
   // way the mockup lands it.
   useEffect(() => {
+    if (!wards) return; // nothing to show until the real wards arrive
     const t = setTimeout(() => setOpen(true), 2200);
     return () => clearTimeout(t);
-  }, []);
+  }, [wards]);
 
   function choose(id: string) {
     setSel(id);
@@ -109,13 +134,15 @@ export function WardExplorer({
     setPeek(true);
   }
 
+  const third = Math.min(2, Math.floor(((w.rank - 1) * 3) / live.length));
   const wtone = w.sla >= 75 ? "ok" : w.sla >= 55 ? "warn" : "danger";
   const [legLo, legHi] = LEGLBL[colourBy];
 
   return (
     <>
       <WardStage
-        wards={wards}
+        wards={live}
+        ghost={!wards}
         heightBy={heightBy}
         colourBy={colourBy}
         selected={sel}
@@ -125,7 +152,7 @@ export function WardExplorer({
       <div className="wrap">
         <div className="reveal in" data-d="0">
           <div className="eyebrow">
-            {wards.length} wards · n={total.toLocaleString("en-IN")} complaints
+            {live.length} wards · n={wards ? (total ?? 0).toLocaleString("en-IN") : <span className="skel inl" aria-hidden />} complaints
           </div>
           <h1 className="dspl">Busy is not the same as failing</h1>
           <p className="lede">
@@ -175,6 +202,8 @@ export function WardExplorer({
         </div>
       </div>
 
+      {wards && (
+        <>
       <div className={`sheet${open ? " open" : ""}`} role="region" aria-label="Selected ward detail">
         <div className="sheetbar">
           <span className="grab" />
@@ -292,7 +321,7 @@ export function WardExplorer({
             <section className="fadein" style={{ animationDelay: ".15s" }}>
               <div className="sh">
                 <b>Against other wards</b>
-                <span>{wards.length} MCGM wards</span>
+                <span>{wards.length} AMC wards</span>
               </div>
               <div className="rankbox">
                 <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
@@ -300,8 +329,8 @@ export function WardExplorer({
                     {w.rank}
                     <small>{ord(w.rank)}</small>
                   </div>
-                  <span className={`pill ${w.rank <= 8 ? "ok" : w.rank <= 16 ? "wn" : "dg"}`}>
-                    {w.rank <= 8 ? "Top third" : w.rank <= 16 ? "Middle third" : "Bottom third"}
+                  <span className={`pill ${third === 0 ? "ok" : third === 1 ? "wn" : "dg"}`}>
+                    {["Top third", "Middle third", "Bottom third"][third]}
                   </span>
                 </div>
                 <div className="trk" style={{ marginTop: 13 }}>
@@ -333,6 +362,8 @@ export function WardExplorer({
           <span>Ward {w.name}</span>
         </button>
       </div>
+        </>
+      )}
     </>
   );
 }
