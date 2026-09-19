@@ -122,13 +122,15 @@ export function LoginCard() {
     <>
       {navigating && <FullscreenLoader label="Signing you in…" />}
       <div className="logincard fadeup" style={{ animationDelay: ".12s" }}>
+        {/* The tricolour along the card's top edge: this is a public service,
+            and a government form says so at the top. */}
+        <span className="ribbon" aria-hidden="true" />
         <h1>Sign in</h1>
-        <p className="sub">
-          Track every civic complaint like a service journey — a named officer and
-          a running clock.
-        </p>
+        <p className="sub">Named officer. Running clock.</p>
 
         <div className="tabs2" role="tablist">
+          {/* The lit pill slides between the two tabs rather than jumping. */}
+          <span className="tabpill" data-at={citizen ? 0 : 1} aria-hidden="true" />
           <button role="tab" aria-selected={citizen} onClick={() => pick("citizen")}>
             Citizen
           </button>
@@ -166,7 +168,7 @@ export function LoginCard() {
         </div>
 
         {citizen && otpRequested && (
-          <>
+          <div className="grew">
             <div className="flabel">Six-digit code</div>
             <div className="field2">
               <input
@@ -181,11 +183,11 @@ export function LoginCard() {
                 onKeyDown={(e) => e.key === "Enter" && ready && go()}
               />
             </div>
-          </>
+          </div>
         )}
 
         {!citizen && (
-          <>
+          <div className="grew">
             <div className="flabel">Password</div>
             <div className="field2">
               <input
@@ -197,7 +199,7 @@ export function LoginCard() {
                 onKeyDown={(e) => e.key === "Enter" && ready && go()}
               />
             </div>
-          </>
+          </div>
         )}
 
         <button className="gobtn" onClick={go} disabled={loading} aria-disabled={!ready}>
@@ -215,12 +217,9 @@ export function LoginCard() {
 
         <p className="hint2">
           {citizen ? (
-            <>
-              We&rsquo;ll text a six-digit code. Your number tracks your complaints
-              and is <b>never shown publicly</b>.
-            </>
+            <>Code by SMS · <b>never shown publicly</b></>
           ) : (
-            <>Use the address issued by your department. Access is tied to your ward and role.</>
+            <>Department address · ward and role apply</>
           )}
         </p>
       </div>

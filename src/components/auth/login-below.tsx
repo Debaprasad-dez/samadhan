@@ -3,11 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { LOCALES } from "@/lib/i18n";
-import {
-  useTheme,
-  THEME_LABELS,
-  THEME_PICKER,
-} from "@/components/providers/theme-provider";
 
 const Arrow = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -15,17 +10,23 @@ const Arrow = () => (
   </svg>
 );
 
-/** The languages this corporation's wards actually run on; the rest are one tap away. */
-const LEAD = ["en", "bn", "trp", "hi"];
+const Globe = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="M3.5 12h17M12 3.5c2.2 2.4 3.3 5.3 3.3 8.5S14.2 18.1 12 20.5c-2.2-2.4-3.3-5.3-3.3-8.5S9.8 5.9 12 3.5Z" />
+  </svg>
+);
+
+const Chevron = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M6.5 9.5 12 15l5.5-5.5" />
+  </svg>
+);
+
 const LANG_KEY = "samadhan-lang";
 
-/** Mockup order, which also wraps the chips two and two. */
-const THEME_ORDER = ["bharat-dawn", "mughal-indigo", "civic-steel", "nilgiri-mist"] as const;
-
 export function LoginBelow() {
-  const { theme, setTheme } = useTheme();
   const [lang, setLang] = useState("en");
-  const [allLangs, setAllLangs] = useState(false);
 
   // Read after mount: the stored value is not in the server's HTML.
   useEffect(() => {
@@ -46,10 +47,6 @@ export function LoginBelow() {
     }
   }
 
-  const lead = LEAD.map((c) => LOCALES.find((l) => l.code === c)!).filter(Boolean);
-  const shown = allLangs ? LOCALES : lead;
-  const rest = LOCALES.length - lead.length;
-
   return (
     <div className="below fadeup" style={{ animationDelay: ".2s" }}>
       <Link href="/role-switch" className="demo">
@@ -57,45 +54,28 @@ export function LoginBelow() {
         <Arrow />
       </Link>
 
-      <div className="langrow" role="group" aria-label="Language">
-        {shown.map((l) => (
-          <button
-            key={l.code}
-            aria-pressed={lang === l.code}
-            onClick={() => choose(l.code)}
-          >
-            {l.native}
-          </button>
-        ))}
-        {!allLangs && rest > 0 && (
-          <button
-            aria-pressed={false}
-            aria-label={`Show ${rest} more languages`}
-            onClick={() => setAllLangs(true)}
-          >
-            +{rest}
-          </button>
-        )}
-      </div>
+      {/* All 24 languages in one control: a row of chips only ever showed four. */}
+      <label className="langpick">
+        <span className="ic" aria-hidden="true">
+          <Globe />
+        </span>
+        <select
+          aria-label="Language"
+          value={lang}
+          onChange={(e) => choose(e.target.value)}
+        >
+          {LOCALES.map((l) => (
+            <option key={l.code} value={l.code}>
+              {l.native}
+            </option>
+          ))}
+        </select>
+        <span className="chev" aria-hidden="true">
+          <Chevron />
+        </span>
+      </label>
 
-      <div className="themerow" role="group" aria-label="Theme">
-        {THEME_ORDER.map((id) => (
-          <button
-            key={id}
-            aria-pressed={theme === id}
-            onClick={() => setTheme(id)}
-          >
-            <i style={{ background: THEME_PICKER[id].swatch[1] }} />
-            {THEME_LABELS[id]}
-          </button>
-        ))}
-      </div>
-
-      <p className="foot">
-        A public service of Agartala Municipal Corporation
-        <br />
-        Complaint data is published at ward level. Personal details are not.
-      </p>
+      <p className="foot">Agartala Municipal Corporation · ward-level data only</p>
     </div>
   );
 }
